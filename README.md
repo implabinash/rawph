@@ -1,1 +1,3 @@
-# Rawph: Learn collaboratively with peers
+# Rawph
+
+Collaborative learning with peers
