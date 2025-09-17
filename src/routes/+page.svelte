@@ -53,14 +53,14 @@
 
 <main class="mx-auto max-w-5xl">
 	<section class="space-y-12 px-6 py-24">
-		<div class="space-y-6">
+		<div class="w-[80%] space-y-6">
 			<h1 class="text-[3.5rem] leading-[3.875rem] font-bold">
-				AI-powered assistant for the modern software team
+				A Smarter and Simpler Way to Learn with Peers
 			</h1>
 
 			<p class="text-[1.313rem] leading-[1.75rem] text-subtext-color">
-				Elevate your workflow with intelligent agents. Streamline coding, debugging, and project
-				management with AI.
+				Study side by side with Rawph. Watch videos together, join a call, chat effortlessly and
+				explore your ideas on a clean whiteboard.
 			</p>
 		</div>
 
@@ -78,7 +78,9 @@
 		</div>
 	</section>
 
-	<section class="mb-24 h-144 w-5xl bg-[url('/images/placeholder.png')]"></section>
+	<section class="mb-24 grid place-items-center rounded-md bg-[url('/images/placeholder.png')] p-6">
+		<img src="/images/demo.png" alt="Rawph Demo" class="rounded-md" />
+	</section>
 </main>
 
 <footer class="mx-auto mb-12 flex max-w-5xl items-center justify-between">
