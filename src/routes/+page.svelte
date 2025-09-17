@@ -3,8 +3,31 @@
 </script>
 
 <svelte:head>
-	<title>Rawph</title>
-	<meta name="description" content="Svelte demo app" />
+	<title>Rawph - Collaborative learning with peers</title>
+	<meta
+		name="description"
+		content="Rawph is a co-learning platform where you and your friends can learn from YouTube together. Sync videos, talk in real-time, and brainstorm on a shared whiteboard."
+	/>
+	<meta
+		name="keywords"
+		content="Rawph, co-learning platform, learn with friends, YouTube study, collaborative learning, online study tool, group learning, shared whiteboard, watch and learn"
+	/>
+
+	<meta property="og:title" content="Rawph - Learn Together, Smarter" />
+	<meta
+		property="og:description"
+		content="Paste a YouTube link, sync it with your friends, discuss over audio calls, and use a whiteboard to collaborate. Rawph makes learning social and fun."
+	/>
+	<!-- <meta property="og:image" content="https://rawph.com/og-image.png" /> -->
+	<!-- <meta property="og:url" content="https://rawph.com" /> -->
+
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content="Rawph - Learn Together, Smarter" />
+	<meta
+		name="twitter:description"
+		content="Study with your friends in real time. Watch synced YouTube videos, discuss via audio, and brainstorm on a shared whiteboard with Rawph."
+	/>
+	<!-- <meta name="twitter:image" content="https://rawph.com/twitter-card.png" /> -->
 </svelte:head>
 
 <header
