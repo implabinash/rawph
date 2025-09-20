@@ -43,7 +43,7 @@
 	class="mx-auto my-6 flex max-w-5xl items-center justify-between rounded-md border border-neutral-border px-3 py-3"
 >
 	<a href={resolve("/")} class="flex items-center gap-2 text-heading-3"
-		><img src="/images/logo.svg" alt="Homepage" class="size-6" />Rawph</a
+		><img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />Rawph</a
 	>
 
 	<div class="flex items-center gap-2">
@@ -87,14 +87,16 @@
 		</div>
 	</section>
 
-	<section class="mb-24 grid place-items-center rounded-md bg-[url('/images/placeholder.png')] p-6">
-		<img src="/images/demo.png" alt="Rawph Demo" class="rounded-md" />
+	<section
+		class="mb-24 grid place-items-center rounded-md bg-[url('/images/placeholders/0.png')] p-6"
+	>
+		<img src="/images/products/demo.png" alt="Rawph Demo" class="rounded-md" />
 	</section>
 </main>
 
 <footer class="mx-auto mb-12 flex max-w-5xl items-center justify-between">
 	<a href={resolve("/")} class="flex items-center gap-2"
-		><img src="/images/logo.svg" alt="Homepage" class="size-6" />Rawph</a
+		><img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />Rawph</a
 	>
 
 	<a

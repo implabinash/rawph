@@ -110,7 +110,7 @@
 				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-black px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-black"
 				type="submit"
 			>
-				<img src="/images/google.svg" alt="Sign in with Google" class="" />Continue with Google</button
+				<img src="/images/logos/google.svg" alt="Google" class="" />Continue with Google</button
 			>
 		</form>
 
