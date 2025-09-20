@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import Seo from "$lib/components/Seo.svelte";
 </script>
+
+<Seo title="Join" />
 
 <main class="grid h-screen place-items-center">
 	<section class="w-112 space-y-8 rounded-lg bg-neutral-50 p-8">
