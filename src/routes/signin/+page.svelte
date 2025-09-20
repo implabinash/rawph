@@ -1,11 +1,14 @@
 <script lang="ts">
+	import { Eye, EyeOff } from "@lucide/svelte";
+
 	import { resolve } from "$app/paths";
+	import { enhance } from "$app/forms";
 	import type { ActionData } from "./$types";
 
 	import Seo from "$lib/components/Seo.svelte";
-	import { Eye, EyeOff } from "@lucide/svelte";
 
 	let { form }: { form: ActionData } = $props();
+
 	let showPassword: boolean = $state(false);
 </script>
 
@@ -19,7 +22,7 @@
 			<p class="text-body text-subtext-color">Sign in to continue learning together</p>
 		</div>
 
-		<form class="space-y-4" method="POST" action="?/manual">
+		<form class="space-y-4" method="POST" action="?/manual" use:enhance>
 			<div class="flex flex-col gap-1">
 				<label for="email" class="text-body-bold">Email <span class="text-error-500">*</span></label
 				>
