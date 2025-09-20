@@ -1,7 +1,14 @@
 <script lang="ts">
+	import { io } from "socket.io-client";
 	import { Twitter } from "@lucide/svelte";
 
 	import { resolve } from "$app/paths";
+
+	const socket = io();
+
+	socket.on("eventFromServer", (msg) => {
+		console.log(msg);
+	});
 </script>
 
 <svelte:head>
