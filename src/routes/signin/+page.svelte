@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import type { ActionData } from "./$types";
+
 	import Seo from "$lib/components/Seo.svelte";
+	import { Eye, EyeOff } from "@lucide/svelte";
+
+	let { form }: { form: ActionData } = $props();
+	let showPassword: boolean = $state(false);
 </script>
 
 <Seo title="Sign In" />
@@ -13,7 +19,7 @@
 			<p class="text-body text-subtext-color">Sign in to continue learning together</p>
 		</div>
 
-		<form class="space-y-4">
+		<form class="space-y-4" method="POST" action="?/manual">
 			<div class="flex flex-col gap-1">
 				<label for="email" class="text-body-bold">Email <span class="text-error-500">*</span></label
 				>
@@ -22,25 +28,48 @@
 					id="email"
 					type="email"
 					name="email"
+					value={form?.data}
 					placeholder="Enter your email"
-					class="rounded-md border border-neutral-border px-2 py-1 placeholder:text-caption"
+					class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
 					required
 				/>
+
+				{#if form?.error.fieldErrors.email}
+					<p class="text-caption text-error-600">{form.error.fieldErrors.email}</p>
+				{/if}
 			</div>
 
-			<div class="flex flex-col gap-1">
+			<div class="relative flex flex-col gap-1">
 				<label for="password" class="text-body-bold"
 					>Password <span class="text-error-500">*</span></label
 				>
 
 				<input
 					id="password"
-					type="password"
+					type={showPassword ? "text" : "password"}
 					name="password"
 					placeholder="Enter your password"
-					class="rounded-md border border-neutral-border px-2 py-1 placeholder:text-caption"
+					class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
 					required
 				/>
+
+				<button
+					type="button"
+					class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-black active:bg-neutral-50"
+					onclick={() => {
+						showPassword = !showPassword;
+					}}
+				>
+					{#if showPassword}
+						<EyeOff size="16px" />
+					{:else}
+						<Eye size="16px" />
+					{/if}
+				</button>
+
+				{#if form?.error.fieldErrors.password}
+					<p class="text-caption text-error-600">{form.error.fieldErrors.password}</p>
+				{/if}
 			</div>
 
 			<button
