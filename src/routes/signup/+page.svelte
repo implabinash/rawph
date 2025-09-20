@@ -15,7 +15,7 @@
 
 		<form class="space-y-4">
 			<div class="flex flex-col gap-1">
-				<label for="name" class="text-body-bold">Name</label>
+				<label for="name" class="text-body-bold">Name <span class="text-error-500">*</span></label>
 
 				<input
 					id="name"
@@ -28,7 +28,8 @@
 			</div>
 
 			<div class="flex flex-col gap-1">
-				<label for="email" class="text-body-bold">Email</label>
+				<label for="email" class="text-body-bold">Email <span class="text-error-500">*</span></label
+				>
 
 				<input
 					id="email"
@@ -41,7 +42,9 @@
 			</div>
 
 			<div class="flex flex-col gap-1">
-				<label for="password" class="text-body-bold">Password</label>
+				<label for="password" class="text-body-bold"
+					>Password <span class="text-error-500">*</span></label
+				>
 
 				<input
 					id="password"
