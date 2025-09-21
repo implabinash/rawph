@@ -1,15 +1,12 @@
 <script lang="ts">
-	import Whiteboard from '$lib/components/Whiteboard.svelte';
+	import Video from "$lib/components/Video.svelte";
+	import Whiteboard from "$lib/components/Whiteboard.svelte";
 </script>
 
 <main class="flex h-screen gap-4 p-4">
 	<section class="flex flex-col gap-4">
 		<div class="h-112 w-192 rounded-lg border border-neutral-border bg-neutral-50 p-4">
-			<div
-				class="grid h-full w-full place-items-center rounded-md border border-neutral-border bg-neutral-100"
-			>
-				video
-			</div>
+			<Video />
 		</div>
 
 		<div class="flex flex-1 gap-4">
