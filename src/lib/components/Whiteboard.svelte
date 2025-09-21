@@ -1,23 +1,30 @@
 <script lang="ts">
-	import { Trash } from '@lucide/svelte';
-	import { onMount } from 'svelte';
+	import { Trash } from "@lucide/svelte";
+
+	import { onMount } from "svelte";
 
 	let whiteboard: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = $state(null);
 	let drawing: boolean = $state(false);
 	let position = $state({ x: 0, y: 0 });
 	let isClear = $state(true);
-	let strokeColor = $state('#F2555A');
+	let strokeColor = $state("#F2555A");
 
 	onMount(() => {
-		ctx = whiteboard.getContext('2d');
+		ctx = whiteboard.getContext("2d");
 
 		if (ctx) {
 			resizeCanvas();
 			ctx.lineWidth = 2;
-			ctx.lineCap = 'round';
+			ctx.lineCap = "round";
 			ctx.strokeStyle = strokeColor;
 		}
+
+		window.addEventListener("resize", resizeCanvas);
+
+		return () => {
+			window.removeEventListener("resize", resizeCanvas);
+		};
 	});
 
 	$effect(() => {
@@ -27,14 +34,25 @@
 	});
 
 	const resizeCanvas = () => {
+		if (!ctx) return;
+
+		const imageData = ctx.getImageData(0, 0, whiteboard.width, whiteboard.height);
+
 		const rect = whiteboard.getBoundingClientRect();
 		whiteboard.width = rect.width * window.devicePixelRatio;
 		whiteboard.height = rect.height * window.devicePixelRatio;
-		ctx?.scale(window.devicePixelRatio, window.devicePixelRatio);
+		ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+
+		ctx.lineWidth = 2;
+		ctx.lineCap = "round";
+		ctx.strokeStyle = strokeColor;
+
+		ctx.putImageData(imageData, 0, 0);
 	};
 
 	const getMousePos = (e: MouseEvent) => {
 		const rect = whiteboard.getBoundingClientRect();
+
 		return {
 			x: e.clientX - rect.left,
 			y: e.clientY - rect.top
@@ -81,35 +99,35 @@
 		<button
 			class="size-5 cursor-pointer rounded-full bg-[#F2555A] text-error-700"
 			onclick={() => {
-				strokeColor = '#F2555A';
+				strokeColor = "#F2555A";
 			}}>.</button
 		>
 
 		<button
 			class="size-5 cursor-pointer rounded-full bg-[#55B467] text-success-700"
 			onclick={() => {
-				strokeColor = '#55B467';
+				strokeColor = "#55B467";
 			}}>.</button
 		>
 
 		<button
 			class="size-5 cursor-pointer rounded-full bg-[#369EFF] text-[#369EFF]"
 			onclick={() => {
-				strokeColor = '#369EFF';
+				strokeColor = "#369EFF";
 			}}>.</button
 		>
 
 		<button
 			class="size-5 cursor-pointer rounded-full bg-[#FFCB47] text-warning-700"
 			onclick={() => {
-				strokeColor = '#FFCB47';
+				strokeColor = "#FFCB47";
 			}}>.</button
 		>
 
 		<button
 			class="size-5 cursor-pointer rounded-full bg-white"
 			onclick={() => {
-				strokeColor = 'white';
+				strokeColor = "white";
 			}}>.</button
 		>
 	</div>
