@@ -1,12 +1,14 @@
 <script lang="ts">
 	import { Check, Copy, Hand, Link, LogOut, Mic, X } from "@lucide/svelte";
+
+	import { enhance } from "$app/forms";
 </script>
 
 <div
 	class="flex h-full w-64 flex-col justify-between rounded-lg border border-neutral-border bg-neutral-50 p-4"
 >
 	<div class="flex items-center justify-between">
-		<form>
+		<form method="POST" action="?/mute" use:enhance>
 			<button
 				type="submit"
 				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 hover:bg-neutral-100 active:bg-black"
@@ -14,7 +16,7 @@
 			>
 		</form>
 
-		<form>
+		<form method="POST" action="?/hand" use:enhance>
 			<button
 				type="submit"
 				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 hover:bg-neutral-100 active:bg-black"
@@ -22,7 +24,7 @@
 			>
 		</form>
 
-		<form>
+		<form method="POST" action="?/leave" use:enhance>
 			<button
 				type="submit"
 				class="cursor-pointer rounded-md border border-neutral-border bg-error-600 p-2 text-black hover:bg-error-500 active:bg-error-600"
@@ -42,18 +44,23 @@
 					<p class="text-caption-bold">Person Name</p>
 				</div>
 
-				<div class="space-x-1">
-					<button
-						class="cursor-pointer rounded-md border border-neutral-border bg-success-50 p-1 text-success-700 hover:bg-success-100 active:bg-success-50"
-					>
-						<Check size="16px" />
-					</button>
+				<div class="flex items-center gap-1">
+					<form method="POST" action="?/accept" use:enhance>
+						<button
+							type="submit"
+							class="cursor-pointer rounded-md border border-neutral-border bg-success-50 p-1 text-success-700 hover:bg-success-100 active:bg-success-50"
+						>
+							<Check size="16px" />
+						</button>
+					</form>
 
-					<button
-						class="cursor-pointer rounded-md border border-neutral-border bg-error-50 p-1 text-error-700 hover:bg-error-100 active:bg-error-50"
-					>
-						<X size="16px" />
-					</button>
+					<form method="POST" action="?/reject" use:enhance>
+						<button
+							class="cursor-pointer rounded-md border border-neutral-border bg-error-50 p-1 text-error-700 hover:bg-error-100 active:bg-error-50"
+						>
+							<X size="16px" />
+						</button>
+					</form>
 				</div>
 			</div>
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">

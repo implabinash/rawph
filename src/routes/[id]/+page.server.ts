@@ -21,5 +21,25 @@ export const actions = {
 	message: async ({ request }) => {
 		const formData = Object.fromEntries(await request.formData());
 		console.log(formData);
+	},
+
+	mute: () => {
+		console.log("mute");
+	},
+
+	hand: () => {
+		console.log("hand raise");
+	},
+
+	leave: () => {
+		console.log("leave");
+	},
+
+	accept: () => {
+		console.log("accept");
+	},
+
+	reject: () => {
+		console.log("reject");
 	}
 } satisfies Actions;

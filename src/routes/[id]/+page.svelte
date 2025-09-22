@@ -1,14 +1,18 @@
 <script lang="ts">
+	import type { ActionData } from "./$types";
+
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
 	import Video from "$lib/components/Video.svelte";
 	import Chat from "$lib/components/Chat.svelte";
+
+	let { form }: { form: ActionData } = $props();
 </script>
 
 <main class="flex h-screen gap-4 p-4">
 	<section class="flex h-full w-192 flex-col gap-4">
 		<div class="h-112 rounded-lg border border-neutral-border bg-neutral-50 p-4">
-			<Video />
+			<Video {form} />
 		</div>
 
 		<div class="flex min-h-0 flex-1 gap-4">
