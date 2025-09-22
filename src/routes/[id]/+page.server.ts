@@ -16,5 +16,10 @@ export const actions = {
 		// if videoCode is empty return an error
 
 		return { videoCode };
+	},
+
+	message: async ({ request }) => {
+		const formData = Object.fromEntries(await request.formData());
+		console.log(formData);
 	}
 } satisfies Actions;

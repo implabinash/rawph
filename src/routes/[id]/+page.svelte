@@ -1,20 +1,21 @@
 <script lang="ts">
-	import Video from "$lib/components/Video.svelte";
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
+	import Video from "$lib/components/Video.svelte";
+	import Chat from "$lib/components/Chat.svelte";
 </script>
 
 <main class="flex h-screen gap-4 p-4">
-	<section class="flex flex-col gap-4">
-		<div class="h-112 w-192 rounded-lg border border-neutral-border bg-neutral-50 p-4">
+	<section class="flex h-full w-192 flex-col gap-4">
+		<div class="h-112 rounded-lg border border-neutral-border bg-neutral-50 p-4">
 			<Video />
 		</div>
 
-		<div class="flex flex-1 gap-4">
+		<div class="flex min-h-0 flex-1 gap-4">
 			<div class="h-full w-64 rounded-lg border border-neutral-border bg-neutral-50">
 				call actions, participants, session link
 			</div>
 
-			<div class="h-full flex-1 rounded-lg border border-neutral-border bg-neutral-50">chat</div>
+			<Chat />
 		</div>
 	</section>
 
