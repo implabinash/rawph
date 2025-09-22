@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
+	import Controls from "$lib/components/Controls.svelte";
 	import Video from "$lib/components/Video.svelte";
 	import Chat from "$lib/components/Chat.svelte";
 </script>
@@ -11,9 +12,7 @@
 		</div>
 
 		<div class="flex min-h-0 flex-1 gap-4">
-			<div class="h-full w-64 rounded-lg border border-neutral-border bg-neutral-50">
-				call actions, participants, session link
-			</div>
+			<Controls />
 
 			<Chat />
 		</div>
