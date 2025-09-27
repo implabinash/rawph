@@ -8,7 +8,7 @@
 	let drawing: boolean = $state(false);
 	let position = $state({ x: 0, y: 0 });
 	let isClear = $state(true);
-	let strokeColor = $state("#F2555A");
+	let strokeColor = $state("#369EFF");
 
 	onMount(() => {
 		ctx = whiteboard.getContext("2d");
@@ -97,37 +97,37 @@
 
 	<div class="flex items-center gap-2">
 		<button
-			class="size-5 cursor-pointer rounded-full bg-[#F2555A] text-error-700"
+			class={`${strokeColor === "#F2555A" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#F2555A] text-[#F2555A]`}
 			onclick={() => {
 				strokeColor = "#F2555A";
 			}}>.</button
 		>
 
 		<button
-			class="size-5 cursor-pointer rounded-full bg-[#55B467] text-success-700"
+			class={`${strokeColor === "#55B467" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#55B467] text-[#55B467]`}
 			onclick={() => {
 				strokeColor = "#55B467";
 			}}>.</button
 		>
 
 		<button
-			class="size-5 cursor-pointer rounded-full bg-[#369EFF] text-[#369EFF]"
+			class={`${strokeColor === "#369EFF" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#369EFF] text-[#369EFF]`}
 			onclick={() => {
 				strokeColor = "#369EFF";
 			}}>.</button
 		>
 
 		<button
-			class="size-5 cursor-pointer rounded-full bg-[#FFCB47] text-warning-700"
+			class={`${strokeColor === "#FFCB47" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#FFCB47] text-[#FFCB47]`}
 			onclick={() => {
 				strokeColor = "#FFCB47";
 			}}>.</button
 		>
 
 		<button
-			class="size-5 cursor-pointer rounded-full bg-white"
+			class={`${strokeColor === "black" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-black`}
 			onclick={() => {
-				strokeColor = "white";
+				strokeColor = "black";
 			}}>.</button
 		>
 	</div>

@@ -15,7 +15,9 @@
 <Seo title="Join" />
 
 <main class="grid h-screen place-items-center">
-	<section class="w-112 space-y-8 rounded-lg bg-neutral-50 p-8">
+	<section
+		class="w-112 space-y-8 rounded-lg border border-neutral-border bg-neutral-50 p-8 shadow-2xs"
+	>
 		<div class="space-y-2 text-center">
 			<h1 class="text-heading-2">Welcome to Rawph</h1>
 
@@ -76,7 +78,7 @@
 
 				<button
 					type="button"
-					class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-black active:bg-neutral-50"
+					class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-white active:bg-neutral-50"
 					onclick={() => {
 						showPassword = !showPassword;
 					}}
@@ -94,7 +96,7 @@
 			</div>
 
 			<button
-				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-black hover:bg-brand-500 active:bg-brand-600"
+				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
 				>Join Rawph</button
 			>
 		</form>
@@ -107,7 +109,7 @@
 
 		<form action="">
 			<button
-				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-black px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-black"
+				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-white px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-black"
 				type="submit"
 			>
 				<img src="/images/logos/google.svg" alt="Google" class="" />Continue with Google</button
@@ -115,7 +117,9 @@
 		</form>
 
 		<p class="text-center text-body text-subtext-color">
-			Already have an account? <a href={resolve("/signin")} class="text-brand-700">Sign In</a>
+			Already have an account? <a href={resolve("/signin")} class="text-blue-700 underline"
+				>Sign In</a
+			>
 		</p>
 	</section>
 </main>

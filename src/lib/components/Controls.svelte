@@ -11,7 +11,7 @@
 		<form method="POST" action="?/mute" use:enhance>
 			<button
 				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 hover:bg-neutral-100 active:bg-black"
+				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 hover:bg-neutral-100 active:bg-white"
 				><Mic size="20px" /></button
 			>
 		</form>
@@ -19,7 +19,7 @@
 		<form method="POST" action="?/hand" use:enhance>
 			<button
 				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 hover:bg-neutral-100 active:bg-black"
+				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 text-white hover:bg-neutral-100 active:bg-white"
 				><Hand size="20px" /></button
 			>
 		</form>
@@ -27,7 +27,7 @@
 		<form method="POST" action="?/leave" use:enhance>
 			<button
 				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-error-600 p-2 text-black hover:bg-error-500 active:bg-error-600"
+				class="cursor-pointer rounded-md border border-neutral-border bg-error-600 p-2 text-white hover:bg-error-500 active:bg-error-600"
 				><LogOut size="20px" /></button
 			>
 		</form>
@@ -80,14 +80,14 @@
 
 		<div class="flex items-center gap-2">
 			<div
-				class="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-neutral-border bg-black p-2 text-subtext-color"
+				class="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-neutral-border bg-white p-2 text-subtext-color"
 			>
 				<Link size="12px" class="min-w-fit" />
 				<p class="truncate overflow-x-clip text-caption-bold">https://colearn.app/session/abc123</p>
 			</div>
 
 			<button
-				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 hover:bg-neutral-100 active:bg-black"
+				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 hover:bg-neutral-100 active:bg-white"
 				><Copy size="16px" /></button
 			>
 		</div>
