@@ -4,7 +4,7 @@
 
 <section class="fixed inset-0 grid h-full place-items-center bg-black/40 backdrop-blur-sm">
 	<div
-		class="space-y-6 rounded-lg border border-neutral-border bg-default-background p-8 shadow-lg"
+		class="w-112 space-y-6 rounded-lg border border-neutral-border bg-default-background p-8 shadow-lg"
 	>
 		<div class="space-y-4 text-center">
 			<img
@@ -26,6 +26,18 @@
 			<Clock size="20px" class="text-btext-brand-800 rounded-full bg-brand-100 p-1" />
 
 			<p class="text-caption text-subtext-color">Usually responds within a few minutes</p>
+		</div>
+
+		<div class="flex items-center justify-center gap-2">
+			<div class="size-2 animate-bounce rounded-full bg-neutral-700"></div>
+			<div
+				class="size-2 animate-bounce rounded-full bg-neutral-700"
+				style="animation-delay: 0.2s"
+			></div>
+			<div
+				class="size-2 animate-bounce rounded-full bg-neutral-700"
+				style="animation-delay: 0.4s"
+			></div>
 		</div>
 
 		<form action="">

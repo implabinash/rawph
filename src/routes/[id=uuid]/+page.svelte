@@ -9,7 +9,7 @@
 
 	let { form }: { form: ActionData } = $props();
 
-	let isApproved: boolean = $state(true);
+	let isApproved: boolean = $state(false);
 </script>
 
 <main class="relative">
