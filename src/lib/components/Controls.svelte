@@ -1,26 +1,48 @@
 <script lang="ts">
-	import { Check, Copy, Hand, Link, LogOut, Mic, X } from "@lucide/svelte";
+	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw, X } from "@lucide/svelte";
 
 	import { enhance } from "$app/forms";
+	import { page } from "$app/state";
+
+	let url = $state(page.url);
+	let isMute = $state(false);
+	let copied = $state(false);
+
+	const copyToClipboard = async () => {
+		try {
+			await navigator.clipboard.writeText(url.toString());
+			copied = true;
+			setTimeout(() => (copied = false), 1000);
+		} catch (err) {
+			console.error("Failed to copy:", err);
+		}
+	};
 </script>
 
 <div
 	class="flex h-full w-64 flex-col justify-between rounded-lg border border-neutral-border bg-neutral-50 p-4"
 >
 	<div class="flex items-center justify-between">
-		<form method="POST" action="?/mute" use:enhance>
-			<button
-				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 hover:bg-neutral-100 active:bg-white"
-				><Mic size="20px" /></button
-			>
-		</form>
+		<button
+			type="submit"
+			class={`${isMute ? "bg-error-600 text-white hover:bg-error-500" : "bg-white hover:bg-neutral-100 active:bg-white"} cursor-pointer rounded-md border border-neutral-border p-2`}
+			onclick={() => (isMute = !isMute)}
+		>
+			{#if isMute}
+				<MicOff size="20px" />
+			{:else}
+				<Mic size="20px" />
+			{/if}
+		</button>
 
 		<form method="POST" action="?/hand" use:enhance>
 			<button
 				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-black p-2 text-white hover:bg-neutral-100 active:bg-white"
-				><Hand size="20px" /></button
+				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 text-black hover:bg-neutral-100 active:bg-white"
+				><RefreshCcw
+					size="20px"
+					class="transition-transform duration-500 active:rotate-180"
+				/></button
 			>
 		</form>
 
@@ -83,12 +105,17 @@
 				class="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-neutral-border bg-white p-2 text-subtext-color"
 			>
 				<Link size="12px" class="min-w-fit" />
-				<p class="truncate overflow-x-clip text-caption-bold">https://colearn.app/session/abc123</p>
+				<p class="truncate overflow-x-clip text-caption-bold">{url}</p>
 			</div>
 
 			<button
 				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 hover:bg-neutral-100 active:bg-white"
-				><Copy size="16px" /></button
+				onclick={copyToClipboard}
+				>{#if copied}
+					<Check size="16px" />
+				{:else}
+					<Copy size="16px" />
+				{/if}</button
 			>
 		</div>
 	</div>

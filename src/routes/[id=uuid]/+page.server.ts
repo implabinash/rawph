@@ -23,10 +23,6 @@ export const actions = {
 		console.log(formData);
 	},
 
-	mute: () => {
-		console.log("mute");
-	},
-
 	hand: () => {
 		console.log("hand raise");
 	},
