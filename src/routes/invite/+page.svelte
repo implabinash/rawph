@@ -1,20 +1,15 @@
 <script lang="ts">
-	import { Key } from "@lucide/svelte";
 </script>
 
 <main class="grid h-screen place-items-center">
 	<section class="max-w-96 space-y-8">
-		<div class="flex flex-col items-center justify-center gap-6">
-			<Key class="size-12 rounded-full bg-brand-100 p-3" />
+		<!-- <div class="flex flex-col items-center justify-center gap-6 text-center">
+			<h1 class="text-heading-1">You're invited!</h1>
 
-			<div class="space-y-2 text-center">
-				<h1 class="text-heading-1">You're invited!</h1>
-
-				<p class="text-body text-subtext-color">
-					Our platform is invite-only. Enter your referral code to get started.
-				</p>
-			</div>
-		</div>
+			<p class="w-[80%] text-body text-subtext-color">
+				Our platform is invite-only. Enter your referral code to get started.
+			</p>
+		</div> -->
 
 		<form action="" class="space-y-2">
 			<div class="flex flex-col gap-1">
