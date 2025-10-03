@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Copy, Link, LogOut, Plus, Users } from "@lucide/svelte";
 
-	import Seo from "$lib/components/Seo.svelte";
 	import { enhance } from "$app/forms";
+
+	import Seo from "$lib/components/Seo.svelte";
 </script>
 
 <Seo title="Dashboard" />

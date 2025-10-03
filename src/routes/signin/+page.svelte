@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { Eye, EyeOff } from "@lucide/svelte";
 
+	import type { ActionData } from "./$types";
 	import { resolve } from "$app/paths";
 	import { enhance } from "$app/forms";
-	import type { ActionData } from "./$types";
 
 	import Seo from "$lib/components/Seo.svelte";
 

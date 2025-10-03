@@ -4,8 +4,8 @@
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
 	import Video from "$lib/components/Video.svelte";
-	import Chat from "$lib/components/Chat.svelte";
 	import Popup from "$lib/components/Popup.svelte";
+	import Chat from "$lib/components/Chat.svelte";
 
 	let { form }: { form: ActionData } = $props();
 
