@@ -1,3 +1,4 @@
+import { redirect } from "@sveltejs/kit";
 import type { Actions } from "./$types";
 
 export const actions = {
@@ -28,7 +29,7 @@ export const actions = {
 	},
 
 	leave: () => {
-		console.log("leave");
+		return redirect(301, "/dashboard");
 	},
 
 	accept: () => {
