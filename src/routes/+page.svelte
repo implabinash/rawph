@@ -47,7 +47,7 @@
 		>
 		<a
 			href={resolve("/signup")}
-			class="rounded-md bg-brand-600 px-4 py-2 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
+			class="rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 			>Try Rawph for Free</a
 		>
 	</div>
@@ -69,7 +69,7 @@
 		<div class="flex items-center gap-4">
 			<a
 				href={resolve("/signup")}
-				class="rounded-md bg-brand-600 px-4 py-2 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
+				class="rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 				>Try Rawph for Free</a
 			>
 			<a
@@ -95,7 +95,7 @@
 	<a
 		href="https://x.com/implabinash"
 		target="_blank"
-		class="text-black hover:text-brand-600 active:text-white"
+		class="text-default-font hover:text-brand-400 active:text-default-font"
 	>
 		<Twitter />
 	</a>

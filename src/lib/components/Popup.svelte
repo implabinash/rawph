@@ -2,7 +2,7 @@
 	import { Clock } from "@lucide/svelte";
 </script>
 
-<section class="fixed inset-0 grid h-full place-items-center bg-black/40 backdrop-blur-sm">
+<section class="fixed inset-0 grid h-full place-items-center bg-default-font/40 backdrop-blur-sm">
 	<div
 		class="w-112 space-y-6 rounded-lg border border-neutral-border bg-default-background p-8 shadow-lg"
 	>

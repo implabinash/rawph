@@ -44,7 +44,7 @@
 			required
 		/>
 
-		<button type="submit" class="cursor-pointer rounded-md bg-brand-600 p-2 text-white"
+		<button type="submit" class="cursor-pointer rounded-md bg-brand-600 p-2 text-default-background"
 			><Send size="16px" /></button
 		>
 	</form>

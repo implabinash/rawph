@@ -3,13 +3,13 @@
 
 <main class="grid h-screen place-items-center">
 	<section class="max-w-96 space-y-8">
-		<!-- <div class="flex flex-col items-center justify-center gap-6 text-center">
+		<div class="flex flex-col items-center justify-center gap-6 text-center">
 			<h1 class="text-heading-1">You're invited!</h1>
 
 			<p class="w-[80%] text-body text-subtext-color">
 				Our platform is invite-only. Enter your referral code to get started.
 			</p>
-		</div> -->
+		</div>
 
 		<form action="" class="space-y-2">
 			<div class="flex flex-col gap-1">
@@ -32,7 +32,7 @@
 			</div>
 
 			<button
-				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
+				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 				type="submit">Verify Code</button
 			>
 		</form>

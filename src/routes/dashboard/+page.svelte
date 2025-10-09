@@ -60,7 +60,7 @@
 
 				<form action="">
 					<button
-						class="flex w-fit cursor-pointer items-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
+						class="flex w-fit cursor-pointer items-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 						><Plus size="18px" /> Create New Session</button
 					>
 				</form>
@@ -80,12 +80,12 @@
 						type="url"
 						name="videoURL"
 						placeholder="Paste YouTube URL here..."
-						class="w-full rounded-md border border-neutral-border bg-white py-1 pl-7 text-body text-brand-700 placeholder:text-caption"
+						class="w-full rounded-md border border-neutral-border bg-default-background py-1 pl-7 text-body text-brand-700 placeholder:text-caption"
 						required
 					/>
 
 					<button
-						class="flex cursor-pointer items-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
+						class="flex cursor-pointer items-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 						><Users size="16px" /> Join Session</button
 					>
 				</form>

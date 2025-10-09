@@ -25,7 +25,7 @@
 	<div class="flex items-center justify-between">
 		<button
 			type="submit"
-			class={`${isMute ? "bg-error-600 text-white hover:bg-error-500" : "bg-white hover:bg-neutral-100 active:bg-white"} cursor-pointer rounded-md border border-neutral-border p-2`}
+			class={`${isMute ? "bg-error-600 text-default-background hover:bg-error-500" : "bg-default-background hover:bg-neutral-100 active:bg-default-background"} cursor-pointer rounded-md border border-neutral-border p-2`}
 			onclick={() => (isMute = !isMute)}
 		>
 			{#if isMute}
@@ -38,7 +38,7 @@
 		<form method="POST" action="?/hand" use:enhance>
 			<button
 				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 text-black hover:bg-neutral-100 active:bg-white"
+				class="cursor-pointer rounded-md border border-neutral-border bg-default-background p-2 hover:bg-neutral-100 active:bg-default-background"
 				><RefreshCcw
 					size="20px"
 					class="transition-transform duration-500 active:rotate-180"
@@ -49,7 +49,7 @@
 		<form method="POST" action="?/leave" use:enhance>
 			<button
 				type="submit"
-				class="cursor-pointer rounded-md border border-neutral-border bg-error-600 p-2 text-white hover:bg-error-500 active:bg-error-600"
+				class="cursor-pointer rounded-md border border-neutral-border bg-error-600 p-2 text-default-background hover:bg-error-500 active:bg-error-600"
 				><LogOut size="20px" /></button
 			>
 		</form>
@@ -102,14 +102,14 @@
 
 		<div class="flex items-center gap-2">
 			<div
-				class="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-neutral-border bg-white p-2 text-subtext-color"
+				class="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-neutral-border bg-default-background p-2 text-subtext-color"
 			>
 				<Link size="12px" class="min-w-fit" />
 				<p class="truncate overflow-x-clip text-caption-bold">{url}</p>
 			</div>
 
 			<button
-				class="cursor-pointer rounded-md border border-neutral-border bg-white p-2 hover:bg-neutral-100 active:bg-white"
+				class="cursor-pointer rounded-md border border-neutral-border bg-default-background p-2 hover:bg-neutral-100 active:bg-default-background"
 				onclick={copyToClipboard}
 				>{#if copied}
 					<Check size="16px" />

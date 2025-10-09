@@ -18,7 +18,7 @@
 				type="url"
 				name="videoURL"
 				placeholder="Paste YouTube URL here..."
-				class="w-112 rounded-md border border-neutral-border bg-white py-1 pl-7 text-body text-brand-700 placeholder:text-caption"
+				class="w-112 rounded-md border border-neutral-border bg-default-background py-1 pl-7 text-body text-brand-700 placeholder:text-caption"
 				required
 			/>
 		</form>

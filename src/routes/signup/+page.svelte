@@ -15,9 +15,7 @@
 <Seo title="Join" />
 
 <main class="grid h-screen place-items-center">
-	<section
-		class="w-112 space-y-8 rounded-lg border border-neutral-border bg-neutral-50 p-8 shadow-2xs"
-	>
+	<section class="w-112 space-y-8 p-8">
 		<div class="space-y-2 text-center">
 			<h1 class="text-heading-2">Welcome to Rawph</h1>
 
@@ -78,15 +76,15 @@
 
 				<button
 					type="button"
-					class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-white active:bg-neutral-50"
+					class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-default-background active:bg-neutral-50"
 					onclick={() => {
 						showPassword = !showPassword;
 					}}
 				>
 					{#if showPassword}
-						<EyeOff size="16px" />
-					{:else}
 						<Eye size="16px" />
+					{:else}
+						<EyeOff size="16px" />
 					{/if}
 				</button>
 
@@ -96,8 +94,8 @@
 			</div>
 
 			<button
-				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-white hover:bg-brand-500 active:bg-brand-600"
-				>Join Rawph</button
+				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
+				type="submit">Join Rawph</button
 			>
 		</form>
 
@@ -109,7 +107,7 @@
 
 		<form action="">
 			<button
-				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-white px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-black"
+				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-default-background px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-default-background"
 				type="submit"
 			>
 				<img src="/images/logos/google.svg" alt="Google" class="" />Continue with Google</button

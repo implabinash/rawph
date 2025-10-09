@@ -97,35 +97,35 @@
 
 	<div class="flex items-center gap-2">
 		<button
-			class={`${strokeColor === "#F2555A" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#F2555A] text-[#F2555A]`}
+			class={`${strokeColor === "#F2555A" ? "ring-2 ring-black ring-offset-2 ring-offset-default-background" : ""} size-5 cursor-pointer rounded-full bg-[#F2555A] text-[#F2555A]`}
 			onclick={() => {
 				strokeColor = "#F2555A";
 			}}>.</button
 		>
 
 		<button
-			class={`${strokeColor === "#55B467" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#55B467] text-[#55B467]`}
+			class={`${strokeColor === "#55B467" ? "ring-2 ring-black ring-offset-2 ring-offset-default-background" : ""} size-5 cursor-pointer rounded-full bg-[#55B467] text-[#55B467]`}
 			onclick={() => {
 				strokeColor = "#55B467";
 			}}>.</button
 		>
 
 		<button
-			class={`${strokeColor === "#369EFF" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#369EFF] text-[#369EFF]`}
+			class={`${strokeColor === "#369EFF" ? "ring-2 ring-black ring-offset-2 ring-offset-default-background" : ""} size-5 cursor-pointer rounded-full bg-[#369EFF] text-[#369EFF]`}
 			onclick={() => {
 				strokeColor = "#369EFF";
 			}}>.</button
 		>
 
 		<button
-			class={`${strokeColor === "#FFCB47" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-[#FFCB47] text-[#FFCB47]`}
+			class={`${strokeColor === "#FFCB47" ? "ring-2 ring-black ring-offset-2 ring-offset-default-background" : ""} size-5 cursor-pointer rounded-full bg-[#FFCB47] text-[#FFCB47]`}
 			onclick={() => {
 				strokeColor = "#FFCB47";
 			}}>.</button
 		>
 
 		<button
-			class={`${strokeColor === "black" ? "ring-2 ring-black ring-offset-2 ring-offset-white" : ""} size-5 cursor-pointer rounded-full bg-black`}
+			class={`${strokeColor === "black" ? "ring-2 ring-black ring-offset-2 ring-offset-default-background" : ""} size-5 cursor-pointer rounded-full bg-black`}
 			onclick={() => {
 				strokeColor = "black";
 			}}>.</button
