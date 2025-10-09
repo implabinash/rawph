@@ -72,7 +72,7 @@
 					</p>
 				</div>
 
-				<form action="">
+				<form action="?/create" method="POST" use:enhance>
 					<button
 						class="flex w-fit cursor-pointer items-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 						><Plus size="18px" /> Create New Session</button
@@ -87,7 +87,7 @@
 					<p class="text-body text-subtext-color">Enter a session link to join your friends</p>
 				</div>
 
-				<form class="relative space-y-6" method="POST" action="" use:enhance>
+				<form class="relative space-y-6" method="POST" action="?/join" use:enhance>
 					<Link size="14px" class="absolute top-2 left-2 text-subtext-color" />
 
 					<input
@@ -100,7 +100,7 @@
 
 					<button
 						class="flex cursor-pointer items-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-						><Users size="16px" /> Join Session</button
+						type="submit"><Users size="16px" /> Join Session</button
 					>
 				</form>
 			</div>
