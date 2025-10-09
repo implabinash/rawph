@@ -9,13 +9,9 @@
 	let copied = $state(false);
 
 	const copyToClipboard = async () => {
-		try {
-			await navigator.clipboard.writeText(url.toString());
-			copied = true;
-			setTimeout(() => (copied = false), 1000);
-		} catch (err) {
-			console.error("Failed to copy:", err);
-		}
+		await navigator.clipboard.writeText(url.toString());
+		copied = true;
+		setTimeout(() => (copied = false), 1000);
 	};
 </script>
 

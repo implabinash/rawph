@@ -1,9 +1,18 @@
 <script lang="ts">
-	import { Copy, Link, LogOut, Plus, Users } from "@lucide/svelte";
+	import { Check, Copy, Link, LogOut, Plus, Users } from "@lucide/svelte";
 
 	import { enhance } from "$app/forms";
 
 	import Seo from "$lib/components/Seo.svelte";
+
+	let copied = $state(false);
+	let code = $state("9YC5VXW6JV");
+
+	const copyToClipboard = async () => {
+		await navigator.clipboard.writeText(code.toUpperCase());
+		copied = true;
+		setTimeout(() => (copied = false), 1000);
+	};
 </script>
 
 <Seo title="Dashboard" />
@@ -37,11 +46,16 @@
 			</div>
 
 			<div class="flex items-center gap-3">
-				<p class="text-heading-3 text-brand-primary">9YC5VXW6JV</p>
+				<p class="text-heading-3 text-brand-primary">{code.toUpperCase()}</p>
 
 				<button
-					class="flex cursor-pointer items-center gap-2 rounded-md border border-neutral-border bg-default-background px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-default-background"
-					><Copy size="16px" class="active:animate-ping" /> Copy Code</button
+					class="flex cursor-pointer items-center gap-1 rounded-md border border-neutral-border bg-default-background px-3 py-1.5 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-default-background"
+					onclick={copyToClipboard}
+					>{#if copied}
+						<Check size="16px" /> Copied
+					{:else}
+						<Copy size="16px" /> Copy Code
+					{/if}</button
 				>
 			</div>
 		</div>
