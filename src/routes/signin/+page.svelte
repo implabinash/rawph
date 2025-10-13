@@ -14,7 +14,7 @@
 
 <Seo title="Sign In" />
 
-<main class="grid h-screen place-items-center">
+<main class="grid h-screen grid-cols-2 place-items-center">
 	<section class="w-112 space-y-8 p-8">
 		<div class="space-y-2 text-center">
 			<h1 class="text-heading-2">Welcome to Rawph</h1>
@@ -100,5 +100,11 @@
 			Don't have an account? <a href={resolve("/signup")} class="text-blue-600 underline">Sign Up</a
 			>
 		</p>
+	</section>
+
+	<section class="h-full w-full p-4">
+		<div
+			class="h-full w-full rounded-lg bg-[url('/images/placeholders/0.png')] bg-cover bg-center bg-no-repeat"
+		></div>
 	</section>
 </main>
