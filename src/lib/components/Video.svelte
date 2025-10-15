@@ -5,12 +5,20 @@
 	import { enhance } from "$app/forms";
 
 	let { form }: { form: ActionData } = $props();
+
+	let videoCode: string = $state("");
+
+	$effect(() => {
+		if (!videoCode) {
+			videoCode = form?.videoCode || "";
+		}
+	});
 </script>
 
 <div
 	class="grid h-full w-full place-items-center rounded-md border border-neutral-border bg-neutral-100"
 >
-	{#if !form?.videoCode}
+	{#if !videoCode}
 		<form class="relative" method="POST" action="?/youtube" use:enhance>
 			<Link size="14px" class="absolute top-2 left-2 text-subtext-color" />
 
@@ -26,7 +34,7 @@
 		<iframe
 			width="560"
 			height="315"
-			src={`https://www.youtube-nocookie.com/embed/${form.videoCode}`}
+			src={`https://www.youtube-nocookie.com/embed/${videoCode}`}
 			title="YouTube video player"
 			frameborder="0"
 			allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
