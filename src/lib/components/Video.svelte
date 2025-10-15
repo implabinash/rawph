@@ -9,8 +9,12 @@
 	let videoCode: string = $state("");
 
 	$effect(() => {
-		if (!videoCode) {
-			videoCode = form?.videoCode || "";
+		if (!videoCode && form?.videoCode) {
+			videoCode = form.videoCode || "";
+		}
+
+		if (form?.change && videoCode) {
+			videoCode = "";
 		}
 	});
 </script>

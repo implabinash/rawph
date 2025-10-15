@@ -24,8 +24,8 @@ export const actions = {
 		console.log(formData);
 	},
 
-	hand: () => {
-		console.log("hand raise");
+	changeVideo: () => {
+		return { change: true };
 	},
 
 	leave: () => {

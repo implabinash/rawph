@@ -31,7 +31,7 @@
 			{/if}
 		</button>
 
-		<form method="POST" action="?/hand" use:enhance>
+		<form method="POST" action="?/changeVideo" use:enhance>
 			<button
 				type="submit"
 				class="cursor-pointer rounded-md border border-neutral-border bg-default-background p-2 hover:bg-neutral-100 active:bg-default-background"
