@@ -1,5 +1,5 @@
 import { redirect } from "@sveltejs/kit";
-import type { Actions } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 
 export const actions = {
 	youtube: async ({ request }) => {
@@ -19,11 +19,6 @@ export const actions = {
 		return { videoCode };
 	},
 
-	message: async ({ request }) => {
-		const formData = Object.fromEntries(await request.formData());
-		console.log(formData);
-	},
-
 	changeVideo: () => {
 		return { change: true };
 	},
@@ -40,3 +35,9 @@ export const actions = {
 		console.log("reject");
 	}
 } satisfies Actions;
+
+export const load: PageServerLoad = async ({ locals }) => {
+	if (!locals.user) {
+		throw redirect(301, "/signin");
+	}
+};
