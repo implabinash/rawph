@@ -19,7 +19,7 @@ export const actions = {
 			});
 		}
 
-		const { date, error } = await authClient.signIn.email({
+		const { data, error } = await authClient.signIn.email({
 			email: result.data.email,
 			password: result.data.password,
 			callbackURL: "/dashboard"
@@ -28,21 +28,11 @@ export const actions = {
 		if (error) {
 			console.error("Better Auth sign in error:", error);
 
-			if (error.status === 409) {
-				return fail(409, {
-					data: {
-						email: result.data.email
-					},
-					errors: { email: ["An account with this email already exists"] },
-					message: error.message || "User already exists."
-				});
-			}
-
 			return fail(error.status || 400, {
 				data: {
 					email: result.data.email
 				},
-				errors: {},
+				error: {},
 				message: error.message || "Sign in failed. Please try again."
 			});
 		}
