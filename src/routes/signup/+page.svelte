@@ -10,6 +10,7 @@
 	let { form }: { form: ActionData } = $props();
 
 	let showPassword: boolean = $state(false);
+	let isSubmitting: boolean = $state(false);
 </script>
 
 <Seo title="Join" />
@@ -22,7 +23,27 @@
 			<p class="text-body text-subtext-color">Register to continue learning together</p>
 		</div>
 
-		<form class="space-y-4" method="POST" action="?/manual" use:enhance>
+		<!-- User Facing Error Messages -->
+		{#if form?.message}
+			<div class="rounded-md border border-error-200 bg-error-50 px-4 py-3">
+				<p class="text-body text-error-700">{form.message}</p>
+			</div>
+		{/if}
+
+		<form
+			class="space-y-4"
+			method="POST"
+			action="?/manual"
+			use:enhance={() => {
+				isSubmitting = true;
+
+				return async ({ update }) => {
+					await update();
+					isSubmitting = false;
+				};
+			}}
+		>
+			<!-- Name Field -->
 			<div class="flex flex-col gap-1">
 				<label for="name" class="text-body-bold">Name <span class="text-error-500">*</span></label>
 
@@ -30,17 +51,20 @@
 					id="name"
 					type="text"
 					name="name"
-					value={form?.data.name}
+					value={form?.data.name ?? ""}
 					placeholder="Enter your name"
-					class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+					class="rounded-md border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+					class:border-neutral-border={!form?.error?.name}
+					class:border-error-500={form?.error?.name}
 					required
 				/>
 
-				{#if form?.error.fieldErrors.name}
-					<p class="text-caption text-error-600">{form.error.fieldErrors.name}</p>
+				{#if form?.error?.name}
+					<p class="text-caption text-error-600">{form.error.name}</p>
 				{/if}
 			</div>
 
+			<!-- Email Field -->
 			<div class="flex flex-col gap-1">
 				<label for="email" class="text-body-bold">Email <span class="text-error-500">*</span></label
 				>
@@ -51,15 +75,18 @@
 					name="email"
 					value={form?.data.email}
 					placeholder="Enter your email"
-					class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+					class="rounded-md border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+					class:border-neutral-border={!form?.error?.email}
+					class:border-error-500={form?.error?.email}
 					required
 				/>
 
-				{#if form?.error.fieldErrors.email}
-					<p class="text-caption text-error-600">{form.error.fieldErrors.email}</p>
+				{#if form?.error?.email}
+					<p class="text-caption text-error-600">{form.error.email}</p>
 				{/if}
 			</div>
 
+			<!-- Password Filed -->
 			<div class="relative flex flex-col gap-1">
 				<label for="password" class="text-body-bold"
 					>Password <span class="text-error-500">*</span></label
@@ -70,7 +97,9 @@
 					type={showPassword ? "text" : "password"}
 					name="password"
 					placeholder="Enter your password"
-					class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+					class="rounded-md border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+					class:border-neutral-border={!form?.error?.password}
+					class:border-error-500={form?.error?.password}
 					required
 				/>
 
@@ -88,23 +117,26 @@
 					{/if}
 				</button>
 
-				{#if form?.error.fieldErrors.password}
-					<p class="text-caption text-error-600">{form.error.fieldErrors.password}</p>
+				{#if form?.error?.password}
+					<p class="text-caption text-error-600">{form.error.password}</p>
 				{/if}
 			</div>
 
+			<!-- Submit Button -->
 			<button
 				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-				type="submit">Join Rawph</button
+				type="submit">{isSubmitting ? "Creating account..." : "Join Rawph"}</button
 			>
 		</form>
 
+		<!-- OR Devider -->
 		<div class="flex items-center gap-2 text-caption text-subtext-color">
 			<hr class="flex-1" />
 			<span>or</span>
 			<hr class="flex-1" />
 		</div>
 
+		<!-- Google Sign Up Button -->
 		<form action="">
 			<button
 				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-default-background px-4 py-2 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-default-background"
@@ -114,6 +146,7 @@
 			>
 		</form>
 
+		<!-- Sign In Page -->
 		<p class="text-center text-body text-subtext-color">
 			Already have an account? <a href={resolve("/signin")} class="text-blue-700 underline"
 				>Sign In</a
@@ -121,6 +154,7 @@
 		</p>
 	</section>
 
+	<!-- Left Image -->
 	<section class="h-full w-full p-4">
 		<div
 			class="h-full w-full rounded-lg bg-[url('/images/placeholders/0.png')] bg-cover bg-center bg-no-repeat"
