@@ -27,7 +27,7 @@ export const actions = {
 		});
 
 		if (error) {
-			console.error("Better Auth sign in error:", error);
+			console.error("Better Auth sign up error:", error);
 
 			if (error.status === 409) {
 				return fail(409, {
