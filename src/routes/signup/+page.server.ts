@@ -19,7 +19,7 @@ export const actions = {
 			});
 		}
 
-		const { date, error } = await authClient.signUp.email({
+		const { data, error } = await authClient.signUp.email({
 			name: result.data.name,
 			email: result.data.email,
 			password: result.data.password,
@@ -31,6 +31,7 @@ export const actions = {
 
 			if (error.status === 409) {
 				return fail(409, {
+					success: false,
 					data: {
 						email: result.data.email,
 						name: result.data.name
@@ -41,12 +42,13 @@ export const actions = {
 			}
 
 			return fail(error.status || 400, {
+				success: false,
 				data: {
 					email: result.data.email,
 					name: result.data.name
 				},
 				errors: {},
-				message: error.message || "Sign in failed. Please try again."
+				message: error.message || "Sign up failed. Please try again."
 			});
 		}
 
