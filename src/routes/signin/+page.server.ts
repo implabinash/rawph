@@ -28,7 +28,19 @@ export const actions = {
 		if (error) {
 			console.error("Better Auth sign in error:", error);
 
+			if (error.status === 401) {
+				return fail(401, {
+					success: false,
+					data: {
+						email: result.data.email
+					},
+					error: {},
+					message: "Invalid email or password."
+				});
+			}
+
 			return fail(error.status || 400, {
+				success: false,
 				data: {
 					email: result.data.email
 				},
