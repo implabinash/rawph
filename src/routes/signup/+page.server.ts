@@ -1,9 +1,6 @@
 import { z } from "zod/v4";
-
 import { fail, redirect, type Actions } from "@sveltejs/kit";
-
 import { signUpSchema } from "$lib/validations/auth";
-import { authClient } from "$lib/auth-client";
 
 export const actions = {
 	manual: async ({ request }) => {
@@ -13,45 +10,15 @@ export const actions = {
 		if (!result.success) {
 			return fail(400, {
 				success: false,
-				data: { email: formData.email, name: formData.name },
-				error: z.flattenError(result.error).fieldErrors,
-				message: ""
-			});
-		}
-
-		const { data, error } = await authClient.signUp.email({
-			name: result.data.name,
-			email: result.data.email,
-			password: result.data.password,
-			callbackURL: "/dashboard"
-		});
-
-		if (error) {
-			console.error("Better Auth sign up error:", error);
-
-			if (error.status === 409) {
-				return fail(409, {
-					success: false,
-					data: {
-						email: result.data.email,
-						name: result.data.name
-					},
-					errors: { email: ["An account with this email already exists"] },
-					message: error.message || "User already exists."
-				});
-			}
-
-			return fail(error.status || 400, {
-				success: false,
 				data: {
-					email: result.data.email,
-					name: result.data.name
+					email: formData.email as string,
+					name: formData.name as string
 				},
-				errors: {},
-				message: error.message || "Sign up failed. Please try again."
+				errors: z.flattenError(result.error).fieldErrors,
+				message: "Validation failed"
 			});
 		}
 
-		return redirect(303, "/dashboard");
+		redirect(303, "/dashboard");
 	}
 } satisfies Actions;
