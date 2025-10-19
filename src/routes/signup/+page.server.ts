@@ -71,28 +71,16 @@ export const actions = {
 		}
 
 		const setCookieHeader = res.headers.get("set-cookie");
+
 		if (setCookieHeader) {
-			// Parse the cookie
-			const cookieParts = setCookieHeader.split(";").map((part) => part.trim());
-			const [cookieNameValue] = cookieParts;
-			const [name, value] = cookieNameValue.split("=");
+			const [name, token] = setCookieHeader.split(";")[0].split("=");
 
-			// Extract cookie attributes
-			const maxAge = cookieParts.find((p) => p.toLowerCase().startsWith("max-age="))?.split("=")[1];
-			const path = cookieParts.find((p) => p.toLowerCase().startsWith("path="))?.split("=")[1];
-			const secure = cookieParts.some((p) => p.toLowerCase() === "secure");
-			const httpOnly = cookieParts.some((p) => p.toLowerCase() === "httponly");
-			const sameSite = cookieParts
-				.find((p) => p.toLowerCase().startsWith("samesite="))
-				?.split("=")[1];
-
-			// Set cookie in SvelteKit
-			cookies.set(name, value, {
-				path: path || "/",
-				maxAge: maxAge ? parseInt(maxAge) : 7 * 24 * 60 * 60,
-				httpOnly: httpOnly,
-				secure: secure,
-				sameSite: (sameSite?.toLowerCase() as "strict" | "lax" | "none") || "lax"
+			cookies.set(name, token, {
+				path: "/",
+				secure: true,
+				httpOnly: true,
+				sameSite: "none",
+				maxAge: 7 * 24 * 60 * 60
 			});
 		}
 
