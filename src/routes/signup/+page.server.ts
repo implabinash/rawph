@@ -1,9 +1,9 @@
 import { z } from "zod/v4";
 
 import { fail, redirect, type Actions } from "@sveltejs/kit";
+import { BASE_URL } from "$env/static/private";
 
 import { signUpSchema } from "$lib/validations/auth";
-import { BASE_URL } from "$env/static/private";
 
 export const actions = {
 	manual: async ({ request, fetch, cookies }) => {
