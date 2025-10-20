@@ -28,8 +28,6 @@ export const actions = {
 			body: JSON.stringify(result.data)
 		});
 
-		console.log(res);
-
 		const data = await res.json();
 
 		if (!data.success) {
