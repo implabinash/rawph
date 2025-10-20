@@ -18,7 +18,7 @@ export const actions = {
 					name: formData.name as string
 				},
 				error: z.flattenError(result.error).fieldErrors,
-				message: "Validation failed"
+				message: "Invalid inputs."
 			});
 		}
 
