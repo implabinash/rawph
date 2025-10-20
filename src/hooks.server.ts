@@ -2,7 +2,14 @@ import { redirect, type Handle } from "@sveltejs/kit";
 import { BASE_URL } from "$env/static/private";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (event.url.pathname.startsWith("/dashboard")) {
+	const isPrivateRoute =
+		event.url.pathname.startsWith("/dashboard") ||
+		event.url.pathname.startsWith("/invite") ||
+		event.url.pathname.startsWith("/s");
+
+	console.log(isPrivateRoute, event.url.pathname);
+
+	if (isPrivateRoute) {
 		const res = await event.fetch(`${BASE_URL}/users/me`, {
 			credentials: "include"
 		});
