@@ -76,6 +76,6 @@ export const actions = {
 			});
 		}
 
-		return redirect(303, "/dashboard");
+		return redirect(303, "/invite");
 	}
 } satisfies Actions;
