@@ -15,8 +15,11 @@
 	} from "@lucide/svelte";
 
 	import { enhance } from "$app/forms";
+	import type { PageData } from "./$types";
 
 	import Seo from "$lib/components/Seo.svelte";
+
+	let { data }: { data: PageData } = $props();
 
 	let copied = $state(false);
 	let code = $state("9YC5VXW6JV");
@@ -50,7 +53,7 @@
 <main class="mt-24 grid place-items-center">
 	<section class="space-y-12">
 		<div class="space-y-4 text-center">
-			<h1 class="text-heading-1">Welcome to Rawph</h1>
+			<h1 class="text-heading-1">Welcome, {data.user.name}</h1>
 			<p class="text-body text-subtext-color">
 				Start learning together with your friends through shared video experiences
 			</p>

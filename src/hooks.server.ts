@@ -2,15 +2,19 @@ import { redirect, type Handle } from "@sveltejs/kit";
 import { BASE_URL } from "$env/static/private";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (event.url.pathname.startsWith("/invite")) {
+	if (event.url.pathname.startsWith("/dashboard")) {
 		const res = await event.fetch(`${BASE_URL}/users/me`, {
 			credentials: "include"
 		});
 
+		if (!res.ok) {
+			redirect(302, "/signin");
+		}
+
 		const data = await res.json();
 
 		if (!data.success) {
-			redirect(303, "/signin");
+			redirect(302, "/signin");
 		}
 
 		const setCookieHeader = res.headers.get("set-cookie");
@@ -28,8 +32,6 @@ export const handle: Handle = async ({ event, resolve }) => {
 		}
 
 		event.locals.user = data.data.user;
-
-		console.log(data.data);
 	}
 
 	const response = await resolve(event);

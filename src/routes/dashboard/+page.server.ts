@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 
+import type { Actions, PageServerLoad } from "./$types";
 import { redirect } from "@sveltejs/kit";
-import type { Actions } from "./$types";
 
 export const actions = {
 	create: async () => {
@@ -16,3 +16,11 @@ export const actions = {
 		return redirect(301, `/${roomID}`);
 	}
 } satisfies Actions;
+
+export const load: PageServerLoad = async ({ locals }) => {
+	if (!locals.user) {
+		redirect(302, "/signin");
+	}
+
+	return { user: locals.user };
+};
