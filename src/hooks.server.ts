@@ -6,30 +6,35 @@ export const handle: Handle = async ({ event, resolve }) => {
 	const token = event.cookies.get(COOKIE_NAME);
 
 	if (token) {
-		const res = await event.fetch(`${BASE_URL}/users/me`, {
-			credentials: "include"
-		});
+		try {
+			const res = await event.fetch(`${BASE_URL}/users/me`, {
+				credentials: "include"
+			});
 
-		if (res.ok) {
-			const data = await res.json();
+			if (res.ok) {
+				const data = await res.json();
 
-			if (data.success) {
-				const setCookieHeader = res.headers.get("set-cookie");
+				if (data.success) {
+					const setCookieHeader = res.headers.get("set-cookie");
 
-				if (setCookieHeader) {
-					const [name, token] = setCookieHeader.split(";")[0].split("=");
+					if (setCookieHeader) {
+						const [name, token] = setCookieHeader.split(";")[0].split("=");
 
-					event.cookies.set(name, token, {
-						path: "/",
-						secure: true,
-						httpOnly: true,
-						sameSite: "none",
-						maxAge: 30 * 24 * 60 * 60
-					});
+						event.cookies.set(name, token, {
+							path: "/",
+							secure: true,
+							httpOnly: true,
+							sameSite: "none",
+							maxAge: 30 * 24 * 60 * 60
+						});
+					}
+
+					event.locals.user = data.data.user;
 				}
-
-				event.locals.user = data.data.user;
 			}
+		} catch (error) {
+			event.cookies.delete(COOKIE_NAME, { path: "/" });
+			console.error("Auth verification failed:", error);
 		}
 	}
 
