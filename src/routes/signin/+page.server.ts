@@ -73,7 +73,7 @@ export const actions = {
 				httpOnly: true,
 				sameSite: "none",
 				maxAge: 30 * 24 * 60 * 60,
-				partitioned: true
+				domain: "rawph.implabinash.workers.dev"
 			});
 		}
 
