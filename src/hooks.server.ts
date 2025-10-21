@@ -1,44 +1,36 @@
-import { redirect, type Handle } from "@sveltejs/kit";
+import { COOKIE_NAME } from "$lib/utils/constants";
 import { BASE_URL } from "$env/static/private";
+import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
-	const isPrivateRoute =
-		event.url.pathname.startsWith("/dashboard") ||
-		event.url.pathname.startsWith("/invite") ||
-		event.url.pathname.startsWith("/s");
+	const token = event.cookies.get(COOKIE_NAME);
 
-	console.log(isPrivateRoute, event.url.pathname);
-
-	if (isPrivateRoute) {
+	if (token) {
 		const res = await event.fetch(`${BASE_URL}/users/me`, {
 			credentials: "include"
 		});
 
-		if (!res.ok) {
-			redirect(302, "/signin");
+		if (res.ok) {
+			const data = await res.json();
+
+			if (data.success) {
+				const setCookieHeader = res.headers.get("set-cookie");
+
+				if (setCookieHeader) {
+					const [name, token] = setCookieHeader.split(";")[0].split("=");
+
+					event.cookies.set(name, token, {
+						path: "/",
+						secure: true,
+						httpOnly: true,
+						sameSite: "none",
+						maxAge: 30 * 24 * 60 * 60
+					});
+				}
+
+				event.locals.user = data.data.user;
+			}
 		}
-
-		const data = await res.json();
-
-		if (!data.success) {
-			redirect(302, "/signin");
-		}
-
-		const setCookieHeader = res.headers.get("set-cookie");
-
-		if (setCookieHeader) {
-			const [name, token] = setCookieHeader.split(";")[0].split("=");
-
-			event.cookies.set(name, token, {
-				path: "/",
-				secure: true,
-				httpOnly: true,
-				sameSite: "none",
-				maxAge: 30 * 24 * 60 * 60
-			});
-		}
-
-		event.locals.user = data.data.user;
 	}
 
 	const response = await resolve(event);

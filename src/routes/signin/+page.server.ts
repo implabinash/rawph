@@ -79,3 +79,11 @@ export const actions = {
 		return redirect(303, "/invite");
 	}
 } satisfies Actions;
+
+// export const load: PageServerLoad = async ({ locals }) => {
+// 	if (!locals.user) {
+// 		redirect(302, "/signin");
+// 	}
+
+// 	return { user: locals.user };
+// };
