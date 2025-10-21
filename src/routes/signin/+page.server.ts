@@ -76,7 +76,7 @@ export const actions = {
 			});
 		}
 
-		return redirect(303, "/invite");
+		throw redirect(303, "/invite");
 	}
 } satisfies Actions;
 

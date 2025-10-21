@@ -24,7 +24,7 @@ export const actions = {
 	},
 
 	leave: () => {
-		return redirect(301, "/dashboard");
+		throw redirect(301, "/dashboard");
 	},
 
 	accept: () => {
