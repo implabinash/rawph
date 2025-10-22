@@ -17,6 +17,7 @@ declare global {
 				email: string;
 				image: string;
 				isInvited: boolean;
+				joinedCode: string;
 				createdAt: Date;
 				updatedAt: Date;
 			};

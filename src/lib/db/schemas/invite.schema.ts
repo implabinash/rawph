@@ -2,24 +2,19 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
 
-import { inviteCodesTable } from "./invite.schema";
-
-export const usersTable = sqliteTable("users", {
+export const inviteCodesTable = sqliteTable("invite_codes", {
 	id: text("id")
 		.primaryKey()
 		.notNull()
 		.unique()
 		.$defaultFn(() => randomUUID()),
 
-	name: text("name").notNull(),
-	email: text("email").notNull().unique(),
-	password: text("password").notNull(),
-	image: text("image").notNull(),
+	code: text("code").notNull().unique(),
+	createdBy: text("created_by").default("00000000-0000-0000-0000-000000000000"),
 
-	isInvited: integer("is_invited", { mode: "boolean" }).default(false).notNull(),
-	joinedCode: text("joined_code")
-		.references(() => inviteCodesTable.code)
-		.notNull(),
+	isUsed: integer("is_used", { mode: "boolean" }).default(false).notNull(),
+	usedBy: text("used_by"),
+	usedAt: integer("used_at", { mode: "timestamp_ms" }),
 
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)

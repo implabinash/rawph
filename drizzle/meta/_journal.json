@@ -15,6 +15,13 @@
       "when": 1761129812045,
       "tag": "0001_supreme_pepper_potts",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1761149833201,
+      "tag": "0002_useful_oracle",
+      "breakpoints": true
     }
   ]
 }
