@@ -1,7 +1,8 @@
 import { eq } from "drizzle-orm";
-import { sessionsTable } from "../schemas/auth.schema";
-import { usersTable } from "../schemas/user.schema";
-import { getDB } from "..";
+
+import { sessionsTable } from "$lib/db/schemas/auth.schema";
+import { usersTable } from "$lib/db/schemas/user.schema";
+import { getDB } from "$lib/db/index";
 
 export const getSessionData = async (db: D1Database, sessionToken: string) => {
 	const user = await getDB(db)

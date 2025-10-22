@@ -1,7 +1,7 @@
 import { drizzle } from "drizzle-orm/d1";
 
-import { sessionsTable } from "./schemas/auth.schema";
-import { usersTable } from "./schemas/user.schema";
+import { sessionsTable } from "$lib/db/schemas/auth.schema";
+import { usersTable } from "$lib/db/schemas/user.schema";
 
 export const getDB = (db: D1Database) => {
 	return drizzle(db, {

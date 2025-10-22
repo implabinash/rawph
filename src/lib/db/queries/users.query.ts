@@ -1,6 +1,7 @@
 import { eq } from "drizzle-orm";
-import { getDB } from "..";
-import { usersTable } from "../schemas/user.schema";
+
+import { usersTable } from "$lib/db/schemas/user.schema";
+import { getDB } from "$lib/db/index";
 
 export const findAllUsers = async (db: D1Database) => {
 	const users = await getDB(db).query.usersTable.findMany();
