@@ -55,3 +55,7 @@ export const changePasswordSchema = z
 		message: "New password must be different from current password",
 		path: ["newPassword"]
 	});
+
+export const inviteCodeSchema = z.object({
+	code: z.string().min(10, { message: "Enter a valid code." })
+});

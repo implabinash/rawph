@@ -1,17 +1,21 @@
 <script lang="ts">
+	import type { ActionData } from "./$types";
+	import { enhance } from "$app/forms";
+
+	let { form }: { form: ActionData } = $props();
 </script>
 
 <main class="grid h-screen place-items-center">
 	<section class="max-w-96 space-y-8">
 		<div class="flex flex-col items-center justify-center gap-6 text-center">
-			<h1 class="text-heading-1">You're invited!</h1>
+			<h1 class="text-heading-1">Welcome to Rawph</h1>
 
 			<p class="w-[80%] text-body text-subtext-color">
-				Our platform is invite-only. Enter your referral code to get started.
+				Rawph is currently in private beta. Enter your invite code to get started.
 			</p>
 		</div>
 
-		<form action="" class="space-y-2">
+		<form class="space-y-2" method="POST" use:enhance>
 			<div class="flex flex-col gap-1">
 				<label for="code" class="text-body-bold"
 					>Invite Code <span class="text-error-500">*</span></label
@@ -26,9 +30,9 @@
 					required
 				/>
 
-				<!-- {#if form?.error.fieldErrors.email} -->
-				<!-- <p class="text-caption text-error-600">{form.error.fieldErrors.email}</p> -->
-				<!-- {/if} -->
+				{#if form?.error.code}
+					<p class="text-caption text-error-600">{form.error.code}</p>
+				{/if}
 			</div>
 
 			<button
@@ -44,10 +48,11 @@
 		</div>
 
 		<div class="space-y-2 rounded-md bg-neutral-50 p-6 text-center">
-			<p class="text-heading-3">No invite code?</p>
+			<p class="text-heading-3">Don't have an invite code?</p>
 
 			<p class="text-body text-subtext-color">
-				Join our waitlist and we'll notify you when we release early access invitations.
+				No worries! You're already on our waitlist and we'll notify you as soon as the next beta
+				launch opens up.
 			</p>
 		</div>
 	</section>
