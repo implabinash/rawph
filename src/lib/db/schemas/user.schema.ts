@@ -17,9 +17,7 @@ export const usersTable = sqliteTable("users", {
 	image: text("image").notNull(),
 
 	isInvited: integer("is_invited", { mode: "boolean" }).default(false).notNull(),
-	joinedCode: text("joined_code")
-		.references(() => inviteCodesTable.code)
-		.notNull(),
+	joinedCode: text("joined_code").references(() => inviteCodesTable.code),
 
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
