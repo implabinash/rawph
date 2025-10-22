@@ -2,7 +2,7 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
 
-import { usersTable } from "$lib/db/schemas/user.schema";
+import { usersTable } from "./user.schema";
 
 export const sessionsTable = sqliteTable("sessions", {
 	id: text("id")
