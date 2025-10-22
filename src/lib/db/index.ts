@@ -11,3 +11,5 @@ export const getDB = (db: D1Database) => {
 		}
 	});
 };
+
+export type DrizzleClient = ReturnType<typeof getDB>;

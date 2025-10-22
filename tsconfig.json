@@ -10,5 +10,6 @@
 		"sourceMap": true,
 		"strict": true,
 		"moduleResolution": "bundler"
-	}
+	},
+	"include": ["src/**/*", "./worker-configuration.d.ts"]
 }
