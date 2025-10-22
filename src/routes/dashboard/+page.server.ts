@@ -18,8 +18,12 @@ export const actions = {
 } satisfies Actions;
 
 export const load: PageServerLoad = async ({ locals }) => {
-	if (!locals.user || !locals.user.isInvited) {
+	if (!locals.user) {
 		throw redirect(307, "/signin");
+	}
+
+	if (!locals.user.isInvited) {
+		throw redirect(307, "/invite");
 	}
 
 	return { user: locals.user };
