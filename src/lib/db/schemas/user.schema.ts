@@ -14,6 +14,8 @@ export const usersTable = sqliteTable("users", {
 	password: text("password").notNull(),
 	image: text("image").notNull(),
 
+	isInvited: integer("is_invited", { mode: "boolean" }).default(false).notNull(),
+
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 		.notNull(),
