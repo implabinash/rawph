@@ -24,7 +24,7 @@ export const actions = {
 	},
 
 	leave: () => {
-		throw redirect(301, "/dashboard");
+		throw redirect(303, "/dashboard");
 	},
 
 	accept: () => {
@@ -38,6 +38,6 @@ export const actions = {
 
 export const load: PageServerLoad = async ({ locals }) => {
 	if (!locals.user) {
-		throw redirect(301, "/signin");
+		throw redirect(307, "/signin");
 	}
 };
