@@ -18,11 +18,9 @@ export const actions = {
 } satisfies Actions;
 
 export const load: PageServerLoad = async ({ locals }) => {
-	console.log("dashboard: ", locals);
-
-	// if (!locals.user) {
-	// 	throw redirect(302, "/signin");
-	// }
+	if (!locals.user) {
+		throw redirect(302, "/signin");
+	}
 
 	return { user: locals.user };
 };
