@@ -2,5 +2,13 @@
 	"name": "rawph",
 	"pages_build_output_dir": ".svelte-kit/cloudflare",
 	"compatibility_date": "2025-10-01",
-	"compatibility_flags": ["nodejs_compat"]
+	"compatibility_flags": ["nodejs_compat"],
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "rawph_db",
+			"database_id": "d81f2c3f-a21e-43be-b6c6-79163a055049",
+			"migrations_dir": "./drizzle"
+		}
+	]
 }
