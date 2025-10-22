@@ -1,12 +1,11 @@
 import { z } from "zod/v4";
 
 import { fail, redirect, type Actions } from "@sveltejs/kit";
-import { BASE_URL } from "$env/static/private";
 
 import { signInSchema } from "$lib/validations/auth";
 
 export const actions = {
-	manual: async ({ request, cookies }) => {
+	manual: async ({ request, cookies, fetch }) => {
 		const formData = Object.fromEntries(await request.formData());
 		const result = signInSchema.safeParse(formData);
 
@@ -19,7 +18,7 @@ export const actions = {
 			});
 		}
 
-		const res = await fetch(`${BASE_URL}/auth/signin/email`, {
+		const res = await fetch("/api/v1/auth/signin/email", {
 			method: "POST",
 			credentials: "include",
 			body: JSON.stringify(result.data)

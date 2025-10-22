@@ -1,7 +1,6 @@
 import { z } from "zod/v4";
 
 import { fail, redirect, type Actions } from "@sveltejs/kit";
-import { BASE_URL } from "$env/static/private";
 
 import { signUpSchema } from "$lib/validations/auth";
 
@@ -22,7 +21,7 @@ export const actions = {
 			});
 		}
 
-		const res = await fetch(`${BASE_URL}/auth/signup/email`, {
+		const res = await fetch("/api/v1/auth/signup/email", {
 			method: "POST",
 			credentials: "include",
 			body: JSON.stringify(result.data)
@@ -77,9 +76,8 @@ export const actions = {
 				path: "/",
 				secure: true,
 				httpOnly: true,
-				sameSite: "none",
-				maxAge: 30 * 24 * 60 * 60,
-				partitioned: true
+				sameSite: "lax",
+				maxAge: 30 * 24 * 60 * 60
 			});
 		}
 
