@@ -1,5 +1,5 @@
-import { redirect } from "@sveltejs/kit";
 import type { Actions, PageServerLoad } from "./$types";
+import { redirect } from "@sveltejs/kit";
 
 export const actions = {
 	youtube: async ({ request }) => {

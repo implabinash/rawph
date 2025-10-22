@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Link } from "@lucide/svelte";
 
-	import type { ActionData } from "../../routes/[id=uuid]/$types";
+	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
 	import { enhance } from "$app/forms";
 
 	let { form }: { form: ActionData } = $props();
