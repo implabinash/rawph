@@ -44,10 +44,18 @@
 		<p>Rawph</p>
 	</div>
 
-	<button
-		class="flex cursor-pointer items-center gap-2 rounded-md bg-error-50 px-4 py-2 text-body-bold text-error-700 hover:bg-error-100 active:bg-error-50"
-		><LogOut size="18px" />Log Out</button
-	>
+	<div class="flex items-center gap-4">
+		<img
+			src={`/images/avatars/${data.user.image}.webp`}
+			alt={data.user.name}
+			class="size-9 rounded-full"
+		/>
+
+		<button
+			class="flex cursor-pointer items-center gap-2 rounded-md bg-error-50 px-4 py-2 text-body-bold text-error-700 hover:bg-error-100 active:bg-error-50"
+			><LogOut size="18px" />Log Out</button
+		>
+	</div>
 </header>
 
 <main class="mt-24 grid place-items-center">
