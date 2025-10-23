@@ -37,7 +37,7 @@
 				/>
 
 				{#if form?.error.code}
-					<p class="text-caption text-error-600">{form.error.code}</p>
+					<p class="text-caption text-error-600">{form.error.code[0]}</p>
 				{/if}
 			</div>
 

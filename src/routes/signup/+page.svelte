@@ -60,7 +60,7 @@
 				/>
 
 				{#if form?.error?.name}
-					<p class="text-caption text-error-600">{form.error.name}</p>
+					<p class="text-caption text-error-600">{form.error.name[0]}</p>
 				{/if}
 			</div>
 
@@ -82,7 +82,7 @@
 				/>
 
 				{#if form?.error?.email}
-					<p class="text-caption text-error-600">{form.error.email}</p>
+					<p class="text-caption text-error-600">{form.error.email[0]}</p>
 				{/if}
 			</div>
 
@@ -118,7 +118,7 @@
 				</button>
 
 				{#if form?.error?.password}
-					<p class="text-caption text-error-600">{form.error.password}</p>
+					<p class="text-caption text-error-600">{form.error.password[0]}</p>
 				{/if}
 			</div>
 
