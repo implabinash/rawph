@@ -157,7 +157,7 @@
 	<!-- Left Image -->
 	<section class="h-full w-full p-4">
 		<div
-			class="h-full w-full rounded-lg bg-[url('/images/placeholders/0.png')] bg-cover bg-center bg-no-repeat"
+			class="h-full w-full rounded-lg bg-[url('/images/bg.png')] bg-cover bg-center bg-no-repeat"
 		></div>
 	</section>
 </main>
