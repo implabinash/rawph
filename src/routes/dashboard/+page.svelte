@@ -14,12 +14,12 @@
 		Youtube
 	} from "@lucide/svelte";
 
-	import type { PageData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 	import { enhance } from "$app/forms";
 
 	import Seo from "$lib/components/Seo.svelte";
 
-	let { data }: { data: PageData } = $props();
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let copied = $state(false);
 	let code = $state("9YC5VXW6JV");
@@ -216,7 +216,13 @@
 				<p class="text-body text-subtext-color">Update your password to keep your account secure</p>
 			</div>
 
-			<form class="space-y-4" method="POST" action="?/manual" use:enhance>
+			{#if form?.message}
+				<div class="rounded-md border border-error-200 bg-error-50 px-4 py-3">
+					<p class="text-body text-error-700">{form.message}</p>
+				</div>
+			{/if}
+
+			<form class="space-y-4" method="POST" action="?/changePassword" use:enhance>
 				<div class="relative flex flex-col gap-1">
 					<label for="currentPassword" class="text-body-bold"
 						>Current Password <span class="text-error-500">*</span></label
@@ -245,9 +251,9 @@
 						{/if}
 					</button>
 
-					<!-- {#if form?.error.fieldErrors.password} -->
-					<!-- <p class="text-caption text-error-600">{form.error.fieldErrors.password}</p> -->
-					<!-- {/if} -->
+					{#if form?.error.currentPassword}
+						<p class="text-caption text-error-600">{form.error.currentPassword[0]}</p>
+					{/if}
 				</div>
 
 				<div class="relative flex flex-col gap-1">
@@ -278,9 +284,9 @@
 						{/if}
 					</button>
 
-					<!-- {#if form?.error.fieldErrors.password} -->
-					<!-- <p class="text-caption text-error-600">{form.error.fieldErrors.password}</p> -->
-					<!-- {/if} -->
+					{#if form?.error.newPassword}
+						<p class="text-caption text-error-600">{form.error.newPassword[0]}</p>
+					{/if}
 				</div>
 
 				<div class="relative flex flex-col gap-1">
@@ -311,9 +317,9 @@
 						{/if}
 					</button>
 
-					<!-- {#if form?.error.fieldErrors.password} -->
-					<!-- <p class="text-caption text-error-600">{form.error.fieldErrors.password}</p> -->
-					<!-- {/if} -->
+					{#if form?.error.confirmPassword}
+						<p class="text-caption text-error-600">{form.error.confirmPassword[0]}</p>
+					{/if}
 				</div>
 
 				<button
