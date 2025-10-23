@@ -83,7 +83,7 @@
 	<section
 		class="mb-24 grid place-items-center rounded-md bg-[url('/images/placeholders/0.png')] p-6"
 	>
-		<img src="/images/products/demo.png" alt="Rawph Demo" class="rounded-md" />
+		<img src="/images/products/demo.jpg" alt="Rawph Demo" class="rounded-md" />
 	</section>
 </main>
 
