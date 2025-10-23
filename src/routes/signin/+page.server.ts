@@ -70,9 +70,8 @@ export const actions = {
 				path: "/",
 				secure: true,
 				httpOnly: true,
-				sameSite: "none",
-				maxAge: 30 * 24 * 60 * 60,
-				domain: "rawph.implabinash.workers.dev"
+				sameSite: "lax",
+				maxAge: 30 * 24 * 60 * 60
 			});
 		}
 
