@@ -1,7 +1,7 @@
 import type { Handle } from "@sveltejs/kit";
 
-import { getDB } from "$lib/db";
 import { COOKIE_NAME } from "$lib/utils/constants";
+import { getDB } from "$lib/db";
 
 export const handle: Handle = async ({ event, resolve }) => {
 	if (event.platform?.env.DB) {
@@ -10,7 +10,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
 	const token = event.cookies.get(COOKIE_NAME);
 
-	if (token && !event.url.pathname.startsWith("/api")) {
+	if (token && !event.url.pathname.startsWith("/api/v1/users/me")) {
 		try {
 			const res = await event.fetch("/api/v1/users/me", {
 				credentials: "include"

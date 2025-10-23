@@ -15,6 +15,12 @@
 			</p>
 		</div>
 
+		{#if form?.message}
+			<div class="rounded-md border border-error-200 bg-error-50 px-4 py-3">
+				<p class="text-body text-error-700">{form.message}</p>
+			</div>
+		{/if}
+
 		<form class="space-y-2" method="POST" use:enhance>
 			<div class="flex flex-col gap-1">
 				<label for="code" class="text-body-bold"

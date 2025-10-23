@@ -5,7 +5,7 @@ import { json } from "@sveltejs/kit";
 
 import { findUserByEmail } from "$lib/db/queries/users.query";
 import { sessionsTable } from "$lib/db/schemas/auth.schema";
-import { generateSessionToken } from "$lib/utils/sessions";
+import { generateSessionToken } from "$lib/utils/random";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import { signUpSchema } from "$lib/validations/auth";
 import { COOKIE_NAME } from "$lib/utils/constants";
