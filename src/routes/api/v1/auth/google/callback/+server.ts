@@ -50,8 +50,6 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 
 		if (existingOAuthAccount) {
 			userId = existingOAuthAccount.userId;
-
-			console.log(`[OAuth] Existing Google user signed in: ${googleUser.email}`);
 		} else {
 			const existingUser = await findUserByEmail(locals.db, googleUser.email);
 
@@ -63,8 +61,6 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 					provider: "google",
 					providerUserId: googleUser.sub
 				});
-
-				console.log(`[OAuth] Linked Google to existing account: ${googleUser.email}`);
 			} else {
 				const image = googleUser.picture || Math.floor(Math.random() * 5).toString();
 
@@ -85,8 +81,6 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 					provider: "google",
 					providerUserId: googleUser.sub
 				});
-
-				console.log(`[OAuth] New user created via Google: ${googleUser.email}`);
 			}
 		}
 

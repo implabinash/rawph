@@ -82,9 +82,5 @@ export const actions = {
 		}
 
 		throw redirect(303, "/invite");
-	},
-
-	google: async () => {
-		console.log("google");
 	}
 } satisfies Actions;
