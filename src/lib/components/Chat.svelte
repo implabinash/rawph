@@ -17,7 +17,7 @@
 
 	<div class="flex-1 space-y-3 overflow-y-auto">
 		<div class="flex items-start justify-baseline gap-3">
-			<img src="/images/placeholders/0.png" alt="User" class="mt-1 size-7 rounded-full" />
+			<img src="/images/avatars/0.webp" alt="User" class="mt-1 size-7 rounded-full" />
 
 			<div class="w-[90%] space-y-1">
 				<div>

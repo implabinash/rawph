@@ -57,7 +57,7 @@
 		<div class="space-y-2">
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 				<div class="flex items-center gap-2">
-					<img src="/images/placeholders/0.png" alt="Partcipants" class="size-5 rounded-full" />
+					<img src="/images/avatars/0.webp" alt="Partcipants" class="size-5 rounded-full" />
 
 					<p class="text-caption-bold">Person Name</p>
 				</div>
@@ -83,7 +83,7 @@
 			</div>
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 				<div class="flex items-center gap-2">
-					<img src="/images/placeholders/0.png" alt="Partcipants" class="size-5 rounded-full" />
+					<img src="/images/avatars/2.webp" alt="Partcipants" class="size-5 rounded-full" />
 
 					<p class="text-caption-bold">Person Name</p>
 				</div>
