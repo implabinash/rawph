@@ -11,6 +11,7 @@
 
 	let showPassword: boolean = $state(false);
 	let isSubmitting: boolean = $state(false);
+	let isGoogleSubmitting: boolean = $state(false);
 </script>
 
 <Seo title="Join" />
@@ -141,12 +142,25 @@
 		</div>
 
 		<!-- Google Sign Up Button -->
-		<form action="">
+		<form
+			method="POST"
+			action="?/google"
+			class="space-y-3"
+			use:enhance={() => {
+				isGoogleSubmitting = true;
+				return async ({ update }) => {
+					await update();
+					isGoogleSubmitting = false;
+				};
+			}}
+		>
 			<button
 				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-default-background px-4 py-2 text-body-bold text-brand-700 shadow-2xs hover:bg-neutral-50 active:bg-default-background"
 				type="submit"
 			>
-				<img src="/images/logos/google.svg" alt="Google" class="" />Continue with Google</button
+				<img src="/images/logos/google.svg" alt="Google" class="" />{isGoogleSubmitting
+					? "Connecting..."
+					: "Continue with Google"}</button
 			>
 		</form>
 
