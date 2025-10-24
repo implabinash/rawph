@@ -2,6 +2,8 @@ import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { randomUUID } from "crypto";
 import { sql } from "drizzle-orm";
 
+import { ADMIN_UUID } from "$lib/utils/constants";
+
 export const inviteCodesTable = sqliteTable("invite_codes", {
 	id: text("id")
 		.primaryKey()
@@ -10,7 +12,7 @@ export const inviteCodesTable = sqliteTable("invite_codes", {
 		.$defaultFn(() => randomUUID()),
 
 	code: text("code").notNull().unique(),
-	createdBy: text("created_by").default("00000000-0000-0000-0000-000000000000"),
+	createdBy: text("created_by").default(ADMIN_UUID),
 
 	isUsed: integer("is_used", { mode: "boolean" }).default(false).notNull(),
 	usedBy: text("used_by"),
