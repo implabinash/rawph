@@ -10,6 +10,25 @@
 	let { form }: { form: ActionData } = $props();
 
 	let isApproved: boolean = $state(true);
+	// let keyBuffer = "";
+	// let bufferTimeout: ReturnType<typeof setTimeout>;
+
+	// const handleKeys = (e: KeyboardEvent) => {
+	// 	if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+	// 		keyBuffer += e.key.toLowerCase();
+
+	// 		clearTimeout(bufferTimeout);
+	// 		bufferTimeout = setTimeout(() => (keyBuffer = ""), 2000);
+
+	// 		if (keyBuffer.endsWith("awesome")) {
+	// 			alert("🎉 Awesome!");
+	// 			keyBuffer = "";
+	// 		} else if (keyBuffer.endsWith("cool")) {
+	// 			alert("😎 Cool!");
+	// 			keyBuffer = "";
+	// 		}
+	// 	}
+	// };
 </script>
 
 <main class="relative">
@@ -37,3 +56,5 @@
 		<Popup />
 	{/if}
 </main>
+
+<!-- <svelte:window on:keydown|preventDefault={handleKeys} /> -->
