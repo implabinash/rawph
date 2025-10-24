@@ -4,7 +4,7 @@ import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
 import { COOKIE_NAME, EXTENSION_THRESHOLD, SESSION_DURATION } from "$lib/utils/constants";
-import { getSessionData } from "$lib/db/queries/sessions.query";
+import { findSessionData } from "$lib/db/queries/sessions.query";
 import { sessionsTable } from "$lib/db/schemas/auth.schema";
 
 export const GET: RequestHandler = async ({ cookies, locals }) => {
@@ -21,7 +21,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 		return json(response, { status: 401 });
 	}
 
-	const data = await getSessionData(locals.db, sessionToken);
+	const data = await findSessionData(locals.db, sessionToken);
 
 	if (!data || !data.users) {
 		const response = {

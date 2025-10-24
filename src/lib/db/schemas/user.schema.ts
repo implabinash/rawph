@@ -13,7 +13,7 @@ export const usersTable = sqliteTable("users", {
 
 	name: text("name").notNull(),
 	email: text("email").notNull().unique(),
-	password: text("password").notNull(),
+	password: text("password"),
 	image: text("image").notNull(),
 
 	isInvited: integer("is_invited", { mode: "boolean" }).default(false).notNull(),

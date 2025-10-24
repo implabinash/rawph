@@ -4,7 +4,7 @@ import { z } from "zod/v4";
 import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
-import { getSessionData } from "$lib/db/queries/sessions.query";
+import { findSessionData } from "$lib/db/queries/sessions.query";
 import { hashPassword, verifyPassword } from "$lib/utils/hash";
 import { changePasswordSchema } from "$lib/validations/auth";
 import { usersTable } from "$lib/db/schemas/user.schema";
@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 		return json(response, { status: 401 });
 	}
 
-	const data = await getSessionData(locals.db, sessionToken);
+	const data = await findSessionData(locals.db, sessionToken);
 
 	if (!data || !data.users) {
 		const response = {
