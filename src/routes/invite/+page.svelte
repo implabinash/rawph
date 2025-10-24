@@ -6,13 +6,17 @@
 </script>
 
 <main class="grid h-screen place-items-center">
-	<section class="max-w-96 space-y-8">
-		<div class="flex flex-col items-center justify-center gap-6 text-center">
-			<h1 class="text-heading-1">Welcome to Rawph</h1>
+	<section class="max-w-100 space-y-8">
+		<div class="flex flex-col items-center gap-6">
+			<img src="/images/logos/rawph.svg" alt="Rawph Logo" class="size-8" />
 
-			<p class="w-[80%] text-body text-subtext-color">
-				Rawph is currently in private beta. Enter your invite code to get started.
-			</p>
+			<div class="flex w-full flex-col items-center justify-center space-y-3 text-center">
+				<h1 class="text-heading-1">Welcome to Rawph</h1>
+
+				<p class="w-[80%] text-body text-subtext-color">
+					Rawph is currently in private beta. Enter your invite code to get started.
+				</p>
+			</div>
 		</div>
 
 		{#if form?.message}
@@ -53,7 +57,7 @@
 			<hr class="flex-1" />
 		</div>
 
-		<div class="space-y-2 rounded-md bg-neutral-50 p-6 text-center">
+		<div class="space-y-2 rounded-md bg-neutral-50 p-6 text-center shadow">
 			<p class="text-heading-3">Don't have an invite code?</p>
 
 			<p class="text-body text-subtext-color">
