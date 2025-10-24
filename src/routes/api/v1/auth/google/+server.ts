@@ -26,5 +26,13 @@ export const GET: RequestHandler = ({ cookies }) => {
 		maxAge: 60 * 10
 	});
 
+	cookies.set("oauth_flow", "signup", {
+		path: "/",
+		secure: true,
+		httpOnly: true,
+		sameSite: "lax",
+		maxAge: 60 * 10
+	});
+
 	redirect(302, url.toString());
 };

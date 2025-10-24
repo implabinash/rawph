@@ -144,7 +144,7 @@
 		<!-- Google Sign Up Button -->
 		<form
 			method="GET"
-			action="/api/v1/auth/signup/google"
+			action="/api/v1/auth/google"
 			class="space-y-3"
 			use:enhance={() => {
 				isGoogleSubmitting = true;
