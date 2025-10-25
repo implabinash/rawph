@@ -5,7 +5,7 @@ import { json } from "@sveltejs/kit";
 
 import { COOKIE_NAME, EXTENSION_THRESHOLD, SESSION_DURATION } from "$lib/utils/constants";
 import { findSessionData } from "$lib/db/queries/sessions.query";
-import { sessionsTable } from "$lib/db/schemas/auth.schema";
+import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 
 export const GET: RequestHandler = async ({ cookies, locals }) => {
 	const sessionToken = cookies.get(COOKIE_NAME);
@@ -35,7 +35,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 	}
 
 	const now = new Date();
-	const expiresAt = new Date(data.sessions.expiresAt);
+	const expiresAt = new Date(data.auth_sessions.expiresAt);
 	const timeUntilExpiry = expiresAt.getTime() - now.getTime();
 
 	if (timeUntilExpiry <= 0) {
@@ -53,9 +53,9 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 
 		try {
 			await locals.db
-				.update(sessionsTable)
+				.update(authSessionsTable)
 				.set({ expiresAt: newExpiresAt })
-				.where(eq(sessionsTable.token, sessionToken));
+				.where(eq(authSessionsTable.token, sessionToken));
 		} catch (err) {
 			console.error("Failed to extend session:", err);
 

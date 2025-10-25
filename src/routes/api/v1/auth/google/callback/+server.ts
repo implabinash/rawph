@@ -1,10 +1,9 @@
 import type { RequestHandler } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
-import { oauthAccountsTable } from "$lib/db/schemas/auth.schema";
+import { authSessionsTable, oauthAccountsTable } from "$lib/db/schemas/auth.schema";
 import { findOAuthAccount } from "$lib/db/queries/oauth.query";
 import { findUserByEmail } from "$lib/db/queries/users.query";
-import { sessionsTable } from "$lib/db/schemas/auth.schema";
 import { generateSessionToken } from "$lib/utils/random";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import { COOKIE_NAME } from "$lib/utils/constants";
@@ -87,7 +86,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const sessionToken = generateSessionToken();
 		const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
-		await locals.db.insert(sessionsTable).values({
+		await locals.db.insert(authSessionsTable).values({
 			token: sessionToken,
 			userId,
 			expiresAt

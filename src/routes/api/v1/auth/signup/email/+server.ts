@@ -3,8 +3,8 @@ import { z } from "zod/v4";
 import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
+import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 import { findUserByEmail } from "$lib/db/queries/users.query";
-import { sessionsTable } from "$lib/db/schemas/auth.schema";
 import { generateSessionToken } from "$lib/utils/random";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import { signUpSchema } from "$lib/validations/auth";
@@ -61,7 +61,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 
 		userID = user.userID;
 
-		await locals.db.insert(sessionsTable).values({
+		await locals.db.insert(authSessionsTable).values({
 			token: sessionToken,
 			userId: userID,
 			expiresAt

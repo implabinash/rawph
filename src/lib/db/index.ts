@@ -1,14 +1,14 @@
 import { drizzle } from "drizzle-orm/d1";
 
 import { inviteCodesTable } from "./schemas/invite.schema";
-import { oauthAccountsTable, sessionsTable } from "./schemas/auth.schema";
+import { authSessionsTable, oauthAccountsTable } from "./schemas/auth.schema";
 import { usersTable } from "./schemas/user.schema";
 
 export const getDB = (db: D1Database) => {
 	return drizzle(db, {
 		schema: {
 			usersTable,
-			sessionsTable,
+			authSessionsTable,
 			inviteCodesTable,
 			oauthAccountsTable
 		}

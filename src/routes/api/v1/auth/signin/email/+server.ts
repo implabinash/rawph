@@ -4,11 +4,11 @@ import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
 import { findUserByEmail } from "$lib/db/queries/users.query";
-import { sessionsTable } from "$lib/db/schemas/auth.schema";
 import { generateSessionToken } from "$lib/utils/random";
 import { signInSchema } from "$lib/validations/auth";
 import { COOKIE_NAME } from "$lib/utils/constants";
 import { verifyPassword } from "$lib/utils/hash";
+import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 
 export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 	const body = await request.json();
@@ -39,7 +39,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 		return json(response, { status: 401 });
 	}
 
-	const isValidPassword = await verifyPassword(result.data.password, user.password);
+	const isValidPassword = await verifyPassword(result.data.password, user.password!);
 
 	if (!isValidPassword) {
 		const response = {
@@ -56,7 +56,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 	const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
 	try {
-		await locals.db.insert(sessionsTable).values({
+		await locals.db.insert(authSessionsTable).values({
 			token: sessionToken,
 			userId: user.id,
 			expiresAt
