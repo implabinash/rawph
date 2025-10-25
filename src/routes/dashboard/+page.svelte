@@ -46,7 +46,9 @@
 
 	<div class="flex items-center gap-4">
 		<img
-			src={`/images/avatars/${data.user.image}.webp`}
+			src={data.user.image.startsWith("http")
+				? data.user.image
+				: `/images/avatars/${data.user.image}.webp`}
 			alt={data.user.name}
 			class="size-9 rounded-full"
 		/>
