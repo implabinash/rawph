@@ -1,18 +1,32 @@
-import { randomUUID } from "crypto";
 import { z } from "zod/v4";
 
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
 import { changePasswordSchema, setPasswordSchema } from "$lib/validations/auth";
+import { studySessionsTable } from "$lib/db/schemas/studysession.schema";
 import { findInviteCodesByUserID } from "$lib/db/queries/invites.query";
 import { COOKIE_NAME } from "$lib/utils/constants";
 
 export const actions = {
-	create: async () => {
-		const roomID = randomUUID();
+	create: async ({ locals }) => {
+		const [studySession] = await locals.db
+			.insert(studySessionsTable)
+			.values({
+				createdBy: locals.user.id
+			})
+			.returning({ studySessionId: studySessionsTable.id });
 
-		throw redirect(303, `/${roomID}`);
+		if (!studySession.studySessionId) {
+			return fail(409, {
+				success: false,
+				data: {},
+				error: {},
+				message: "Study session creation failed. Try again."
+			});
+		}
+
+		redirect(303, `/${studySession.studySessionId}`);
 	},
 
 	join: async ({ request }) => {

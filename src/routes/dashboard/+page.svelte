@@ -147,6 +147,12 @@
 					</div>
 				</div>
 
+				{#if form?.message}
+					<div class="rounded-md border border-error-200 bg-error-50 px-4 py-3">
+						<p class="text-body text-error-700">{form.message}</p>
+					</div>
+				{/if}
+
 				<form action="?/create" method="POST" use:enhance>
 					<button
 						class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"

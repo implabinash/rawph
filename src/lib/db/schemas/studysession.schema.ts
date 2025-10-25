@@ -19,7 +19,9 @@ export const studySessionsTable = sqliteTable("study_sessions", {
 		.notNull()
 		.default("active"),
 
-	startedAt: integer("started_at", { mode: "timestamp_ms" }),
+	startedAt: integer("started_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
 	endedAt: integer("ended_at", { mode: "timestamp_ms" }),
 	durationMinutes: integer("duration_minutes"),
 
