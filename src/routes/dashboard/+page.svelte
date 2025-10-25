@@ -264,12 +264,14 @@
 						name="currentPassword"
 						placeholder="Enter your password"
 						class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption disabled:cursor-not-allowed disabled:bg-neutral-200"
+						disabled={!data.user.hasPassword}
 						required
 					/>
 
 					<button
 						type="button"
 						class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-default-background active:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
+						disabled={!data.user.hasPassword}
 						onclick={() => {
 							showCurrentPassword = !showCurrentPassword;
 						}}
