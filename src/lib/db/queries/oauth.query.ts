@@ -1,6 +1,7 @@
 import { and, eq } from "drizzle-orm";
-import type { DrizzleClient } from "..";
-import { oauthAccountsTable } from "../schemas/auth.schema";
+
+import { oauthAccountsTable } from "$lib/db/schemas/auth.schema";
+import type { DrizzleClient } from "$lib/db/index";
 
 export const findOAuthAccount = async (
 	db: DrizzleClient,

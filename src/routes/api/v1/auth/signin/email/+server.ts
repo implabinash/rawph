@@ -3,12 +3,12 @@ import { z } from "zod/v4";
 import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
+import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 import { findUserByEmail } from "$lib/db/queries/users.query";
 import { generateSessionToken } from "$lib/utils/random";
 import { signInSchema } from "$lib/validations/auth";
 import { COOKIE_NAME } from "$lib/utils/constants";
 import { verifyPassword } from "$lib/utils/hash";
-import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 
 export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 	const body = await request.json();

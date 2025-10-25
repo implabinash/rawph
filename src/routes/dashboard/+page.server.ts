@@ -4,8 +4,8 @@ import { z } from "zod/v4";
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
-import { findInviteCodesByUserID } from "$lib/db/queries/invites.query";
 import { changePasswordSchema, setPasswordSchema } from "$lib/validations/auth";
+import { findInviteCodesByUserID } from "$lib/db/queries/invites.query";
 import { COOKIE_NAME } from "$lib/utils/constants";
 
 export const actions = {

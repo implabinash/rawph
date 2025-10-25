@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 
+import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import type { DrizzleClient } from "$lib/db/index";
-import { authSessionsTable } from "../schemas/auth.schema";
 
 export const findSessionData = async (db: DrizzleClient, sessionToken: string) => {
 	const user = await db

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 
-import { inviteCodesTable } from "../schemas/invite.schema";
+import { inviteCodesTable } from "$lib/db/schemas/invite.schema";
 import type { DrizzleClient } from "$lib/db/index";
 
 export const findInviteCodeData = async (db: DrizzleClient, code: string) => {
