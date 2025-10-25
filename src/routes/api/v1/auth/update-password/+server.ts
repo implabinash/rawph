@@ -4,26 +4,43 @@ import { z } from "zod/v4";
 import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
+import { changePasswordSchema, setPasswordSchema } from "$lib/validations/auth";
 import { findSessionData } from "$lib/db/queries/sessions.query";
 import { hashPassword, verifyPassword } from "$lib/utils/hash";
-import { changePasswordSchema } from "$lib/validations/auth";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import { COOKIE_NAME } from "$lib/utils/constants";
 
 export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 	const body = await request.json();
 
-	const result = changePasswordSchema.safeParse(body);
+	let result;
 
-	if (!result.success) {
-		const response = {
-			success: false,
-			data: {},
-			error: z.flattenError(result.error).fieldErrors,
-			message: "Invalid inputs."
-		};
+	if (locals.user.hasPassword) {
+		result = changePasswordSchema.safeParse(body);
 
-		return json(response, { status: 400 });
+		if (!result.success) {
+			const response = {
+				success: false,
+				data: {},
+				error: z.flattenError(result.error).fieldErrors,
+				message: "Invalid inputs."
+			};
+
+			return json(response, { status: 400 });
+		}
+	} else {
+		result = setPasswordSchema.safeParse(body);
+
+		if (!result.success) {
+			const response = {
+				success: false,
+				data: {},
+				error: z.flattenError(result.error).fieldErrors,
+				message: "Invalid inputs."
+			};
+
+			return json(response, { status: 400 });
+		}
 	}
 
 	const sessionToken = cookies.get(COOKIE_NAME);
@@ -52,17 +69,19 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 		return json(response, { status: 401 });
 	}
 
-	const isValidPassword = await verifyPassword(result.data.currentPassword, data.users.password);
+	if (locals.user.hasPassword) {
+		const isValidPassword = await verifyPassword(result.data.currentPassword, data.users.password);
 
-	if (!isValidPassword) {
-		const response = {
-			success: false,
-			data: {},
-			error: {},
-			message: "Current password is incorrect."
-		};
+		if (!isValidPassword) {
+			const response = {
+				success: false,
+				data: {},
+				error: {},
+				message: "Current password is incorrect."
+			};
 
-		return json(response, { status: 401 });
+			return json(response, { status: 401 });
+		}
 	}
 
 	const newHashedPassword = await hashPassword(result.data.newPassword);
