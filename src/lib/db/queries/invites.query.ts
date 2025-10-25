@@ -10,3 +10,11 @@ export const findInviteCodeData = async (db: DrizzleClient, code: string) => {
 
 	return inviteCodeData;
 };
+
+export const findInviteCodesByUserID = async (db: DrizzleClient, userID: string) => {
+	const inviteCodes = await db.query.inviteCodesTable.findMany({
+		where: eq(inviteCodesTable.createdBy, userID)
+	});
+
+	return inviteCodes;
+};

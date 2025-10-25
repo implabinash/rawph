@@ -6,6 +6,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { COOKIE_NAME } from "$lib/utils/constants";
 import { changePasswordSchema } from "$lib/validations/auth";
 import { z } from "zod/v4";
+import { findInviteCodesByUserID } from "$lib/db/queries/invites.query";
 
 export const actions = {
 	create: async () => {
@@ -92,5 +93,7 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(307, "/invite");
 	}
 
-	return { user: locals.user };
+	const inviteCodes = await findInviteCodesByUserID(locals.db, locals.user.id);
+
+	return { user: locals.user, inviteCodes };
 };

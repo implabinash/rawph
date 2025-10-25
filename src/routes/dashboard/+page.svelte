@@ -21,18 +21,19 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let copied = $state(false);
-	let code = $state("9YC5VXW6JV");
+	let code = $state("");
 
 	let showCurrentPassword: boolean = $state(false);
 	let showNewPassword: boolean = $state(false);
 	let showConfirmPassword: boolean = $state(false);
 
-	const copyToClipboard = async () => {
-		await navigator.clipboard.writeText(code.toUpperCase());
-		copied = true;
+	const copyToClipboard = async (inviteCode: string) => {
+		await navigator.clipboard.writeText(inviteCode.toUpperCase());
+		code = inviteCode;
 
-		setTimeout(() => (copied = false), 1000);
+		setTimeout(() => {
+			code = "";
+		}, 1000);
 	};
 </script>
 
@@ -65,7 +66,7 @@
 <main class="mt-24 grid place-items-center">
 	<section class="space-y-12">
 		<div class="space-y-4 text-center">
-			<h1 class="text-heading-1">Welcome, {data.user.name}</h1>
+			<h1 class="text-heading-1">Welcome, {data.user.name.split(" ")[0]}</h1>
 			<p class="text-body text-subtext-color">
 				Start learning together with your friends through shared video experiences
 			</p>
@@ -73,28 +74,55 @@
 
 		<!-- Invite Code -->
 		<div
-			class="flex items-center justify-between rounded-lg border border-neutral-border bg-neutral-50 px-6 py-4 shadow-sm"
+			class="space-y-4 rounded-lg border border-neutral-border bg-neutral-50 px-6 py-4 shadow-sm"
 		>
 			<div class="space-y-1">
 				<p class="text-body-bold">Your Invite Code</p>
 
 				<p class="text-caption text-subtext-color">
-					Share this code with friends to invite them to Rawph
+					{data.inviteCodes.filter((code) => !code.isUsed).length} of 2 codes available • Share with
+					friends to invite them
 				</p>
 			</div>
 
-			<div class="flex items-center gap-3">
-				<p class="text-heading-3 text-brand-primary">{code.toUpperCase()}</p>
+			<div class="grid grid-cols-2 gap-4">
+				{#each data.inviteCodes as inviteCode, index (inviteCode.id)}
+					<div
+						class="space-y-2 rounded-md border border-neutral-border bg-neutral-0 px-4 py-3 shadow-sm"
+						class:cursor-not-allowed={inviteCode.isUsed}
+					>
+						<div class="flex items-center gap-1 text-caption text-subtext-color">
+							<p>Code {index + 1}</p>
 
-				<button
-					class="flex cursor-pointer items-center gap-1 rounded-md border border-neutral-border bg-default-background px-3 py-1.5 text-body-bold text-brand-700 hover:bg-neutral-50 active:bg-default-background"
-					onclick={copyToClipboard}
-					>{#if copied}
-						<Check size="16px" />
-					{:else}
-						<Copy size="16px" />
-					{/if}Copy Code</button
-				>
+							{#if inviteCode.isUsed}
+								<div class="size-1 rounded-full bg-subtext-color"></div>
+								<p>Used</p>
+							{/if}
+						</div>
+
+						<div class="flex items-center justify-between">
+							<p
+								class="text-body-bold"
+								class:line-through={inviteCode.isUsed}
+								class:text-neutral-400={inviteCode.isUsed}
+							>
+								{inviteCode.code}
+							</p>
+
+							{#if !inviteCode.isUsed}
+								<button
+									class="cursor-pointer rounded-md bg-default-background p-1.5 text-brand-700 hover:bg-neutral-100 active:bg-default-background"
+									onclick={() => copyToClipboard(inviteCode.code)}
+									>{#if inviteCode.code === code}
+										<Check size="14px" />
+									{:else}
+										<Copy size="14px" />
+									{/if}</button
+								>
+							{/if}
+						</div>
+					</div>
+				{/each}
 			</div>
 		</div>
 
@@ -235,13 +263,13 @@
 						type={showCurrentPassword ? "text" : "password"}
 						name="currentPassword"
 						placeholder="Enter your password"
-						class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption"
+						class="rounded-md border border-neutral-border px-2 py-2 text-body text-brand-700 placeholder:text-caption disabled:cursor-not-allowed disabled:bg-neutral-200"
 						required
 					/>
 
 					<button
 						type="button"
-						class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-default-background active:bg-neutral-50"
+						class="absolute top-8 right-2 w-fit cursor-pointer rounded-md p-1 hover:bg-default-background active:bg-neutral-50 disabled:cursor-not-allowed disabled:bg-neutral-200"
 						onclick={() => {
 							showCurrentPassword = !showCurrentPassword;
 						}}
