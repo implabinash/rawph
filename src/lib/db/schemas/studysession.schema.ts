@@ -1,0 +1,94 @@
+import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { usersTable } from "./user.schema";
+import { randomUUID } from "crypto";
+import { sql } from "drizzle-orm";
+
+export const studySessionsTable = sqliteTable("study_sessions", {
+	id: text("id")
+		.primaryKey()
+		.notNull()
+		.unique()
+		.$defaultFn(() => randomUUID()),
+
+	createdBy: text("created_by")
+		.notNull()
+		.references(() => usersTable.id),
+
+	status: text("status", { enum: ["active", "completed"] })
+		.notNull()
+		.default("active"),
+
+	startedAt: integer("started_at", { mode: "timestamp_ms" }),
+	endedAt: integer("ended_at", { mode: "timestamp_ms" }),
+	durationMinutes: integer("duration_minutes"),
+
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => new Date())
+		.notNull()
+});
+
+export const sessionParticipantsTable = sqliteTable("session_participants", {
+	id: text("id")
+		.primaryKey()
+		.notNull()
+		.unique()
+		.$defaultFn(() => randomUUID()),
+
+	studySessionId: text("study_session_id")
+		.notNull()
+		.references(() => studySessionsTable.id, { onDelete: "cascade" }),
+	userId: text("user_id")
+		.notNull()
+		.references(() => usersTable.id),
+
+	role: text("role", { enum: ["creator", "participant"] })
+		.notNull()
+		.default("participant"),
+
+	joinedAt: integer("joined_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+
+	leftAt: integer("left_at", { mode: "timestamp_ms" }),
+
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => new Date())
+		.notNull()
+});
+
+export const sessionVideosTable = sqliteTable("session_videos", {
+	id: text("id")
+		.primaryKey()
+		.notNull()
+		.unique()
+		.$defaultFn(() => randomUUID()),
+
+	studySessionId: text("study_session_id")
+		.references(() => studySessionsTable.id)
+		.notNull(),
+	youtubeUrl: text("youtube_url").notNull(),
+
+	addedBy: text("added_by")
+		.references(() => usersTable.id)
+		.notNull(),
+	addedAt: integer("added_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	removedAt: integer("removed_at", { mode: "timestamp_ms" }),
+
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => new Date())
+		.notNull()
+});

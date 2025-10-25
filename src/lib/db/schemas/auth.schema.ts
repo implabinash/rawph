@@ -4,7 +4,7 @@ import { sql } from "drizzle-orm";
 
 import { usersTable } from "./user.schema";
 
-export const sessionsTable = sqliteTable("sessions", {
+export const sessionsTable = sqliteTable("auth_sessions", {
 	id: text("id")
 		.primaryKey()
 		.notNull()
