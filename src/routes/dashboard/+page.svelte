@@ -42,7 +42,7 @@
 <header class="flex items-center justify-between border-b border-b-neutral-border px-10 py-4">
 	<div class="flex items-center gap-2">
 		<img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />
-		<p>Rawph</p>
+		<p class="text-heading-3 font-semibold">Rawph</p>
 	</div>
 
 	<div class="flex items-center gap-4">
