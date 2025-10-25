@@ -11,7 +11,8 @@
 		Plus,
 		SquarePen,
 		Users,
-		Youtube
+		Youtube,
+		Lock
 	} from "@lucide/svelte";
 
 	import type { ActionData, PageData } from "./$types";
@@ -355,8 +356,9 @@
 				</div>
 
 				<button
-					class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-					>Update Password</button
+					class="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
+				>
+					<Lock size="16px" /> Update Password</button
 				>
 			</form>
 		</div>

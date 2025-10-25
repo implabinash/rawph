@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { Check } from "@lucide/svelte";
+
 	import type { ActionData } from "./$types";
 	import { enhance } from "$app/forms";
 
+	import Seo from "$lib/components/Seo.svelte";
+
 	let { form }: { form: ActionData } = $props();
 </script>
+
+<Seo title="Invite" />
 
 <main class="grid h-screen place-items-center">
 	<section class="max-w-100 space-y-8">
@@ -46,8 +52,10 @@
 			</div>
 
 			<button
-				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-				type="submit">Verify Code</button
+				class="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
+				type="submit"
+			>
+				<Check size="18px" /> Verify Code</button
 			>
 		</form>
 
