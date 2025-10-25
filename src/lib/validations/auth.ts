@@ -56,6 +56,16 @@ export const changePasswordSchema = z
 		path: ["newPassword"]
 	});
 
+export const setPasswordSchema = changePasswordSchema
+	.pick({
+		newPassword: true,
+		confirmPassword: true
+	})
+	.refine((data) => data.newPassword === data.confirmPassword, {
+		message: "Passwords do not match",
+		path: ["confirmPassword"]
+	});
+
 export const inviteCodeSchema = z.object({
 	code: z.string().min(10, { message: "Enter a valid code." })
 });

@@ -34,7 +34,10 @@ export const handle: Handle = async ({ event, resolve }) => {
 						});
 					}
 
-					event.locals.user = data.data.user;
+					event.locals.user = {
+						...data.data.user,
+						hasPassword: data.data.hasPassword
+					};
 				}
 			}
 		} catch (error) {
@@ -42,6 +45,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 			console.error("Auth verification failed:", error);
 		}
 	}
+
+	console.log(event.locals.user);
 
 	const response = await resolve(event);
 	return response;

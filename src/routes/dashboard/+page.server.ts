@@ -1,12 +1,12 @@
 import { randomUUID } from "crypto";
+import { z } from "zod/v4";
 
 import type { Actions, PageServerLoad } from "./$types";
 import { fail, redirect } from "@sveltejs/kit";
 
-import { COOKIE_NAME } from "$lib/utils/constants";
-import { changePasswordSchema } from "$lib/validations/auth";
-import { z } from "zod/v4";
 import { findInviteCodesByUserID } from "$lib/db/queries/invites.query";
+import { changePasswordSchema } from "$lib/validations/auth";
+import { COOKIE_NAME } from "$lib/utils/constants";
 
 export const actions = {
 	create: async () => {

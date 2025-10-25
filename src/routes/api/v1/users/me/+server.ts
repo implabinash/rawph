@@ -83,7 +83,8 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 	const response = {
 		success: true,
 		data: {
-			user: userWithoutPassword
+			user: userWithoutPassword,
+			hasPassword: !!password
 		},
 		error: {},
 		message: "User retrieved successfully."
