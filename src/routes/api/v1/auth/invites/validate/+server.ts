@@ -28,7 +28,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 
 	const inviteCodeData = await findInviteCodeData(locals.db, result.data.code);
 
-	if (!inviteCodeData || inviteCodeData.isUsed) {
+	if (!inviteCodeData) {
 		const response = {
 			success: false,
 			data: {},
@@ -37,6 +37,17 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		};
 
 		return json(response, { status: 400 });
+	}
+
+	if (inviteCodeData.isUsed) {
+		const response = {
+			success: false,
+			data: {},
+			error: {},
+			message: "Code is already used."
+		};
+
+		return json(response, { status: 409 });
 	}
 
 	if (!locals.user) {

@@ -30,9 +30,7 @@ export const actions = {
 			if (res.status === 400) {
 				return fail(400, {
 					success: false,
-					data: {
-						email: result.data.code
-					},
+					data: {},
 					error: data.error,
 					message: data.message
 				});
@@ -41,9 +39,16 @@ export const actions = {
 			if (res.status === 401) {
 				return fail(401, {
 					success: false,
-					data: {
-						email: result.data.code
-					},
+					data: {},
+					error: data.error,
+					message: data.message
+				});
+			}
+
+			if (res.status === 409) {
+				return fail(401, {
+					success: false,
+					data: {},
 					error: data.error,
 					message: data.message
 				});
@@ -52,9 +57,7 @@ export const actions = {
 			if (res.status === 500) {
 				return fail(500, {
 					success: false,
-					data: {
-						email: result.data.code
-					},
+					data: {},
 					error: data.error,
 					message: data.message
 				});
