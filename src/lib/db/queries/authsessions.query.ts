@@ -4,7 +4,7 @@ import { authSessionsTable } from "$lib/db/schemas/auth.schema";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import type { DrizzleClient } from "$lib/db/index";
 
-export const findSessionData = async (db: DrizzleClient, sessionToken: string) => {
+export const findAuthSessionData = async (db: DrizzleClient, sessionToken: string) => {
 	const user = await db
 		.select()
 		.from(authSessionsTable)

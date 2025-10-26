@@ -5,7 +5,7 @@ import type { RequestHandler } from "./$types";
 import { json } from "@sveltejs/kit";
 
 import { changePasswordSchema, setPasswordSchema } from "$lib/validations/auth";
-import { findSessionData } from "$lib/db/queries/sessions.query";
+import { findAuthSessionData } from "$lib/db/queries/authsessions.query";
 import { hashPassword, verifyPassword } from "$lib/utils/hash";
 import { usersTable } from "$lib/db/schemas/user.schema";
 import { COOKIE_NAME } from "$lib/utils/constants";
@@ -56,7 +56,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 		return json(response, { status: 401 });
 	}
 
-	const data = await findSessionData(locals.db, sessionToken);
+	const data = await findAuthSessionData(locals.db, sessionToken);
 
 	if (!data || !data.users) {
 		const response = {
