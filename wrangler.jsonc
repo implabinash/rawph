@@ -10,13 +10,5 @@
 			"database_id": "d81f2c3f-a21e-43be-b6c6-79163a055049",
 			"migrations_dir": "./drizzle"
 		}
-	],
-	"durable_objects": {
-		"bindings": [
-			{
-				"name": "WEBSOCKET_SERVER",
-				"class_name": "WebSocketServer"
-			}
-		]
-	}
+	]
 }
