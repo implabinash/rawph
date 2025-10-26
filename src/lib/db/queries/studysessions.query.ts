@@ -1,6 +1,10 @@
 import { and, eq } from "drizzle-orm";
 
-import { sessionParticipantsTable, studySessionsTable } from "$lib/db/schemas/studysession.schema";
+import {
+	sessionParticipantsTable,
+	sessionVideosTable,
+	studySessionsTable
+} from "$lib/db/schemas/studysession.schema";
 import type { DrizzleClient } from "$lib/db/index";
 
 export const findStudySessionById = async (db: DrizzleClient, studySessionId: string) => {
@@ -24,4 +28,19 @@ export const findParticipantsById = async (
 	});
 
 	return participant;
+};
+
+export const findSessionVideoByUrl = async (
+	db: DrizzleClient,
+	studySessionId: string,
+	videoUrl: string
+) => {
+	const video = await db.query.sessionVideosTable.findFirst({
+		where: and(
+			eq(sessionVideosTable.studySessionId, studySessionId),
+			eq(sessionVideosTable.youtubeUrl, videoUrl)
+		)
+	});
+
+	return video;
 };

@@ -23,7 +23,7 @@
 	class="grid h-full w-full place-items-center rounded-md border border-neutral-border bg-neutral-100"
 >
 	{#if !videoCode}
-		<form class="relative" method="POST" action="?/youtube" use:enhance>
+		<form class="relative space-y-1.5" method="POST" action="?/addVideo" use:enhance>
 			<Link size="14px" class="absolute top-2 left-2 text-subtext-color" />
 
 			<input
@@ -33,6 +33,10 @@
 				class="w-112 rounded-md border border-neutral-border bg-default-background py-1 pl-7 text-body text-brand-700 placeholder:text-caption"
 				required
 			/>
+
+			{#if form?.error?.videoURL}
+				<p class="text-caption text-error-600">{form.error.videoURL[0]}</p>
+			{/if}
 		</form>
 	{:else}
 		<iframe

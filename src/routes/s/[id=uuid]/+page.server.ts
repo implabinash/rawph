@@ -1,24 +1,69 @@
-import { findParticipantsById, findStudySessionById } from "$lib/db/queries/studysessions.query";
-import { sessionParticipantsTable, studySessionsTable } from "$lib/db/schemas/studysession.schema";
 import { eq } from "drizzle-orm";
+import { z } from "zod/v4";
+
 import type { Actions, PageServerLoad } from "./$types";
 import { error, fail, redirect } from "@sveltejs/kit";
+
+import { youtubeUrlSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
+import {
+	findParticipantsById,
+	findSessionVideoByUrl,
+	findStudySessionById
+} from "$lib/db/queries/studysessions.query";
+import {
+	sessionParticipantsTable,
+	sessionVideosTable,
+	studySessionsTable
+} from "$lib/db/schemas/studysession.schema";
 
 export const actions = {
-	youtube: async ({ request }) => {
+	addVideo: async ({ request, locals, url }) => {
 		const formData = Object.fromEntries(await request.formData());
-		let videoCode = "";
 
-		// Check for valid youtube video or not
+		const result = youtubeUrlSchema.safeParse(formData);
 
-		if (formData.videoURL.toString().includes("watch?v=")) {
-			videoCode = formData.videoURL.toString().split("watch?v=").at(-1) || "";
-		} else {
-			videoCode = formData.videoURL.toString().split("/").at(-1) || "";
+		if (!result.success) {
+			return {
+				error: z.flattenError(result.error).fieldErrors,
+				videoCode: null
+			};
 		}
 
-		// if videoCode is empty return an error
+		const videoURL = result.data.videoURL;
+		let videoCode = "";
+
+		if (videoURL.includes("watch?v=")) {
+			const params = new URLSearchParams(new URL(videoURL).search);
+			videoCode = params.get("v") || "";
+		} else if (videoURL.includes("youtu.be/")) {
+			videoCode = videoURL.split("youtu.be/")[1]?.split("?")[0] || "";
+		} else if (videoURL.includes("/embed/")) {
+			videoCode = videoURL.split("/embed/")[1]?.split("?")[0] || "";
+		} else if (videoURL.includes("/shorts/")) {
+			videoCode = videoURL.split("/shorts/")[1]?.split("?")[0] || "";
+		} else {
+			videoCode = videoURL.split("/").at(-1)?.split("?")[0] || "";
+		}
+
+		try {
+			const studySessionId = url.pathname.split("/")[2];
+
+			const video = await findSessionVideoByUrl(locals.db, studySessionId, result.data.videoURL);
+
+			if (!video) {
+				await locals.db.insert(sessionVideosTable).values({
+					studySessionId: studySessionId,
+					addedBy: locals.user.id,
+					youtubeUrl: result.data.videoURL
+				});
+			}
+		} catch (err) {
+			console.error("Video add error: ", err);
+			return fail(500, {
+				message: "Something went wrong. Try again."
+			});
+		}
 
 		return { videoCode };
 	},
