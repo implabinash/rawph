@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ActionData } from "./$types";
+	import type { ActionData, PageData } from "./$types";
 
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
@@ -7,7 +7,7 @@
 	import Popup from "$lib/components/Popup.svelte";
 	import Chat from "$lib/components/Chat.svelte";
 
-	let { form }: { form: ActionData } = $props();
+	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let isApproved: boolean = $state(true);
 	// let keyBuffer = "";
@@ -39,7 +39,7 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls />
+				<Controls user={data.user} />
 
 				<Chat />
 			</div>

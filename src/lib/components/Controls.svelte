@@ -4,6 +4,10 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 
+	import type { User } from "$lib/utils/types";
+
+	let { user }: { user: User } = $props();
+
 	let url = $state(page.url);
 	let isMute = $state(false);
 	let copied = $state(false);
@@ -81,11 +85,16 @@
 					</form>
 				</div>
 			</div>
+
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 				<div class="flex items-center gap-2">
-					<img src="/images/avatars/2.webp" alt="Partcipants" class="size-5 rounded-full" />
+					<img
+						src={user.image.startsWith("http") ? user.image : `/images/avatars/${user.image}.webp`}
+						alt={user.name}
+						class="size-5 rounded-full"
+					/>
 
-					<p class="text-caption-bold">Person Name</p>
+					<p class="text-caption-bold">{user.name}</p>
 				</div>
 
 				<Mic size="16px" class="m-1" />
