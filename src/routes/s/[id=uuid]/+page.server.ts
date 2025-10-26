@@ -1,7 +1,9 @@
 import { findParticipantsById, findStudySessionById } from "$lib/db/queries/studysessions.query";
-import { sessionParticipantsTable } from "$lib/db/schemas/studysession.schema";
+import { sessionParticipantsTable, studySessionsTable } from "$lib/db/schemas/studysession.schema";
+import { eq } from "drizzle-orm";
 import type { Actions, PageServerLoad } from "./$types";
-import { error, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { calculateTimeDiffInMin } from "$lib/utils/time";
 
 export const actions = {
 	youtube: async ({ request }) => {
@@ -25,7 +27,30 @@ export const actions = {
 		return { change: true };
 	},
 
-	leave: () => {
+	leave: async ({ url, locals }) => {
+		const studySessionId = url.pathname.split("/")[2];
+
+		try {
+			const studySession = await findStudySessionById(locals.db, studySessionId);
+
+			const duration = calculateTimeDiffInMin(studySession!.startedAt, new Date());
+
+			await locals.db
+				.update(studySessionsTable)
+				.set({
+					status: "completed",
+					endedAt: new Date(),
+					durationMinutes: duration
+				})
+				.where(eq(studySessionsTable.id, studySessionId));
+		} catch (err) {
+			console.log("Leave error: ", err);
+
+			return fail(500, {
+				message: "Failed. Try again."
+			});
+		}
+
 		throw redirect(303, "/dashboard");
 	},
 
@@ -61,7 +86,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	let isApproved = false;
 
-	const existingParticipant = await findParticipantsById(locals.db, locals.user.id);
+	const existingParticipant = await findParticipantsById(
+		locals.db,
+		studySession.id,
+		locals.user.id
+	);
 
 	if (existingParticipant) {
 		isApproved = existingParticipant.status === "approved";
