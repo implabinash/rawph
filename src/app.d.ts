@@ -5,6 +5,7 @@ declare global {
 		interface Platform {
 			env: {
 				DB: D1Database;
+				DO: DurableObjectNamespace;
 			};
 			cf: CfProperties;
 			ctx: ExecutionContext;
