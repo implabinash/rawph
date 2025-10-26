@@ -1,4 +1,4 @@
-import { findStudySessionById } from "$lib/db/queries/studysessions.query";
+import { findParticipantsById, findStudySessionById } from "$lib/db/queries/studysessions.query";
 import { sessionParticipantsTable } from "$lib/db/schemas/studysession.schema";
 import type { Actions, PageServerLoad } from "./$types";
 import { error, redirect } from "@sveltejs/kit";
@@ -61,7 +61,13 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	let isApproved = false;
 
-	if (studySession.createdBy === locals.user.id) {
+	const existingParticipant = await findParticipantsById(locals.db, locals.user.id);
+
+	if (existingParticipant) {
+		isApproved = existingParticipant.status === "approved";
+	}
+
+	if (!existingParticipant && studySession.createdBy === locals.user.id) {
 		try {
 			await locals.db.insert(sessionParticipantsTable).values({
 				status: "approved",
