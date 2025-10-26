@@ -1,5 +1,7 @@
+import { findStudySessionById } from "$lib/db/queries/studysessions.query";
+import { sessionParticipantsTable } from "$lib/db/schemas/studysession.schema";
 import type { Actions, PageServerLoad } from "./$types";
-import { redirect } from "@sveltejs/kit";
+import { error, redirect } from "@sveltejs/kit";
 
 export const actions = {
 	youtube: async ({ request }) => {
@@ -45,5 +47,35 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		throw redirect(307, "/invite");
 	}
 
-	return { user: locals.user };
+	const studySessionId = url.pathname.split("/")[2];
+
+	const studySession = await findStudySessionById(locals.db, studySessionId);
+
+	if (!studySession) {
+		return error(404, { message: "Study session not found." });
+	}
+
+	if (studySession.status === "completed") {
+		return error(404, { message: "Study session already finished" });
+	}
+
+	let isApproved = false;
+
+	if (studySession.createdBy === locals.user.id) {
+		try {
+			await locals.db.insert(sessionParticipantsTable).values({
+				status: "approved",
+				studySessionId: studySession.id,
+				userId: locals.user.id,
+				role: "creator"
+			});
+
+			isApproved = true;
+		} catch (err) {
+			console.error("Study Session joining error: ", err);
+			return error(500, { message: "Something went wrong. Try again!" });
+		}
+	}
+
+	return { user: locals.user, isApproved };
 };

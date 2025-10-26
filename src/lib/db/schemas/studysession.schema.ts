@@ -51,6 +51,7 @@ export const sessionParticipantsTable = sqliteTable("session_participants", {
 	role: text("role", { enum: ["creator", "participant"] })
 		.notNull()
 		.default("participant"),
+	status: text("role", { enum: ["approved", "kicked"] }).notNull(),
 
 	joinedAt: integer("joined_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)

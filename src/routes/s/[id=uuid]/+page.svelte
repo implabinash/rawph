@@ -9,7 +9,6 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let isApproved: boolean = $state(true);
 	// let keyBuffer = "";
 	// let bufferTimeout: ReturnType<typeof setTimeout>;
 
@@ -52,7 +51,7 @@
 		</section>
 	</section>
 
-	{#if !isApproved}
+	{#if !data.isApproved}
 		<Popup />
 	{/if}
 </main>
