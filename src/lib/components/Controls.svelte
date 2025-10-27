@@ -76,6 +76,8 @@
 
 					<div class="flex items-center gap-1">
 						<form method="POST" action="?/accept" use:enhance>
+							<input type="hidden" value={pendingParticipant.userId} name="pendingParticipant" />
+
 							<button
 								type="submit"
 								class="cursor-pointer rounded-md border border-neutral-border bg-success-50 p-1 text-success-700 hover:bg-success-100 active:bg-success-50"

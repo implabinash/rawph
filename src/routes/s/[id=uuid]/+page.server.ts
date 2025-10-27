@@ -17,6 +17,7 @@ import {
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
 import { findUserById } from "$lib/db/queries/users.query";
+import { pendingParticipantSchema } from "$lib/validations/websocket";
 
 export const actions = {
 	addVideo: async ({ request, locals, url }) => {
@@ -125,8 +126,13 @@ export const actions = {
 		return { success: true };
 	},
 
-	accept: () => {
-		console.log("accept");
+	accept: async ({ request }) => {
+		const formData = Object.fromEntries(await request.formData());
+		const result = pendingParticipantSchema.safeParse(formData);
+
+		if (!result.success) {
+			return fail(401, { message: "invalid id" });
+		}
 	},
 
 	reject: () => {

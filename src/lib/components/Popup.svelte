@@ -4,6 +4,7 @@
 	import { Clock } from "@lucide/svelte";
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
 	import { websocketServer } from "$lib/stores/websocket.svelte";
+	import { onDestroy } from "svelte";
 
 	let { ss, user, form }: { ss: User; user: User; form: ActionData } = $props();
 
@@ -22,6 +23,18 @@
 
 		isRequested = false;
 	};
+
+	onDestroy(() => {
+		cancelRequest();
+	});
+
+	if (typeof window !== "undefined") {
+		window.addEventListener("beforeunload", cancelRequest);
+
+		onDestroy(() => {
+			window.removeEventListener("beforeunload", cancelRequest);
+		});
+	}
 </script>
 
 <section class="fixed inset-0 grid h-full place-items-center bg-default-font/40 backdrop-blur-sm">
