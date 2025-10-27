@@ -121,6 +121,10 @@ export const actions = {
 		return { success: true };
 	},
 
+	cancel: () => {
+		return { success: true };
+	},
+
 	accept: () => {
 		console.log("accept");
 	},

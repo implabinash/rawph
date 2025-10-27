@@ -61,8 +61,20 @@ class WebSocketServer {
 	}
 
 	private handleMessage(message: WSMessage) {
-		if (message.type === "new_participant") {
-			this.pendingParticipants.push(message.data);
+		if (message.type === "request_new_participant") {
+			const existingPendingRequest = this.pendingParticipants.find(
+				(pendingParticipant) => pendingParticipant.userId === message.data.userId
+			);
+
+			if (!existingPendingRequest) {
+				this.pendingParticipants.push(message.data);
+			}
+		}
+
+		if (message.type === "cancel_participant_requset") {
+			this.pendingParticipants = this.pendingParticipants.filter(
+				(pendingParticipant) => pendingParticipant.userId !== message.data.userId
+			);
 		}
 	}
 

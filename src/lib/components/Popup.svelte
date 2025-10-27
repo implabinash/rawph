@@ -4,17 +4,24 @@
 	import { Clock } from "@lucide/svelte";
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
 	import { websocketServer } from "$lib/stores/websocket.svelte";
-	import { onDestroy } from "svelte";
 
 	let { ss, user, form }: { ss: User; user: User; form: ActionData } = $props();
 
 	let isRequested: boolean = $state(false);
 
-	onDestroy(() => {
-		const participant = websocketServer.pendingParticipants.find(
-			(participant) => participant.userId === user.id
-		);
-	});
+	const cancelRequest = () => {
+		const message = {
+			type: "cancel_participant_requset",
+			data: {
+				userId: user.id
+			},
+			for: "sp"
+		};
+
+		websocketServer.send(message);
+
+		isRequested = false;
+	};
 </script>
 
 <section class="fixed inset-0 grid h-full place-items-center bg-default-font/40 backdrop-blur-sm">
@@ -64,7 +71,16 @@
 		{/if}
 
 		{#if isRequested}
-			<form method="POST" action="?/request" use:enhance>
+			<form
+				method="POST"
+				action="?/cancel"
+				use:enhance={() => {
+					return async ({ update }) => {
+						await update();
+						cancelRequest();
+					};
+				}}
+			>
 				<button
 					class="w-full cursor-pointer rounded-md border border-neutral-border py-2 text-body-bold text-neutral-700 hover:bg-neutral-50 active:bg-default-background"
 					type="submit">Cancel Request</button
@@ -78,24 +94,18 @@
 					return async ({ update }) => {
 						await update();
 
-						const participant = websocketServer.pendingParticipants.find(
-							(participant) => participant.userId === user.id
-						);
+						const message = {
+							type: "request_new_participant",
+							data: {
+								userId: user.id,
+								name: user.name,
+								image: user.image,
+								userRole: "sm"
+							},
+							for: "ss"
+						};
 
-						if (!participant) {
-							const message = {
-								type: "new_participant",
-								data: {
-									userId: user.id,
-									name: user.name,
-									image: user.image,
-									userRole: "sm"
-								},
-								for: "ss"
-							};
-
-							websocketServer.send(message);
-						}
+						websocketServer.send(message);
 
 						isRequested = true;
 					};
