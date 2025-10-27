@@ -70,7 +70,7 @@
 	</section>
 
 	{#if !data.isApproved}
-		<Popup ss={data.ss!} />
+		<Popup ss={data.ss!} {form} user={data.user} />
 	{/if}
 </main>
 

@@ -3,8 +3,9 @@
 	import type { User } from "$lib/utils/types";
 	import { Clock } from "@lucide/svelte";
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
+	import { websocketServer } from "$lib/stores/websocket.svelte";
 
-	let { ss, form }: { ss: User; form: ActionData } = $props();
+	let { ss, user, form }: { ss: User; user: User; form: ActionData } = $props();
 
 	let isRequested: boolean = $state(false);
 </script>
@@ -59,14 +60,33 @@
 			<form method="POST" action="?/request" use:enhance>
 				<button
 					class="w-full cursor-pointer rounded-md border border-neutral-border py-2 text-body-bold text-neutral-700 hover:bg-neutral-50 active:bg-default-background"
-					>Cancel Request</button
+					type="submit">Cancel Request</button
 				>
 			</form>
 		{:else}
-			<form>
+			<form
+				method="POST"
+				action="?/request"
+				use:enhance={() => {
+					return async ({ update }) => {
+						await update();
+						const message = {
+							type: "new_participant",
+							data: {
+								userId: user.id,
+								name: user.name,
+								image: user.image,
+								userRole: "sm"
+							}
+						};
+
+						websocketServer.send(message);
+					};
+				}}
+			>
 				<button
 					class="w-full cursor-pointer rounded-md bg-brand-600 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-					>Ask to Join</button
+					type="submit">Ask to Join</button
 				>
 			</form>
 		{/if}

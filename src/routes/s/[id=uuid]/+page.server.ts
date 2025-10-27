@@ -17,6 +17,7 @@ import {
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
 import { findUserById } from "$lib/db/queries/users.query";
+import { websocketServer } from "$lib/stores/websocket.svelte";
 
 export const actions = {
 	addVideo: async ({ request, locals, url }) => {
@@ -98,6 +99,27 @@ export const actions = {
 		}
 
 		throw redirect(303, "/dashboard");
+	},
+
+	request: async ({ locals, url }) => {
+		const sessionId = url.pathname.split("/")[2];
+
+		const session = await findStudySessionById(locals.db, sessionId);
+		const sp = await findParticipantsById(locals.db, session!.id, locals.user.id);
+
+		if (!session) {
+			return fail(404, { message: "session not found" });
+		}
+
+		if (session.status === "completed") {
+			return fail(404, { message: "session completed" });
+		}
+
+		if (sp && sp.status === "kicked") {
+			return fail(404, { message: "not allowed" });
+		}
+
+		return { success: true };
 	},
 
 	accept: () => {
