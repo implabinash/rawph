@@ -4,10 +4,17 @@
 	import { Clock } from "@lucide/svelte";
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
 	import { websocketServer } from "$lib/stores/websocket.svelte";
+	import { onDestroy } from "svelte";
 
 	let { ss, user, form }: { ss: User; user: User; form: ActionData } = $props();
 
 	let isRequested: boolean = $state(false);
+
+	onDestroy(() => {
+		const participant = websocketServer.pendingParticipants.find(
+			(participant) => participant.userId === user.id
+		);
+	});
 </script>
 
 <section class="fixed inset-0 grid h-full place-items-center bg-default-font/40 backdrop-blur-sm">
@@ -70,18 +77,27 @@
 				use:enhance={() => {
 					return async ({ update }) => {
 						await update();
-						const message = {
-							type: "new_participant",
-							data: {
-								userId: user.id,
-								name: user.name,
-								image: user.image,
-								userRole: "sm"
-							},
-							for: "ss"
-						};
 
-						websocketServer.send(message);
+						const participant = websocketServer.pendingParticipants.find(
+							(participant) => participant.userId === user.id
+						);
+
+						if (!participant) {
+							const message = {
+								type: "new_participant",
+								data: {
+									userId: user.id,
+									name: user.name,
+									image: user.image,
+									userRole: "sm"
+								},
+								for: "ss"
+							};
+
+							websocketServer.send(message);
+						}
+
+						isRequested = true;
 					};
 				}}
 			>

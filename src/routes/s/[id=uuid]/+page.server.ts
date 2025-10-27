@@ -17,7 +17,6 @@ import {
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
 import { findUserById } from "$lib/db/queries/users.query";
-import { websocketServer } from "$lib/stores/websocket.svelte";
 
 export const actions = {
 	addVideo: async ({ request, locals, url }) => {
