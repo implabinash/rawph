@@ -31,7 +31,7 @@ class WebSocketServer {
 			user_id: sessionData.userId,
 			name: sessionData.name,
 			image: sessionData.image,
-			role: sessionData.role
+			user_role: sessionData.role
 		});
 
 		const wsUrl = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionId}?${params}`;
