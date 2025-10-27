@@ -17,6 +17,7 @@ class WebSocketServer {
 
 	public messages = $state<WSMessage[]>([]);
 	public participants = $state<SessionData[]>([]);
+	public pendingParticipants = $state<SessionData[]>([]);
 
 	connect(studySessionId: string, sessionData: SessionData) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
@@ -47,6 +48,7 @@ class WebSocketServer {
 			try {
 				const data = JSON.parse(event.data);
 				console.log(data);
+				this.handleMessage(data);
 			} catch (err) {
 				console.error("Failed to parse message:", err);
 			}
@@ -59,6 +61,12 @@ class WebSocketServer {
 		this.ws.onerror = (error) => {
 			console.error("WebSocket error:", error);
 		};
+	}
+
+	private handleMessage(message: WSMessage) {
+		if (message.type === "new_participant") {
+			this.pendingParticipants.push(message.data);
+		}
 	}
 
 	send(message: WSMessage) {

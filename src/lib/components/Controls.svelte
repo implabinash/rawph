@@ -5,6 +5,7 @@
 	import { page } from "$app/state";
 
 	import type { User } from "$lib/utils/types";
+	import { websocketServer } from "$lib/stores/websocket.svelte";
 
 	let { user }: { user: User } = $props();
 
@@ -59,32 +60,40 @@
 		<p class="text-caption-bold">Participants</p>
 
 		<div class="space-y-2">
-			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
-				<div class="flex items-center gap-2">
-					<img src="/images/avatars/0.webp" alt="Partcipants" class="size-5 rounded-full" />
+			{#each websocketServer.pendingParticipants as pendingParticipant (pendingParticipant.userId)}
+				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
+					<div class="flex items-center gap-2">
+						<img
+							src={pendingParticipant.image.startsWith("http")
+								? pendingParticipant.image
+								: `/images/avatars/${pendingParticipant.image}.webp`}
+							alt={pendingParticipant.name}
+							class="size-5 rounded-full"
+						/>
 
-					<p class="text-caption-bold">Person Name</p>
+						<p class="text-caption-bold">{pendingParticipant.name}</p>
+					</div>
+
+					<div class="flex items-center gap-1">
+						<form method="POST" action="?/accept" use:enhance>
+							<button
+								type="submit"
+								class="cursor-pointer rounded-md border border-neutral-border bg-success-50 p-1 text-success-700 hover:bg-success-100 active:bg-success-50"
+							>
+								<Check size="16px" />
+							</button>
+						</form>
+
+						<form method="POST" action="?/reject" use:enhance>
+							<button
+								class="cursor-pointer rounded-md border border-neutral-border bg-error-50 p-1 text-error-700 hover:bg-error-100 active:bg-error-50"
+							>
+								<X size="16px" />
+							</button>
+						</form>
+					</div>
 				</div>
-
-				<div class="flex items-center gap-1">
-					<form method="POST" action="?/accept" use:enhance>
-						<button
-							type="submit"
-							class="cursor-pointer rounded-md border border-neutral-border bg-success-50 p-1 text-success-700 hover:bg-success-100 active:bg-success-50"
-						>
-							<Check size="16px" />
-						</button>
-					</form>
-
-					<form method="POST" action="?/reject" use:enhance>
-						<button
-							class="cursor-pointer rounded-md border border-neutral-border bg-error-50 p-1 text-error-700 hover:bg-error-100 active:bg-error-50"
-						>
-							<X size="16px" />
-						</button>
-					</form>
-				</div>
-			</div>
+			{/each}
 
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 				<div class="flex items-center gap-2">

@@ -77,7 +77,8 @@
 								name: user.name,
 								image: user.image,
 								userRole: "sm"
-							}
+							},
+							for: "ss"
 						};
 
 						websocketServer.send(message);
