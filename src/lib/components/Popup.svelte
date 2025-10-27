@@ -1,5 +1,8 @@
 <script lang="ts">
+	import type { User } from "$lib/utils/types";
 	import { Clock } from "@lucide/svelte";
+
+	let { ss }: { ss: User } = $props();
 </script>
 
 <section class="fixed inset-0 grid h-full place-items-center bg-default-font/40 backdrop-blur-sm">
@@ -8,8 +11,8 @@
 	>
 		<div class="space-y-4 text-center">
 			<img
-				src="/images/placeholders/0.png"
-				alt="Person Name"
+				src={ss.image.startsWith("http") ? ss.image : `/images/avatars/${ss.image}.webp`}
+				alt={ss.name}
 				class="mx-auto size-14 rounded-full"
 			/>
 
@@ -17,7 +20,7 @@
 				<h1 class="text-heading-2">Waiting for approval</h1>
 
 				<p class="text-body text-subtext-color">
-					Alex Chen needs to approve your request to join the session.
+					{ss.name} needs to approve your request to join the session.
 				</p>
 			</div>
 		</div>

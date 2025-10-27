@@ -16,6 +16,7 @@ import {
 	sessionVideosTable,
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
+import { findUserById } from "$lib/db/queries/users.query";
 
 export const actions = {
 	addVideo: async ({ request, locals, url }) => {
@@ -120,6 +121,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const studySessionId = url.pathname.split("/")[2];
 
 	const studySession = await findStudySessionById(locals.db, studySessionId);
+	const ss = await findUserById(locals.db, studySession!.createdBy);
 
 	if (!studySession) {
 		return error(404, { message: "Study session not found." });
@@ -144,10 +146,10 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!existingParticipant && studySession.createdBy === locals.user.id) {
 		try {
 			await locals.db.insert(sessionParticipantsTable).values({
-				status: "approved",
 				studySessionId: studySession.id,
 				userId: locals.user.id,
-				role: "creator"
+				status: "approved",
+				role: "ss"
 			});
 
 			isApproved = true;
@@ -157,5 +159,5 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
-	return { user: locals.user, isApproved };
+	return { user: locals.user, ss, isApproved };
 };

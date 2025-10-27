@@ -48,9 +48,12 @@ export const sessionParticipantsTable = sqliteTable("session_participants", {
 		.notNull()
 		.references(() => usersTable.id),
 
-	role: text("role", { enum: ["creator", "participant"] })
+	// SS: Session Secretary -> Creator of the session (Max: 1)
+	// SR: Session Representative -> Management power over session, under admin (Max: 5)
+	// SM: Session Members -> Participants of the session (Max: 14)
+	role: text("role", { enum: ["ss", "sr", "sm"] })
 		.notNull()
-		.default("participant"),
+		.default("sm"),
 	status: text("status", { enum: ["approved", "kicked"] }).notNull(),
 
 	joinedAt: integer("joined_at", { mode: "timestamp_ms" })

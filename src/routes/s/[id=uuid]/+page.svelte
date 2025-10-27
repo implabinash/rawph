@@ -52,7 +52,7 @@
 	</section>
 
 	{#if !data.isApproved}
-		<Popup />
+		<Popup ss={data.ss!} />
 	{/if}
 </main>
 

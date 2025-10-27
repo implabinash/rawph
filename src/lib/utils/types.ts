@@ -2,10 +2,10 @@ export type User = {
 	id: string;
 	name: string;
 	email: string;
-	hasPassword: boolean;
+	hasPassword?: boolean;
 	image: string;
 	isInvited: boolean;
-	joinedCode: string;
+	joinedCode: string | null;
 	createdAt: Date;
 	updatedAt: Date;
 };

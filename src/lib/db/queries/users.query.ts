@@ -15,3 +15,11 @@ export const findUserByEmail = async (db: DrizzleClient, email: string) => {
 
 	return user;
 };
+
+export const findUserById = async (db: DrizzleClient, userId: string) => {
+	const user = await db.query.usersTable.findFirst({
+		where: eq(usersTable.id, userId)
+	});
+
+	return user;
+};
