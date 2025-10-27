@@ -159,5 +159,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
-	return { user: locals.user, ss, isApproved };
+	const sp = await findParticipantsById(locals.db, studySession!.id, locals.user.id);
+
+	return { user: locals.user, sp, ss, isApproved };
 };

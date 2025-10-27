@@ -1,13 +1,31 @@
 <script lang="ts">
 	import type { ActionData, PageData } from "./$types";
+	import { page } from "$app/state";
 
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
 	import Video from "$lib/components/Video.svelte";
 	import Popup from "$lib/components/Popup.svelte";
 	import Chat from "$lib/components/Chat.svelte";
+	import { onDestroy, onMount } from "svelte";
+	import { websocketServer } from "$lib/stores/websocket.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
+
+	onMount(() => {
+		const studySessionId = page.url.pathname.split("/")[2];
+
+		websocketServer.connect(studySessionId, {
+			userId: data.user.id,
+			name: data.user.name,
+			image: data.user.image || "0",
+			role: data.sp?.role || "sm"
+		});
+	});
+
+	onDestroy(() => {
+		websocketServer.disconnect();
+	});
 
 	// let keyBuffer = "";
 	// let bufferTimeout: ReturnType<typeof setTimeout>;

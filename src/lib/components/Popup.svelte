@@ -1,8 +1,10 @@
 <script lang="ts">
+	import { enhance } from "$app/forms";
 	import type { User } from "$lib/utils/types";
 	import { Clock } from "@lucide/svelte";
+	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
 
-	let { ss }: { ss: User } = $props();
+	let { ss, form }: { ss: User; form: ActionData } = $props();
 
 	let isRequested: boolean = $state(false);
 </script>
@@ -54,7 +56,7 @@
 		{/if}
 
 		{#if isRequested}
-			<form>
+			<form method="POST" action="?/request" use:enhance>
 				<button
 					class="w-full cursor-pointer rounded-md border border-neutral-border py-2 text-body-bold text-neutral-700 hover:bg-neutral-50 active:bg-default-background"
 					>Cancel Request</button
