@@ -40,14 +40,11 @@ class WebSocketServer {
 
 		this.ws.onopen = () => {
 			console.log("WebSocket connected");
-
-			this.send({ type: "get_participants" });
 		};
 
 		this.ws.onmessage = (event) => {
 			try {
 				const data = JSON.parse(event.data);
-				console.log(data);
 				this.handleMessage(data);
 			} catch (err) {
 				console.error("Failed to parse message:", err);
