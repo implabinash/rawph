@@ -8,7 +8,7 @@ import { youtubeURLSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
 	findAllSPsBySessionID,
-	findParticipantsByID,
+	findParticipantByID,
 	findSessionVideoByURL,
 	findStudySessionByID
 } from "$lib/db/queries/studysessions.query";
@@ -106,7 +106,7 @@ export const actions = {
 		const sessionID = url.pathname.split("/")[2];
 
 		const session = await findStudySessionByID(locals.db, sessionID);
-		const sp = await findParticipantsByID(locals.db, session!.id, locals.user.id);
+		const sp = await findParticipantByID(locals.db, session!.id, locals.user.id);
 
 		if (!session) {
 			return fail(404, { message: "session not found" });
@@ -165,11 +165,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	let isApproved = false;
 
-	const existingParticipant = await findParticipantsByID(
-		locals.db,
-		studySession.id,
-		locals.user.id
-	);
+	const existingParticipant = await findParticipantByID(locals.db, studySession.id, locals.user.id);
 
 	if (existingParticipant) {
 		isApproved = existingParticipant.status === "approved";
@@ -191,7 +187,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
-	const sp = await findParticipantsByID(locals.db, studySession!.id, locals.user.id);
+	const sp = await findParticipantByID(locals.db, studySession!.id, locals.user.id);
 	const sps = await findAllSPsBySessionID(locals.db, studySession!.id);
 
 	return { user: locals.user, ss, sps, sp, isApproved };

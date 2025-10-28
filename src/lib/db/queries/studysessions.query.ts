@@ -15,7 +15,7 @@ export const findStudySessionByID = async (db: DrizzleClient, studySessionID: st
 	return studySession;
 };
 
-export const findParticipantsByID = async (
+export const findParticipantByID = async (
 	db: DrizzleClient,
 	studySessionID: string,
 	participantsId: string
