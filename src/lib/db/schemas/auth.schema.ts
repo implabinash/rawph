@@ -26,7 +26,7 @@ export const authSessionsTable = sqliteTable("auth_sessions", {
 		.notNull()
 });
 
-export const oauthAccountsTable = sqliteTable("oauth_accounts", {
+export const oAuthAccountsTable = sqliteTable("oauth_accounts", {
 	id: text("id")
 		.primaryKey()
 		.notNull()

@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 
-import { oauthAccountsTable } from "$lib/db/schemas/auth.schema";
+import { oAuthAccountsTable } from "$lib/db/schemas/auth.schema";
 import type { DrizzleClient } from "$lib/db/index";
 
 export const findOAuthAccount = async (
@@ -8,10 +8,10 @@ export const findOAuthAccount = async (
 	provider: string,
 	providerUserID: string
 ) => {
-	const account = await db.query.oauthAccountsTable.findFirst({
+	const account = await db.query.oAuthAccountsTable.findFirst({
 		where: and(
-			eq(oauthAccountsTable.provider, provider),
-			eq(oauthAccountsTable.providerUserID, providerUserID)
+			eq(oAuthAccountsTable.provider, provider),
+			eq(oAuthAccountsTable.providerUserID, providerUserID)
 		)
 	});
 

@@ -1,7 +1,7 @@
 import type { RequestHandler } from "./$types";
 import { redirect } from "@sveltejs/kit";
 
-import { authSessionsTable, oauthAccountsTable } from "$lib/db/schemas/auth.schema";
+import { authSessionsTable, oAuthAccountsTable } from "$lib/db/schemas/auth.schema";
 import { findOAuthAccount } from "$lib/db/queries/oauth.query";
 import { findUserByEmail } from "$lib/db/queries/users.query";
 import { generateSessionToken } from "$lib/utils/random";
@@ -55,7 +55,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 			if (existingUser) {
 				userID = existingUser.id;
 
-				await locals.db.insert(oauthAccountsTable).values({
+				await locals.db.insert(oAuthAccountsTable).values({
 					userID,
 					provider: "google",
 					providerUserID: googleUser.sub
@@ -75,7 +75,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 
 				userID = newUser.id;
 
-				await locals.db.insert(oauthAccountsTable).values({
+				await locals.db.insert(oAuthAccountsTable).values({
 					userID,
 					provider: "google",
 					providerUserID: googleUser.sub
