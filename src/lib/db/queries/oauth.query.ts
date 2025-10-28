@@ -12,7 +12,10 @@ export const findOAuthAccount = async (
 		where: and(
 			eq(oAuthAccountsTable.provider, provider),
 			eq(oAuthAccountsTable.providerUserID, providerUserID)
-		)
+		),
+		columns: {
+			userID: true
+		}
 	});
 
 	return account;

@@ -5,7 +5,11 @@ import type { DrizzleClient } from "$lib/db/index";
 
 export const findInviteCodeData = async (db: DrizzleClient, code: string) => {
 	const inviteCodeData = await db.query.inviteCodesTable.findFirst({
-		where: eq(inviteCodesTable.code, code)
+		where: eq(inviteCodesTable.code, code),
+		columns: {
+			id: true,
+			isUsed: true
+		}
 	});
 
 	return inviteCodeData;

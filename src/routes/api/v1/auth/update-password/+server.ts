@@ -70,7 +70,10 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 	}
 
 	if (locals.user.hasPassword) {
-		const isValidPassword = await verifyPassword(result.data.currentPassword, data.users.password);
+		const isValidPassword = await verifyPassword(
+			result.data.currentPassword,
+			data.user.password ?? ""
+		);
 
 		if (!isValidPassword) {
 			const response = {

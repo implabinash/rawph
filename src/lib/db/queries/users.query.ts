@@ -5,7 +5,11 @@ import type { DrizzleClient } from "$lib/db/index";
 
 export const findUserByEmail = async (db: DrizzleClient, email: string) => {
 	const user = await db.query.usersTable.findFirst({
-		where: eq(usersTable.email, email)
+		where: eq(usersTable.email, email),
+		columns: {
+			id: true,
+			password: true
+		}
 	});
 
 	return user;
