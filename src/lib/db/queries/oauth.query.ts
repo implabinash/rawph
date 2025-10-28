@@ -6,12 +6,12 @@ import type { DrizzleClient } from "$lib/db/index";
 export const findOAuthAccount = async (
 	db: DrizzleClient,
 	provider: string,
-	providerUserId: string
+	providerUserID: string
 ) => {
 	const account = await db.query.oauthAccountsTable.findFirst({
 		where: and(
 			eq(oauthAccountsTable.provider, provider),
-			eq(oauthAccountsTable.providerUserId, providerUserId)
+			eq(oauthAccountsTable.providerUserID, providerUserID)
 		)
 	});
 

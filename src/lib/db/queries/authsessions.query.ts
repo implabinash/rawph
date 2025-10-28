@@ -8,7 +8,7 @@ export const findAuthSessionData = async (db: DrizzleClient, sessionToken: strin
 	const user = await db
 		.select()
 		.from(authSessionsTable)
-		.leftJoin(usersTable, eq(usersTable.id, authSessionsTable.userId))
+		.leftJoin(usersTable, eq(usersTable.id, authSessionsTable.userID))
 		.where(eq(authSessionsTable.token, sessionToken))
 		.limit(1);
 

@@ -1,7 +1,7 @@
 import { PUBLIC_BASE_URL } from "$env/static/public";
 
 type SessionData = {
-	userId: string;
+	userID: string;
 	name: string;
 	image: string;
 	role: "ss" | "sr" | "sm";
@@ -28,7 +28,7 @@ class WebSocketServer {
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
 		const params = new URLSearchParams({
-			user_id: sessionData.userId,
+			user_id: sessionData.userID,
 			name: sessionData.name,
 			image: sessionData.image,
 			user_role: sessionData.role
@@ -80,7 +80,7 @@ class WebSocketServer {
 	private handleMessage(message: WSMessage) {
 		if (message.type === "request_new_participant") {
 			const existingPendingRequest = this.pendingParticipants.find(
-				(pendingParticipant) => pendingParticipant.userId === message.data.userId
+				(pendingParticipant) => pendingParticipant.userID === message.data.userID
 			);
 
 			if (!existingPendingRequest) {
@@ -91,7 +91,7 @@ class WebSocketServer {
 		console.log(message);
 		if (message.type === "add_new_participant") {
 			const existingParticipant = this.participants.find(
-				(participant) => participant.userId === message.data.userId
+				(participant) => participant.userID === message.data.userID
 			);
 
 			if (!existingParticipant) {
@@ -101,7 +101,7 @@ class WebSocketServer {
 
 		if (message.type === "cancel_participant_requset") {
 			this.pendingParticipants = this.pendingParticipants.filter(
-				(pendingParticipant) => pendingParticipant.userId !== message.data.userId
+				(pendingParticipant) => pendingParticipant.userID !== message.data.userID
 			);
 		}
 	}

@@ -12,7 +12,7 @@ export const authSessionsTable = sqliteTable("auth_sessions", {
 		.$defaultFn(() => randomUUID()),
 
 	token: text("token").notNull().unique(),
-	userId: text("user_id")
+	userID: text("user_id")
 		.notNull()
 		.references(() => usersTable.id, { onDelete: "cascade" }),
 
@@ -33,12 +33,12 @@ export const oauthAccountsTable = sqliteTable("oauth_accounts", {
 		.unique()
 		.$defaultFn(() => randomUUID()),
 
-	userId: text("user_id")
+	userID: text("user_id")
 		.notNull()
 		.references(() => usersTable.id, { onDelete: "cascade" }),
 
 	provider: text("provider", { enum: ["google", "apple"] }).notNull(),
-	providerUserId: text("provider_user_id").notNull(),
+	providerUserID: text("provider_user_id").notNull(),
 
 	createdAt: integer("created_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)

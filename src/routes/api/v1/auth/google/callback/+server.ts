@@ -44,21 +44,21 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 
 		const googleUser: GoogleUser = await response.json();
 
-		let userId: string;
+		let userID: string;
 		const existingOAuthAccount = await findOAuthAccount(locals.db, "google", googleUser.sub);
 
 		if (existingOAuthAccount) {
-			userId = existingOAuthAccount.userId;
+			userID = existingOAuthAccount.userID;
 		} else {
 			const existingUser = await findUserByEmail(locals.db, googleUser.email);
 
 			if (existingUser) {
-				userId = existingUser.id;
+				userID = existingUser.id;
 
 				await locals.db.insert(oauthAccountsTable).values({
-					userId,
+					userID,
 					provider: "google",
-					providerUserId: googleUser.sub
+					providerUserID: googleUser.sub
 				});
 			} else {
 				const image = googleUser.picture || Math.floor(Math.random() * 5).toString();
@@ -73,12 +73,12 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 					})
 					.returning({ id: usersTable.id });
 
-				userId = newUser.id;
+				userID = newUser.id;
 
 				await locals.db.insert(oauthAccountsTable).values({
-					userId,
+					userID,
 					provider: "google",
-					providerUserId: googleUser.sub
+					providerUserID: googleUser.sub
 				});
 			}
 		}
@@ -88,7 +88,7 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 
 		await locals.db.insert(authSessionsTable).values({
 			token: sessionToken,
-			userId,
+			userID,
 			expiresAt
 		});
 

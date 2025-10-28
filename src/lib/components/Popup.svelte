@@ -14,7 +14,7 @@
 		const message = {
 			type: "cancel_participant_requset",
 			data: {
-				userId: user.id
+				userID: user.id
 			},
 			for: "sp"
 		};
@@ -110,7 +110,7 @@
 						const message = {
 							type: "request_new_participant",
 							data: {
-								userId: user.id,
+								userID: user.id,
 								name: user.name,
 								image: user.image,
 								userRole: "sm"

@@ -22,7 +22,7 @@ export const findParticipantsById = async (
 ) => {
 	const participant = await db.query.sessionParticipantsTable.findFirst({
 		where: and(
-			eq(sessionParticipantsTable.userId, participantsId),
+			eq(sessionParticipantsTable.userID, participantsId),
 			eq(sessionParticipantsTable.studySessionId, studySessionId)
 		)
 	});

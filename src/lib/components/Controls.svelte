@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw, User, X } from "@lucide/svelte";
+	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw, X } from "@lucide/svelte";
 
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
@@ -59,7 +59,7 @@
 		<p class="text-caption-bold">Participants</p>
 
 		<div class="space-y-2">
-			{#each websocketServer.pendingParticipants as pendingParticipant (pendingParticipant.userId)}
+			{#each websocketServer.pendingParticipants as pendingParticipant (pendingParticipant.userID)}
 				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img
@@ -75,7 +75,7 @@
 
 					<div class="flex items-center gap-1">
 						<form method="POST" action="?/accept" use:enhance>
-							<input type="hidden" value={pendingParticipant.userId} name="pendingParticipant" />
+							<input type="hidden" value={pendingParticipant.userID} name="pendingParticipant" />
 
 							<button
 								type="submit"
@@ -97,7 +97,7 @@
 			{/each}
 
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
-				{#each websocketServer.participants as participant (participant.userId)}
+				{#each websocketServer.participants as participant (participant.userID)}
 					<div class="flex items-center gap-2">
 						<img
 							src={participant.image.startsWith("http")

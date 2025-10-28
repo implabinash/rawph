@@ -63,7 +63,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 
 		await locals.db.insert(authSessionsTable).values({
 			token: sessionToken,
-			userId: userID,
+			userID,
 			expiresAt
 		});
 	} catch (err) {

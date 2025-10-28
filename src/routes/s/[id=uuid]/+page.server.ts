@@ -179,7 +179,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		try {
 			await locals.db.insert(sessionParticipantsTable).values({
 				studySessionId: studySession.id,
-				userId: locals.user.id,
+				userID: locals.user.id,
 				status: "approved",
 				role: "ss"
 			});

@@ -44,7 +44,7 @@ export const sessionParticipantsTable = sqliteTable("session_participants", {
 	studySessionId: text("study_session_id")
 		.notNull()
 		.references(() => studySessionsTable.id, { onDelete: "cascade" }),
-	userId: text("user_id")
+	userID: text("user_id")
 		.notNull()
 		.references(() => usersTable.id),
 

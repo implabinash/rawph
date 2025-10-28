@@ -16,7 +16,7 @@
 		const studySessionId = page.url.pathname.split("/")[2];
 
 		websocketServer.connect(studySessionId, {
-			userId: data.user.id,
+			userID: data.user.id,
 			name: data.user.name,
 			image: data.user.image || "0",
 			role: data.sp?.role || "sm"
