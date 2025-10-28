@@ -1,10 +1,11 @@
 import { relations } from "drizzle-orm";
 
-import { usersTable } from "./user.schema";
 import { authSessionsTable, oAuthAccountsTable } from "./auth.schema";
+import { usersTable } from "./user.schema";
 import {
 	sessionParticipantsTable,
 	sessionVideosTable,
+	studySessionJoinRequestTable,
 	studySessionsTable
 } from "./studysession.schema";
 
@@ -13,6 +14,7 @@ export const userRelations = relations(usersTable, ({ many }) => ({
 	oAuthSessions: many(oAuthAccountsTable),
 	createdStudySessions: many(studySessionsTable),
 	sessionParticipations: many(sessionParticipantsTable),
+	joinRequests: many(studySessionJoinRequestTable),
 	addedVideos: many(sessionVideosTable)
 }));
 
@@ -36,6 +38,7 @@ export const studySessionRelations = relations(studySessionsTable, ({ one, many 
 		references: [usersTable.id]
 	}),
 	participants: many(sessionParticipantsTable),
+	joinRequests: many(studySessionJoinRequestTable),
 	videos: many(sessionVideosTable)
 }));
 
@@ -46,6 +49,21 @@ export const sessionParticipantsRelations = relations(sessionParticipantsTable, 
 	}),
 	user: one(usersTable, {
 		fields: [sessionParticipantsTable.userID],
+		references: [usersTable.id]
+	})
+}));
+
+export const joinRequestRelations = relations(studySessionJoinRequestTable, ({ one }) => ({
+	studySession: one(studySessionsTable, {
+		fields: [studySessionJoinRequestTable.studySessionID],
+		references: [studySessionsTable.id]
+	}),
+	requestBy: one(usersTable, {
+		fields: [studySessionJoinRequestTable.requestBy],
+		references: [usersTable.id]
+	}),
+	respondedBy: one(usersTable, {
+		fields: [studySessionJoinRequestTable.respondedBy],
 		references: [usersTable.id]
 	})
 }));

@@ -71,6 +71,42 @@ export const sessionParticipantsTable = sqliteTable("session_participants", {
 		.notNull()
 });
 
+export const studySessionJoinRequestTable = sqliteTable("session_join_requests", {
+	id: text("id")
+		.primaryKey()
+		.notNull()
+		.unique()
+		.$defaultFn(() => randomUUID()),
+
+	studySessionID: text("study_session_id")
+		.notNull()
+		.references(() => studySessionsTable.id),
+
+	requestBy: text("requested_by")
+		.notNull()
+		.references(() => usersTable.id),
+	requestedAt: integer("requested_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+
+	status: text("status", { enum: ["pending", "approved", "rejected"] })
+		.notNull()
+		.default("pending"),
+
+	respondedBy: text("responded_by").references(() => usersTable.id),
+
+	respondedAt: integer("responded_at", { mode: "timestamp_ms" }),
+
+	createdAt: integer("created_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.notNull(),
+
+	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => new Date())
+		.notNull()
+});
+
 export const sessionVideosTable = sqliteTable("session_videos", {
 	id: text("id")
 		.primaryKey()
