@@ -23,7 +23,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 
 	const data = await findAuthSessionData(locals.db, sessionToken);
 
-	if (!data || !data.users) {
+	if (!data || !data.user) {
 		const response = {
 			success: false,
 			data: {},
@@ -35,7 +35,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 	}
 
 	const now = new Date();
-	const expiresAt = new Date(data.auth_sessions.expiresAt);
+	const expiresAt = new Date(data.expiresAt);
 	const timeUntilExpiry = expiresAt.getTime() - now.getTime();
 
 	if (timeUntilExpiry <= 0) {
@@ -78,7 +78,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 		});
 	}
 
-	const { password, ...userWithoutPassword } = data.users;
+	const { password, ...userWithoutPassword } = data.user;
 
 	const response = {
 		success: true,

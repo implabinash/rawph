@@ -58,7 +58,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 
 	const data = await findAuthSessionData(locals.db, sessionToken);
 
-	if (!data || !data.users) {
+	if (!data || !data.user) {
 		const response = {
 			success: false,
 			data: {},
@@ -90,7 +90,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 		await locals.db
 			.update(usersTable)
 			.set({ password: newHashedPassword })
-			.where(eq(usersTable.id, data.users.id));
+			.where(eq(usersTable.id, data.user.id));
 	} catch (err) {
 		console.error("Password change error: ", err);
 

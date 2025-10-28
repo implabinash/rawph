@@ -6,8 +6,18 @@ import { usersTable } from "./schemas/user.schema";
 import {
 	sessionParticipantsTable,
 	sessionVideosTable,
+	studySessionJoinRequestTable,
 	studySessionsTable
 } from "./schemas/studysession.schema";
+import {
+	authRelations,
+	joinRequestRelations,
+	oAuthRelations,
+	sessionParticipantsRelations,
+	sessionVideosRelations,
+	studySessionRelations,
+	userRelations
+} from "./schemas/relations";
 
 export const getDB = (db: D1Database) => {
 	return drizzle(db, {
@@ -20,7 +30,16 @@ export const getDB = (db: D1Database) => {
 
 			studySessionsTable,
 			sessionParticipantsTable,
-			sessionVideosTable
+			studySessionJoinRequestTable,
+			sessionVideosTable,
+
+			userRelations,
+			authRelations,
+			oAuthRelations,
+			studySessionRelations,
+			sessionParticipantsRelations,
+			joinRequestRelations,
+			sessionVideosRelations
 		}
 	});
 };

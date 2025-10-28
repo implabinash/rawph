@@ -22,7 +22,8 @@ export const authSessionsTable = sqliteTable("auth_sessions", {
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 		.notNull(),
 	updatedAt: integer("updated_at", { mode: "timestamp_ms" })
-		.$onUpdate(() => /* @__PURE__ */ new Date())
+		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
+		.$onUpdate(() => new Date())
 		.notNull()
 });
 
