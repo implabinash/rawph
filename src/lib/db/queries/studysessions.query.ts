@@ -7,7 +7,7 @@ import {
 } from "$lib/db/schemas/studysession.schema";
 import type { DrizzleClient } from "$lib/db/index";
 
-export const findStudySessionById = async (db: DrizzleClient, studySessionID: string) => {
+export const findStudySessionByID = async (db: DrizzleClient, studySessionID: string) => {
 	const studySession = await db.query.studySessionsTable.findFirst({
 		where: eq(studySessionsTable.id, studySessionID)
 	});
@@ -15,7 +15,7 @@ export const findStudySessionById = async (db: DrizzleClient, studySessionID: st
 	return studySession;
 };
 
-export const findParticipantsById = async (
+export const findParticipantsByID = async (
 	db: DrizzleClient,
 	studySessionID: string,
 	participantsId: string

@@ -8,16 +8,16 @@ import { youtubeURLSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
 	findAllSPsBySessionID,
-	findParticipantsById,
+	findParticipantsByID,
 	findSessionVideoByURL,
-	findStudySessionById
+	findStudySessionByID
 } from "$lib/db/queries/studysessions.query";
 import {
 	sessionParticipantsTable,
 	sessionVideosTable,
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
-import { findUserById } from "$lib/db/queries/users.query";
+import { findUserByID } from "$lib/db/queries/users.query";
 import { pendingParticipantSchema } from "$lib/validations/websocket";
 
 export const actions = {
@@ -79,7 +79,7 @@ export const actions = {
 		const studySessionID = url.pathname.split("/")[2];
 
 		try {
-			const studySession = await findStudySessionById(locals.db, studySessionID);
+			const studySession = await findStudySessionByID(locals.db, studySessionID);
 
 			const duration = calculateTimeDiffInMin(studySession!.startedAt, new Date());
 
@@ -105,8 +105,8 @@ export const actions = {
 	request: async ({ locals, url }) => {
 		const sessionID = url.pathname.split("/")[2];
 
-		const session = await findStudySessionById(locals.db, sessionID);
-		const sp = await findParticipantsById(locals.db, session!.id, locals.user.id);
+		const session = await findStudySessionByID(locals.db, sessionID);
+		const sp = await findParticipantsByID(locals.db, session!.id, locals.user.id);
 
 		if (!session) {
 			return fail(404, { message: "session not found" });
@@ -152,8 +152,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	const studySessionID = url.pathname.split("/")[2];
 
-	const studySession = await findStudySessionById(locals.db, studySessionID);
-	const ss = await findUserById(locals.db, studySession!.createdBy);
+	const studySession = await findStudySessionByID(locals.db, studySessionID);
+	const ss = await findUserByID(locals.db, studySession!.createdBy);
 
 	if (!studySession) {
 		return error(404, { message: "Study session not found." });
@@ -165,7 +165,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	let isApproved = false;
 
-	const existingParticipant = await findParticipantsById(
+	const existingParticipant = await findParticipantsByID(
 		locals.db,
 		studySession.id,
 		locals.user.id
@@ -191,7 +191,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
-	const sp = await findParticipantsById(locals.db, studySession!.id, locals.user.id);
+	const sp = await findParticipantsByID(locals.db, studySession!.id, locals.user.id);
 	const sps = await findAllSPsBySessionID(locals.db, studySession!.id);
 
 	return { user: locals.user, ss, sps, sp, isApproved };
