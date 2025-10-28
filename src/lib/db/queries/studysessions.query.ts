@@ -9,7 +9,13 @@ import type { DrizzleClient } from "$lib/db/index";
 
 export const findStudySessionByID = async (db: DrizzleClient, studySessionID: string) => {
 	const studySession = await db.query.studySessionsTable.findFirst({
-		where: eq(studySessionsTable.id, studySessionID)
+		where: eq(studySessionsTable.id, studySessionID),
+		columns: {
+			id: true,
+			createdBy: true,
+			status: true,
+			startedAt: true
+		}
 	});
 
 	return studySession;
@@ -24,7 +30,12 @@ export const findParticipantByID = async (
 		where: and(
 			eq(sessionParticipantsTable.userID, participantsId),
 			eq(sessionParticipantsTable.studySessionID, studySessionID)
-		)
+		),
+		columns: {
+			id: true,
+			status: true,
+			role: true
+		}
 	});
 
 	return participant;

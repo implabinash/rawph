@@ -28,4 +28,4 @@ export const usersTable = sqliteTable("users", {
 		.notNull()
 });
 
-export type User = typeof usersTable.$inferSelect;
+export type User = Omit<typeof usersTable.$inferSelect, "password">;

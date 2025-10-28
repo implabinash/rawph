@@ -4,6 +4,8 @@ import { z } from "zod/v4";
 import type { Actions, PageServerLoad } from "./$types";
 import { error, fail, redirect } from "@sveltejs/kit";
 
+import { pendingParticipantSchema } from "$lib/validations/websocket";
+import { findUserByID } from "$lib/db/queries/users.query";
 import { youtubeURLSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
@@ -17,8 +19,6 @@ import {
 	sessionVideosTable,
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
-import { findUserByID } from "$lib/db/queries/users.query";
-import { pendingParticipantSchema } from "$lib/validations/websocket";
 
 export const actions = {
 	addVideo: async ({ request, locals, url }) => {
@@ -187,8 +187,8 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
-	const sp = await findParticipantByID(locals.db, studySession!.id, locals.user.id);
-	const allSPs = await findAllSPsBySessionID(locals.db, studySession!.id);
+	const sp = await findParticipantByID(locals.db, studySession.id, locals.user.id);
+	const allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
 
 	return { user: locals.user, ss, allSPs, sp, isApproved };
 };
