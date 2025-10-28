@@ -1,13 +1,12 @@
 <script lang="ts">
-	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw, X } from "@lucide/svelte";
+	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw, User, X } from "@lucide/svelte";
 
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 
 	import { websocketServer } from "$lib/stores/websocket.svelte";
-	import type { SP } from "$lib/db/schemas/studysession.schema";
 
-	let { sps }: { sps: SP[] } = $props();
+	let { sps }: { sps: SP } = $props();
 
 	let url = $state(page.url);
 	let isMute = $state(false);
@@ -98,11 +97,11 @@
 			{/each}
 
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
-				{#each sps as sp (sp.id)}
+				{#each websocketServer.participants as participant (participant.userId)}
 					<div class="flex items-center gap-2">
 						<img
-							src={sp.image.startsWith("http")
-								? sp.image
+							src={participant.image.startsWith("http")
+								? participant.image
 								: `/images/avatars/${participant.image}.webp`}
 							alt={participant.name}
 							class="size-5 rounded-full"
