@@ -4,12 +4,12 @@ import { z } from "zod/v4";
 import type { Actions, PageServerLoad } from "./$types";
 import { error, fail, redirect } from "@sveltejs/kit";
 
-import { youtubeUrlSchema } from "$lib/validations/video";
+import { youtubeURLSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
-	findAllSPsBySessionId,
+	findAllSPsBySessionID,
 	findParticipantsById,
-	findSessionVideoByUrl,
+	findSessionVideoByURL,
 	findStudySessionById
 } from "$lib/db/queries/studysessions.query";
 import {
@@ -24,7 +24,7 @@ export const actions = {
 	addVideo: async ({ request, locals, url }) => {
 		const formData = Object.fromEntries(await request.formData());
 
-		const result = youtubeUrlSchema.safeParse(formData);
+		const result = youtubeURLSchema.safeParse(formData);
 
 		if (!result.success) {
 			return {
@@ -50,15 +50,15 @@ export const actions = {
 		}
 
 		try {
-			const studySessionId = url.pathname.split("/")[2];
+			const studySessionID = url.pathname.split("/")[2];
 
-			const video = await findSessionVideoByUrl(locals.db, studySessionId, result.data.videoURL);
+			const video = await findSessionVideoByURL(locals.db, studySessionID, result.data.videoURL);
 
 			if (!video) {
 				await locals.db.insert(sessionVideosTable).values({
-					studySessionId: studySessionId,
+					studySessionID: studySessionID,
 					addedBy: locals.user.id,
-					youtubeUrl: result.data.videoURL
+					youtubeURL: result.data.videoURL
 				});
 			}
 		} catch (err) {
@@ -76,10 +76,10 @@ export const actions = {
 	},
 
 	leave: async ({ url, locals }) => {
-		const studySessionId = url.pathname.split("/")[2];
+		const studySessionID = url.pathname.split("/")[2];
 
 		try {
-			const studySession = await findStudySessionById(locals.db, studySessionId);
+			const studySession = await findStudySessionById(locals.db, studySessionID);
 
 			const duration = calculateTimeDiffInMin(studySession!.startedAt, new Date());
 
@@ -90,7 +90,7 @@ export const actions = {
 					endedAt: new Date(),
 					durationMinutes: duration
 				})
-				.where(eq(studySessionsTable.id, studySessionId));
+				.where(eq(studySessionsTable.id, studySessionID));
 		} catch (err) {
 			console.log("Leave error: ", err);
 
@@ -103,9 +103,9 @@ export const actions = {
 	},
 
 	request: async ({ locals, url }) => {
-		const sessionId = url.pathname.split("/")[2];
+		const sessionID = url.pathname.split("/")[2];
 
-		const session = await findStudySessionById(locals.db, sessionId);
+		const session = await findStudySessionById(locals.db, sessionID);
 		const sp = await findParticipantsById(locals.db, session!.id, locals.user.id);
 
 		if (!session) {
@@ -150,9 +150,9 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		throw redirect(307, "/invite");
 	}
 
-	const studySessionId = url.pathname.split("/")[2];
+	const studySessionID = url.pathname.split("/")[2];
 
-	const studySession = await findStudySessionById(locals.db, studySessionId);
+	const studySession = await findStudySessionById(locals.db, studySessionID);
 	const ss = await findUserById(locals.db, studySession!.createdBy);
 
 	if (!studySession) {
@@ -178,7 +178,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	if (!existingParticipant && studySession.createdBy === locals.user.id) {
 		try {
 			await locals.db.insert(sessionParticipantsTable).values({
-				studySessionId: studySession.id,
+				studySessionID: studySession.id,
 				userID: locals.user.id,
 				status: "approved",
 				role: "ss"
@@ -192,7 +192,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	const sp = await findParticipantsById(locals.db, studySession!.id, locals.user.id);
-	const sps = await findAllSPsBySessionId(locals.db, studySession!.id);
+	const sps = await findAllSPsBySessionID(locals.db, studySession!.id);
 
 	return { user: locals.user, ss, sps, sp, isApproved };
 };

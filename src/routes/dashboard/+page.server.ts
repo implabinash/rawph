@@ -15,9 +15,9 @@ export const actions = {
 			.values({
 				createdBy: locals.user.id
 			})
-			.returning({ studySessionId: studySessionsTable.id });
+			.returning({ studySessionID: studySessionsTable.id });
 
-		if (!studySession.studySessionId) {
+		if (!studySession.studySessionID) {
 			return fail(409, {
 				success: false,
 				data: {},
@@ -26,7 +26,7 @@ export const actions = {
 			});
 		}
 
-		redirect(303, `/s/${studySession.studySessionId}`);
+		redirect(303, `/s/${studySession.studySessionID}`);
 	},
 
 	join: async ({ request }) => {

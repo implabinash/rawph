@@ -13,9 +13,9 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	onMount(() => {
-		const studySessionId = page.url.pathname.split("/")[2];
+		const studySessionID = page.url.pathname.split("/")[2];
 
-		websocketServer.connect(studySessionId, {
+		websocketServer.connect(studySessionID, {
 			userID: data.user.id,
 			name: data.user.name,
 			image: data.user.image || "0",

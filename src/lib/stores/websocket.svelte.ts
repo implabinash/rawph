@@ -19,7 +19,7 @@ class WebSocketServer {
 	public participants = $state<SessionData[]>([]);
 	public pendingParticipants = $state<SessionData[]>([]);
 
-	connect(studySessionId: string, sessionData: SessionData) {
+	connect(studySessionID: string, sessionData: SessionData) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
 			console.log("WebSocket already connected");
 			return;
@@ -34,9 +34,9 @@ class WebSocketServer {
 			user_role: sessionData.role
 		});
 
-		const wsUrl = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionId}?${params}`;
+		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
 
-		this.ws = new WebSocket(wsUrl);
+		this.ws = new WebSocket(wsURL);
 
 		this.ws.onopen = () => {
 			console.log("WebSocket connected");

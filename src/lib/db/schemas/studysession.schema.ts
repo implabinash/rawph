@@ -41,7 +41,7 @@ export const sessionParticipantsTable = sqliteTable("session_participants", {
 		.unique()
 		.$defaultFn(() => randomUUID()),
 
-	studySessionId: text("study_session_id")
+	studySessionID: text("study_session_id")
 		.notNull()
 		.references(() => studySessionsTable.id, { onDelete: "cascade" }),
 	userID: text("user_id")
@@ -78,10 +78,10 @@ export const sessionVideosTable = sqliteTable("session_videos", {
 		.unique()
 		.$defaultFn(() => randomUUID()),
 
-	studySessionId: text("study_session_id")
+	studySessionID: text("study_session_id")
 		.references(() => studySessionsTable.id)
 		.notNull(),
-	youtubeUrl: text("youtube_url").notNull(),
+	youtubeURL: text("youtube_url").notNull(),
 
 	addedBy: text("added_by")
 		.references(() => usersTable.id)

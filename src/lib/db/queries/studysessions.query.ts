@@ -7,9 +7,9 @@ import {
 } from "$lib/db/schemas/studysession.schema";
 import type { DrizzleClient } from "$lib/db/index";
 
-export const findStudySessionById = async (db: DrizzleClient, studySessionId: string) => {
+export const findStudySessionById = async (db: DrizzleClient, studySessionID: string) => {
 	const studySession = await db.query.studySessionsTable.findFirst({
-		where: eq(studySessionsTable.id, studySessionId)
+		where: eq(studySessionsTable.id, studySessionID)
 	});
 
 	return studySession;
@@ -17,37 +17,37 @@ export const findStudySessionById = async (db: DrizzleClient, studySessionId: st
 
 export const findParticipantsById = async (
 	db: DrizzleClient,
-	studySessionId: string,
+	studySessionID: string,
 	participantsId: string
 ) => {
 	const participant = await db.query.sessionParticipantsTable.findFirst({
 		where: and(
 			eq(sessionParticipantsTable.userID, participantsId),
-			eq(sessionParticipantsTable.studySessionId, studySessionId)
+			eq(sessionParticipantsTable.studySessionID, studySessionID)
 		)
 	});
 
 	return participant;
 };
 
-export const findSessionVideoByUrl = async (
+export const findSessionVideoByURL = async (
 	db: DrizzleClient,
-	studySessionId: string,
-	videoUrl: string
+	studySessionID: string,
+	videoURL: string
 ) => {
 	const video = await db.query.sessionVideosTable.findFirst({
 		where: and(
-			eq(sessionVideosTable.studySessionId, studySessionId),
-			eq(sessionVideosTable.youtubeUrl, videoUrl)
+			eq(sessionVideosTable.studySessionID, studySessionID),
+			eq(sessionVideosTable.youtubeURL, videoURL)
 		)
 	});
 
 	return video;
 };
 
-export const findAllSPsBySessionId = async (db: DrizzleClient, studySessionID: string) => {
+export const findAllSPsBySessionID = async (db: DrizzleClient, studySessionID: string) => {
 	const sps = await db.query.sessionParticipantsTable.findMany({
-		where: eq(sessionParticipantsTable.studySessionId, studySessionID)
+		where: eq(sessionParticipantsTable.studySessionID, studySessionID)
 	});
 
 	return sps;
