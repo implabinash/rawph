@@ -1,0 +1,7 @@
+SS: Session Secretary
+SR: Session Representative
+SM: Session Member
+SP: Session Participant (SS + SR + SM)
+
+allSPs: All Session Participant
+approvedSPs: Approved Session Participant
