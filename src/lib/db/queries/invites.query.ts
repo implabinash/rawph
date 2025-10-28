@@ -13,7 +13,12 @@ export const findInviteCodeData = async (db: DrizzleClient, code: string) => {
 
 export const findInviteCodesByUserID = async (db: DrizzleClient, userID: string) => {
 	const inviteCodes = await db.query.inviteCodesTable.findMany({
-		where: eq(inviteCodesTable.createdBy, userID)
+		where: eq(inviteCodesTable.createdBy, userID),
+		columns: {
+			id: true,
+			code: true,
+			isUsed: true
+		}
 	});
 
 	return inviteCodes;
