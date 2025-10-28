@@ -56,7 +56,7 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls user={data.user} />
+				<Controls sps={data.sps} />
 
 				<Chat />
 			</div>

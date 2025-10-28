@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { enhance } from "$app/forms";
-	import type { User } from "$lib/utils/types";
 	import { Clock } from "@lucide/svelte";
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
 	import { websocketServer } from "$lib/stores/websocket.svelte";
 	import { onDestroy } from "svelte";
+	import type { User } from "$lib/db/schemas/user.schema";
 
 	let { ss, user, form }: { ss: User; user: User; form: ActionData } = $props();
 

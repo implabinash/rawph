@@ -4,10 +4,10 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 
-	import type { User } from "$lib/utils/types";
 	import { websocketServer } from "$lib/stores/websocket.svelte";
+	import type { SP } from "$lib/db/schemas/studysession.schema";
 
-	let { user }: { user: User } = $props();
+	let { sps }: { sps: SP[] } = $props();
 
 	let url = $state(page.url);
 	let isMute = $state(false);
@@ -98,17 +98,21 @@
 			{/each}
 
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
-				<div class="flex items-center gap-2">
-					<img
-						src={user.image.startsWith("http") ? user.image : `/images/avatars/${user.image}.webp`}
-						alt={user.name}
-						class="size-5 rounded-full"
-					/>
+				{#each sps as sp (sp.id)}
+					<div class="flex items-center gap-2">
+						<img
+							src={sp.image.startsWith("http")
+								? sp.image
+								: `/images/avatars/${participant.image}.webp`}
+							alt={participant.name}
+							class="size-5 rounded-full"
+						/>
 
-					<p class="text-caption-bold">{user.name}</p>
-				</div>
+						<p class="text-caption-bold">{participant.name}</p>
+					</div>
 
-				<Mic size="16px" class="m-1" />
+					<Mic size="16px" class="m-1" />
+				{/each}
 			</div>
 		</div>
 	</div>

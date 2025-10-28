@@ -44,3 +44,11 @@ export const findSessionVideoByUrl = async (
 
 	return video;
 };
+
+export const findAllSPsBySessionId = async (db: DrizzleClient, studySessionID: string) => {
+	const sps = await db.query.sessionParticipantsTable.findMany({
+		where: eq(sessionParticipantsTable.studySessionId, studySessionID)
+	});
+
+	return sps;
+};

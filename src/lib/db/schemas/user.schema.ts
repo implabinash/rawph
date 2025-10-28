@@ -27,3 +27,5 @@ export const usersTable = sqliteTable("users", {
 		.$onUpdate(() => /* @__PURE__ */ new Date())
 		.notNull()
 });
+
+export type User = typeof usersTable.$inferSelect;

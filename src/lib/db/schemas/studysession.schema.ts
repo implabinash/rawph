@@ -99,3 +99,5 @@ export const sessionVideosTable = sqliteTable("session_videos", {
 		.$onUpdate(() => new Date())
 		.notNull()
 });
+
+export type SP = typeof sessionParticipantsTable.$inferSelect;

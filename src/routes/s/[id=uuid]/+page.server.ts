@@ -7,6 +7,7 @@ import { error, fail, redirect } from "@sveltejs/kit";
 import { youtubeUrlSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
+	findAllSPsBySessionId,
 	findParticipantsById,
 	findSessionVideoByUrl,
 	findStudySessionById
@@ -191,6 +192,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	const sp = await findParticipantsById(locals.db, studySession!.id, locals.user.id);
+	const sps = await findAllSPsBySessionId(locals.db, studySession!.id);
 
-	return { user: locals.user, sp, ss, isApproved };
+	return { user: locals.user, ss, sps, sp, isApproved };
 };

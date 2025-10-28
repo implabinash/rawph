@@ -59,25 +59,6 @@ class WebSocketServer {
 			console.error("WebSocket error:", error);
 		};
 	}
-
-	private handleMessage(message: WSMessage) {
-		if (message.type === "request_new_participant") {
-			const existingPendingRequest = this.pendingParticipants.find(
-				(pendingParticipant) => pendingParticipant.userId === message.data.userId
-			);
-
-			if (!existingPendingRequest) {
-				this.pendingParticipants.push(message.data);
-			}
-		}
-
-		if (message.type === "cancel_participant_requset") {
-			this.pendingParticipants = this.pendingParticipants.filter(
-				(pendingParticipant) => pendingParticipant.userId !== message.data.userId
-			);
-		}
-	}
-
 	send(message: WSMessage) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
 			this.ws.send(JSON.stringify(message));
@@ -94,6 +75,35 @@ class WebSocketServer {
 
 		this.messages = [];
 		this.participants = [];
+	}
+
+	private handleMessage(message: WSMessage) {
+		if (message.type === "request_new_participant") {
+			const existingPendingRequest = this.pendingParticipants.find(
+				(pendingParticipant) => pendingParticipant.userId === message.data.userId
+			);
+
+			if (!existingPendingRequest) {
+				this.pendingParticipants.push(message.data);
+			}
+		}
+
+		console.log(message);
+		if (message.type === "add_new_participant") {
+			const existingParticipant = this.participants.find(
+				(participant) => participant.userId === message.data.userId
+			);
+
+			if (!existingParticipant) {
+				this.participants.push(message.data);
+			}
+		}
+
+		if (message.type === "cancel_participant_requset") {
+			this.pendingParticipants = this.pendingParticipants.filter(
+				(pendingParticipant) => pendingParticipant.userId !== message.data.userId
+			);
+		}
 	}
 }
 
