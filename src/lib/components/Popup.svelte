@@ -2,12 +2,18 @@
 	import { enhance } from "$app/forms";
 	import { Clock } from "@lucide/svelte";
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
-	import { websocketServer } from "$lib/stores/websocket.svelte";
 	import { onDestroy } from "svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
 	import type { SP } from "$lib/db/queries/studysessions.query";
 
-	let { ss, user, form }: { ss: SP; user: User; form: ActionData } = $props();
+	type Props = {
+		ss: SP;
+		user: User;
+		ws: WebSocket | null;
+		form: ActionData;
+	};
+
+	let { ss, user, ws, form }: Props = $props();
 
 	let isRequested: boolean = $state(false);
 
@@ -20,7 +26,9 @@
 			for: "sp"
 		};
 
-		websocketServer.send(message);
+		if (ws?.readyState === WebSocket.OPEN) {
+			ws.send(JSON.stringify(message));
+		}
 
 		isRequested = false;
 	};
@@ -121,7 +129,9 @@
 							for: "ss"
 						};
 
-						websocketServer.send(message);
+						if (ws?.readyState === WebSocket.OPEN) {
+							ws.send(JSON.stringify(message));
+						}
 
 						isRequested = true;
 					};

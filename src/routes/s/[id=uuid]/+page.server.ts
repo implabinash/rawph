@@ -135,7 +135,11 @@ export const actions = {
 		return { success: true };
 	},
 
-	cancel: () => {
+	cancel: async ({ locals, url }) => {
+		const studySessionID = url.pathname.split("/")[2];
+
+		const currentSP = await findSPByID(locals.db, studySessionID, locals.user.id);
+
 		return { success: true };
 	},
 

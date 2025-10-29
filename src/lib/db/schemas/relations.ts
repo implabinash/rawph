@@ -59,7 +59,7 @@ export const joinRequestRelations = relations(studySessionJoinRequestTable, ({ o
 		references: [studySessionsTable.id]
 	}),
 	requestBy: one(usersTable, {
-		fields: [studySessionJoinRequestTable.requestBy],
+		fields: [studySessionJoinRequestTable.requestedBy],
 		references: [usersTable.id]
 	}),
 	respondedBy: one(usersTable, {

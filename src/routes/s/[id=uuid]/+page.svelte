@@ -2,8 +2,7 @@
 	import type { ActionData, PageData } from "./$types";
 	import { onDestroy, onMount } from "svelte";
 	import { page } from "$app/state";
-
-	import { websocketServer } from "$lib/stores/websocket.svelte";
+	import { PUBLIC_BASE_URL } from "$env/static/public";
 
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
@@ -12,20 +11,34 @@
 	import Chat from "$lib/components/Chat.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
+	let ws = $state<WebSocket | null>(null);
 
 	onMount(() => {
 		const studySessionID = page.url.pathname.split("/")[2];
 
-		websocketServer.connect(studySessionID, {
-			userID: data.user.id,
+		if (ws?.readyState === WebSocket.OPEN) {
+			console.log("WebSocket already connected");
+			return;
+		}
+
+		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
+
+		const params = new URLSearchParams({
+			user_id: data.user.id,
 			name: data.user.name,
 			image: data.user.image || "0",
-			role: data.currentSP?.role || "sm"
+			user_role: data.currentSP?.role || "sm"
 		});
+
+		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
+
+		ws = new WebSocket(wsURL);
 	});
 
 	onDestroy(() => {
-		websocketServer.disconnect();
+		if (ws?.readyState === WebSocket.OPEN) {
+			ws.close();
+		}
 	});
 
 	// let keyBuffer = "";
@@ -57,7 +70,7 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls allSPs={data.allSPs} />
+				<Controls {ws} joinRequests={data.allJoinRequests} allSPs={data.allSPs} />
 
 				<Chat />
 			</div>
@@ -71,7 +84,7 @@
 	</section>
 
 	{#if !data.isApproved}
-		<Popup ss={data.ss!} {form} user={data.user} />
+		<Popup ss={data.ss!} {ws} {form} user={data.user} />
 	{/if}
 </main>
 

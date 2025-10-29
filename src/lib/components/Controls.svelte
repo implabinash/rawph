@@ -5,12 +5,43 @@
 	import { page } from "$app/state";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
+	import { onMount } from "svelte";
 
-	let { allSPs, joinRequests }: { allSPs: SP[]; joinRequests: JoinRequests } = $props();
+	type Props = {
+		allSPs: SP[];
+		joinRequests: JoinRequests;
+		ws: WebSocket | null;
+	};
+
+	let { allSPs, joinRequests, ws }: Props = $props();
 
 	let url = $state(page.url);
 	let isMute = $state(false);
 	let copied = $state(false);
+	let allJoinRequests: JoinRequests = $state([]);
+
+	onMount(async () => {
+		if (ws?.readyState === WebSocket.OPEN) {
+			ws.onmessage = async (event) => {
+				const message = JSON.parse(event.data);
+
+				if (message.type === "request_new_participant") {
+					const res = await fetch(
+						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`
+					);
+
+					const data = await res.json();
+					allJoinRequests = data;
+				}
+			};
+		}
+	});
+
+	$effect(() => {
+		if (joinRequests) {
+			allJoinRequests = joinRequests;
+		}
+	});
 
 	const copyToClipboard = async () => {
 		await navigator.clipboard.writeText(url.toString());
@@ -59,7 +90,7 @@
 		<p class="text-caption-bold">Participants</p>
 
 		<div class="space-y-2">
-			{#each joinRequests as joinRequest (joinRequest.requestedBy)}
+			{#each allJoinRequests as joinRequest (joinRequest.requestedBy)}
 				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img
