@@ -33,8 +33,19 @@ export const findParticipantByID = async (
 		),
 		columns: {
 			id: true,
+			role: true,
 			status: true,
-			role: true
+			userID: true,
+			studySessionID: true
+		},
+		with: {
+			user: {
+				columns: {
+					id: true,
+					name: true,
+					image: true
+				}
+			}
 		}
 	});
 
@@ -58,8 +69,26 @@ export const findSessionVideoByURL = async (
 
 export const findAllSPsBySessionID = async (db: DrizzleClient, studySessionID: string) => {
 	const sps = await db.query.sessionParticipantsTable.findMany({
-		where: eq(sessionParticipantsTable.studySessionID, studySessionID)
+		where: eq(sessionParticipantsTable.studySessionID, studySessionID),
+		columns: {
+			id: true,
+			role: true,
+			status: true,
+			userID: true,
+			studySessionID: true
+		},
+		with: {
+			user: {
+				columns: {
+					id: true,
+					name: true,
+					image: true
+				}
+			}
+		}
 	});
 
 	return sps;
 };
+
+export type SP = NonNullable<Awaited<ReturnType<typeof findParticipantByID>>>;

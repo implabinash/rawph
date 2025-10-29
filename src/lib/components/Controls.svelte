@@ -5,8 +5,9 @@
 	import { page } from "$app/state";
 
 	import { websocketServer } from "$lib/stores/websocket.svelte";
+	import type { SP } from "$lib/db/queries/studysessions.query";
 
-	let { sps }: { sps: SP } = $props();
+	let { allSPs }: { allSPs: SP[] } = $props();
 
 	let url = $state(page.url);
 	let isMute = $state(false);
@@ -97,17 +98,17 @@
 			{/each}
 
 			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
-				{#each websocketServer.participants as participant (participant.userID)}
+				{#each allSPs as sp (sp.userID)}
 					<div class="flex items-center gap-2">
 						<img
-							src={participant.image.startsWith("http")
-								? participant.image
-								: `/images/avatars/${participant.image}.webp`}
-							alt={participant.name}
+							src={sp.user.image.startsWith("http")
+								? sp.user.image
+								: `/images/avatars/${sp.user.image}.webp`}
+							alt={sp.user.name}
 							class="size-5 rounded-full"
 						/>
 
-						<p class="text-caption-bold">{participant.name}</p>
+						<p class="text-caption-bold">{sp.user.name}</p>
 					</div>
 
 					<Mic size="16px" class="m-1" />

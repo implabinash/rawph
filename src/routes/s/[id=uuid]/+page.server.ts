@@ -5,7 +5,6 @@ import type { Actions, PageServerLoad } from "./$types";
 import { error, fail, redirect } from "@sveltejs/kit";
 
 import { pendingParticipantSchema } from "$lib/validations/websocket";
-import { findUserByID } from "$lib/db/queries/users.query";
 import { youtubeURLSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
@@ -153,7 +152,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const studySessionID = url.pathname.split("/")[2];
 
 	const studySession = await findStudySessionByID(locals.db, studySessionID);
-	const ss = await findUserByID(locals.db, studySession!.createdBy);
 
 	if (!studySession) {
 		return error(404, { message: "Study session not found." });
@@ -163,15 +161,18 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		return error(404, { message: "Study session already finished" });
 	}
 
+	let allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
+
+	const ss = allSPs.find((sp) => sp.role === "ss");
+	const currentSP = allSPs.find((sp) => sp.userID === locals.user.id);
+
 	let isApproved = false;
 
-	const existingParticipant = await findParticipantByID(locals.db, studySession.id, locals.user.id);
-
-	if (existingParticipant) {
-		isApproved = existingParticipant.status === "approved";
+	if (currentSP) {
+		isApproved = currentSP.status === "approved";
 	}
 
-	if (!existingParticipant && studySession.createdBy === locals.user.id) {
+	if (!currentSP && currentSP === ss) {
 		try {
 			await locals.db.insert(sessionParticipantsTable).values({
 				studySessionID: studySession.id,
@@ -187,8 +188,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
-	const sp = await findParticipantByID(locals.db, studySession.id, locals.user.id);
-	const allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
+	allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
 
-	return { user: locals.user, ss, allSPs, sp, isApproved };
+	return { user: locals.user, ss, allSPs, currentSP, isApproved };
 };

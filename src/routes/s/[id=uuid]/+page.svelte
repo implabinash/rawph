@@ -1,14 +1,15 @@
 <script lang="ts">
 	import type { ActionData, PageData } from "./$types";
+	import { onDestroy, onMount } from "svelte";
 	import { page } from "$app/state";
+
+	import { websocketServer } from "$lib/stores/websocket.svelte";
 
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
 	import Video from "$lib/components/Video.svelte";
 	import Popup from "$lib/components/Popup.svelte";
 	import Chat from "$lib/components/Chat.svelte";
-	import { onDestroy, onMount } from "svelte";
-	import { websocketServer } from "$lib/stores/websocket.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -19,7 +20,7 @@
 			userID: data.user.id,
 			name: data.user.name,
 			image: data.user.image || "0",
-			role: data.sp?.role || "sm"
+			role: data.currentSP?.role || "sm"
 		});
 	});
 
@@ -56,7 +57,7 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls sps={data.sps} />
+				<Controls allSPs={data.allSPs} />
 
 				<Chat />
 			</div>
