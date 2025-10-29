@@ -14,7 +14,6 @@ export const userRelations = relations(usersTable, ({ many }) => ({
 	oAuthSessions: many(oAuthAccountsTable),
 	createdStudySessions: many(studySessionsTable),
 	sessionParticipations: many(sessionParticipantsTable),
-	joinRequests: many(studySessionJoinRequestTable),
 	addedVideos: many(sessionVideosTable)
 }));
 

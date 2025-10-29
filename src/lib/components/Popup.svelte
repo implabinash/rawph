@@ -20,11 +20,12 @@
 	const cancelRequest = () => {
 		const message = {
 			type: "cancel_participant_requset",
-			for: "sp"
+			for: "ss"
 		};
 
 		if (ws?.readyState === WebSocket.OPEN) {
 			ws.send(JSON.stringify(message));
+			console.log("cencel request sent");
 		}
 
 		isRequested = false;
@@ -128,6 +129,7 @@
 
 						if (ws?.readyState === WebSocket.OPEN) {
 							ws.send(JSON.stringify(message));
+							console.log("request sent");
 						}
 
 						isRequested = true;

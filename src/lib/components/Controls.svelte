@@ -1,10 +1,11 @@
 <script lang="ts">
-	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw, X } from "@lucide/svelte";
+	import { Check, Copy, Link, LogOut, Mic, MicOff, RefreshCcw } from "@lucide/svelte";
 
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
+	import { onMount } from "svelte";
 
 	type Props = {
 		allSPs: SP[];
@@ -17,12 +18,12 @@
 	let url = $state(page.url);
 	let isMute = $state(false);
 	let copied = $state(false);
-	let allJoinRequests: JoinRequests = $state([]);
-	let newSPs: SP[] = $state([]);
+	let allJoinRequests: JoinRequests = $state(joinRequests);
+	let newSPs: SP[] = $state(allSPs);
 
 	$effect(() => {
 		if (ws) {
-			const handleMessage = async (event) => {
+			ws.addEventListener("message", async (event) => {
 				const message = JSON.parse(event.data);
 
 				if (
@@ -32,6 +33,7 @@
 					const res = await fetch(
 						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`
 					);
+
 					const data = await res.json();
 					allJoinRequests = data;
 				}
@@ -51,23 +53,7 @@
 					const newSPsData = await newSPsRes.json();
 					newSPs = newSPsData;
 				}
-			};
-
-			ws.addEventListener("message", handleMessage);
-
-			return () => {
-				ws.removeEventListener("message", handleMessage);
-			};
-		}
-	});
-
-	$effect(() => {
-		if (joinRequests) {
-			allJoinRequests = joinRequests;
-		}
-
-		if (allSPs) {
-			newSPs = allSPs;
+			});
 		}
 	});
 
@@ -142,7 +128,7 @@
 
 									const message = {
 										type: "new_participant_added",
-										for: "sp"
+										for: "all"
 									};
 
 									if (ws?.readyState === WebSocket.OPEN) {
