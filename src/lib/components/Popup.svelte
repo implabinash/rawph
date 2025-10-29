@@ -20,9 +20,6 @@
 	const cancelRequest = () => {
 		const message = {
 			type: "cancel_participant_requset",
-			data: {
-				userID: user.id
-			},
 			for: "sp"
 		};
 

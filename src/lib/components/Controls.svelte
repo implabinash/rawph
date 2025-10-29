@@ -5,7 +5,6 @@
 	import { page } from "$app/state";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
-	import { onMount } from "svelte";
 
 	type Props = {
 		allSPs: SP[];
@@ -20,19 +19,26 @@
 	let copied = $state(false);
 	let allJoinRequests: JoinRequests = $state([]);
 
-	onMount(async () => {
-		if (ws?.readyState === WebSocket.OPEN) {
-			ws.onmessage = async (event) => {
+	$effect(() => {
+		if (ws) {
+			const handleMessage = async (event) => {
 				const message = JSON.parse(event.data);
-
-				if (message.type === "request_new_participant") {
+				if (
+					message.type === "request_new_participant" ||
+					message.type === "cancel_participant_requset"
+				) {
 					const res = await fetch(
 						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`
 					);
-
 					const data = await res.json();
 					allJoinRequests = data;
 				}
+			};
+
+			ws.addEventListener("message", handleMessage);
+
+			return () => {
+				ws.removeEventListener("message", handleMessage);
 			};
 		}
 	});

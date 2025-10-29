@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { z } from "zod/v4";
 
 import type { Actions, PageServerLoad } from "./$types";
@@ -10,6 +10,7 @@ import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
 	findAllJoinRequestByStudySessionID,
 	findAllSPsBySessionID,
+	findJoinRequestByID,
 	findSPByID,
 	findSessionVideoByURL,
 	findStudySessionByID
@@ -138,7 +139,22 @@ export const actions = {
 	cancel: async ({ locals, url }) => {
 		const studySessionID = url.pathname.split("/")[2];
 
-		const currentSP = await findSPByID(locals.db, studySessionID, locals.user.id);
+		const joinRequest = await findJoinRequestByID(locals.db, studySessionID, locals.user.id);
+
+		if (joinRequest) {
+			try {
+				await locals.db
+					.delete(studySessionJoinRequestTable)
+					.where(
+						and(
+							eq(studySessionJoinRequestTable.studySessionID, studySessionID),
+							eq(studySessionJoinRequestTable.requestedBy, joinRequest.requestedBy)
+						)
+					);
+			} catch (err) {
+				console.error("delete join request failed", err);
+			}
+		}
 
 		return { success: true };
 	},

@@ -77,6 +77,27 @@ export const findAllSPsBySessionID = async (db: DrizzleClient, studySessionID: s
 	return sps;
 };
 
+export const findJoinRequestByID = async (
+	db: DrizzleClient,
+	studySessionID: string,
+	requestedBy: string
+) => {
+	const joinRequest = db.query.studySessionJoinRequestTable.findFirst({
+		where: and(
+			eq(studySessionJoinRequestTable.requestedBy, requestedBy),
+			eq(studySessionJoinRequestTable.studySessionID, studySessionID)
+		),
+		columns: {
+			id: true,
+			studySessionID: true,
+			requestedBy: true,
+			status: true
+		}
+	});
+
+	return joinRequest;
+};
+
 export const findAllJoinRequestByStudySessionID = async (
 	db: DrizzleClient,
 	studySessionID: string
