@@ -26,7 +26,7 @@ export const actions = {
 			});
 		}
 
-		redirect(303, `/s/${studySession.studySessionID}`);
+		throw redirect(303, `/s/${studySession.studySessionID}`);
 	},
 
 	join: async ({ request }) => {

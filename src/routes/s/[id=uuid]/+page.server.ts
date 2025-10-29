@@ -226,17 +226,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	let allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
-
-	const ss = allSPs.find((sp) => sp.role === "ss");
 	const currentSP = allSPs.find((sp) => sp.userID === locals.user.id);
 
 	let isApproved = false;
 
-	if (currentSP) {
-		isApproved = currentSP.status === "approved";
-	}
-
-	if (!currentSP && currentSP === ss) {
+	if (!currentSP && studySession.createdBy === locals.user.id) {
 		try {
 			await locals.db.insert(sessionParticipantsTable).values({
 				studySessionID: studySession.id,
@@ -252,7 +246,13 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		}
 	}
 
+	if (currentSP) {
+		isApproved = currentSP.status === "approved";
+	}
+
 	allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
+	const ss = allSPs.find((sp) => sp.role === "ss");
+
 	const allJoinRequests = await findAllJoinRequestByStudySessionID(locals.db, studySessionID);
 
 	return { user: locals.user, ss, allSPs, currentSP, allJoinRequests, isApproved };
