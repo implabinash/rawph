@@ -1,11 +1,12 @@
 import { and, eq } from "drizzle-orm";
 
+import type { DrizzleClient } from "$lib/db/index";
 import {
 	sessionParticipantsTable,
 	sessionVideosTable,
+	studySessionJoinRequestTable,
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
-import type { DrizzleClient } from "$lib/db/index";
 
 export const findStudySessionByID = async (db: DrizzleClient, studySessionID: string) => {
 	const studySession = await db.query.studySessionsTable.findFirst({
@@ -21,7 +22,7 @@ export const findStudySessionByID = async (db: DrizzleClient, studySessionID: st
 	return studySession;
 };
 
-export const findParticipantByID = async (
+export const findSPByID = async (
 	db: DrizzleClient,
 	studySessionID: string,
 	participantsId: string
@@ -52,21 +53,6 @@ export const findParticipantByID = async (
 	return participant;
 };
 
-export const findSessionVideoByURL = async (
-	db: DrizzleClient,
-	studySessionID: string,
-	videoURL: string
-) => {
-	const video = await db.query.sessionVideosTable.findFirst({
-		where: and(
-			eq(sessionVideosTable.studySessionID, studySessionID),
-			eq(sessionVideosTable.youtubeURL, videoURL)
-		)
-	});
-
-	return video;
-};
-
 export const findAllSPsBySessionID = async (db: DrizzleClient, studySessionID: string) => {
 	const sps = await db.query.sessionParticipantsTable.findMany({
 		where: eq(sessionParticipantsTable.studySessionID, studySessionID),
@@ -91,4 +77,46 @@ export const findAllSPsBySessionID = async (db: DrizzleClient, studySessionID: s
 	return sps;
 };
 
-export type SP = NonNullable<Awaited<ReturnType<typeof findParticipantByID>>>;
+export const findAllJoinRequestByStudySessionID = async (
+	db: DrizzleClient,
+	studySessionID: string
+) => {
+	const allJoinRequests = await db.query.studySessionJoinRequestTable.findMany({
+		where: eq(studySessionJoinRequestTable.studySessionID, studySessionID),
+		columns: {
+			id: true,
+			status: true,
+			requestedBy: true,
+			studySessionID: true
+		},
+		with: {
+			requestBy: {
+				columns: {
+					id: true,
+					name: true,
+					image: true
+				}
+			}
+		}
+	});
+
+	return allJoinRequests;
+};
+
+export const findSessionVideoByURL = async (
+	db: DrizzleClient,
+	studySessionID: string,
+	videoURL: string
+) => {
+	const video = await db.query.sessionVideosTable.findFirst({
+		where: and(
+			eq(sessionVideosTable.studySessionID, studySessionID),
+			eq(sessionVideosTable.youtubeURL, videoURL)
+		)
+	});
+
+	return video;
+};
+
+export type SP = NonNullable<Awaited<ReturnType<typeof findSPByID>>>;
+export type JoinRequests = Awaited<ReturnType<typeof findAllJoinRequestByStudySessionID>>;

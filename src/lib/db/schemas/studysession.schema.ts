@@ -82,7 +82,7 @@ export const studySessionJoinRequestTable = sqliteTable("session_join_requests",
 		.notNull()
 		.references(() => studySessionsTable.id),
 
-	requestBy: text("requested_by")
+	requestedBy: text("requested_by")
 		.notNull()
 		.references(() => usersTable.id),
 	requestedAt: integer("requested_at", { mode: "timestamp_ms" })

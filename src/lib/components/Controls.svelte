@@ -4,10 +4,9 @@
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
 
-	import { websocketServer } from "$lib/stores/websocket.svelte";
-	import type { SP } from "$lib/db/queries/studysessions.query";
+	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
 
-	let { allSPs }: { allSPs: SP[] } = $props();
+	let { allSPs, joinRequests }: { allSPs: SP[]; joinRequests: JoinRequests } = $props();
 
 	let url = $state(page.url);
 	let isMute = $state(false);
@@ -60,23 +59,23 @@
 		<p class="text-caption-bold">Participants</p>
 
 		<div class="space-y-2">
-			{#each websocketServer.pendingParticipants as pendingParticipant (pendingParticipant.userID)}
+			{#each joinRequests as joinRequest (joinRequest.requestedBy)}
 				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img
-							src={pendingParticipant.image.startsWith("http")
-								? pendingParticipant.image
-								: `/images/avatars/${pendingParticipant.image}.webp`}
-							alt={pendingParticipant.name}
+							src={joinRequest.requestBy.image.startsWith("http")
+								? joinRequest.requestBy.image
+								: `/images/avatars/${joinRequest.requestBy.image}.webp`}
+							alt={joinRequest.requestBy.name}
 							class="size-5 rounded-full"
 						/>
 
-						<p class="text-caption-bold">{pendingParticipant.name}</p>
+						<p class="text-caption-bold">{joinRequest.requestBy.name}</p>
 					</div>
 
 					<div class="flex items-center gap-1">
 						<form method="POST" action="?/accept" use:enhance>
-							<input type="hidden" value={pendingParticipant.userID} name="pendingParticipant" />
+							<input type="hidden" value={joinRequest.requestBy.id} name="pendingParticipant" />
 
 							<button
 								type="submit"

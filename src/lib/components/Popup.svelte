@@ -5,8 +5,9 @@
 	import { websocketServer } from "$lib/stores/websocket.svelte";
 	import { onDestroy } from "svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
+	import type { SP } from "$lib/db/queries/studysessions.query";
 
-	let { ss, user, form }: { ss: User; user: User; form: ActionData } = $props();
+	let { ss, user, form }: { ss: SP; user: User; form: ActionData } = $props();
 
 	let isRequested: boolean = $state(false);
 
@@ -43,8 +44,10 @@
 	>
 		<div class="space-y-4 text-center">
 			<img
-				src={ss.image.startsWith("http") ? ss.image : `/images/avatars/${ss.image}.webp`}
-				alt={ss.name}
+				src={ss.user.image.startsWith("http")
+					? ss.user.image
+					: `/images/avatars/${ss.user.image}.webp`}
+				alt={ss.user.name}
 				class="mx-auto size-14 rounded-full"
 			/>
 
@@ -58,7 +61,7 @@
 				</h1>
 
 				<p class="text-body text-subtext-color">
-					{ss.name} needs to approve your request to join the session.
+					{ss.user.name} needs to approve your request to join the session.
 				</p>
 			</div>
 		</div>

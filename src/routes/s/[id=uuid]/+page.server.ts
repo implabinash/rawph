@@ -8,14 +8,16 @@ import { pendingParticipantSchema } from "$lib/validations/websocket";
 import { youtubeURLSchema } from "$lib/validations/video";
 import { calculateTimeDiffInMin } from "$lib/utils/time";
 import {
+	findAllJoinRequestByStudySessionID,
 	findAllSPsBySessionID,
-	findParticipantByID,
+	findSPByID,
 	findSessionVideoByURL,
 	findStudySessionByID
 } from "$lib/db/queries/studysessions.query";
 import {
 	sessionParticipantsTable,
 	sessionVideosTable,
+	studySessionJoinRequestTable,
 	studySessionsTable
 } from "$lib/db/schemas/studysession.schema";
 
@@ -102,21 +104,32 @@ export const actions = {
 	},
 
 	request: async ({ locals, url }) => {
-		const sessionID = url.pathname.split("/")[2];
+		const studySessionID = url.pathname.split("/")[2];
 
-		const session = await findStudySessionByID(locals.db, sessionID);
-		const sp = await findParticipantByID(locals.db, session!.id, locals.user.id);
+		const studySession = await findStudySessionByID(locals.db, studySessionID);
+		const currentSP = await findSPByID(locals.db, studySession!.id, locals.user.id);
 
-		if (!session) {
+		if (!studySession) {
 			return fail(404, { message: "session not found" });
 		}
 
-		if (session.status === "completed") {
+		if (studySession.status === "completed") {
 			return fail(404, { message: "session completed" });
 		}
 
-		if (sp && sp.status === "kicked") {
+		if (currentSP && currentSP.status === "kicked") {
 			return fail(404, { message: "not allowed" });
+		}
+
+		try {
+			await locals.db.insert(studySessionJoinRequestTable).values({
+				studySessionID,
+				requestedBy: locals.user.id
+			});
+		} catch (err) {
+			console.error("Session request failed.", err);
+
+			return fail(500, { message: "failed" });
 		}
 
 		return { success: true };
@@ -189,6 +202,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
+	const allJoinRequests = await findAllJoinRequestByStudySessionID(locals.db, studySessionID);
 
-	return { user: locals.user, ss, allSPs, currentSP, isApproved };
+	return { user: locals.user, ss, allSPs, currentSP, allJoinRequests, isApproved };
 };
