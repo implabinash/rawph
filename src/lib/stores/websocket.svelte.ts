@@ -15,10 +15,6 @@ type WSMessage = {
 class WebSocketServer {
 	private ws = $state<WebSocket | null>(null);
 
-	public messages = $state<WSMessage[]>([]);
-	public participants = $state<SessionData[]>([]);
-	public pendingParticipants = $state<SessionData[]>([]);
-
 	connect(studySessionID: string, sessionData: SessionData) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
 			console.log("WebSocket already connected");
@@ -72,9 +68,6 @@ class WebSocketServer {
 			this.ws.close();
 			this.ws = null;
 		}
-
-		this.messages = [];
-		this.participants = [];
 	}
 
 	private handleMessage(message: WSMessage) {
