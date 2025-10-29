@@ -11,7 +11,9 @@
 	import Chat from "$lib/components/Chat.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
+
 	let ws = $state<WebSocket | null>(null);
+	let isApproved: boolean = $state(false);
 
 	onMount(() => {
 		const studySessionID = page.url.pathname.split("/")[2];
@@ -33,6 +35,33 @@
 		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
 
 		ws = new WebSocket(wsURL);
+	});
+
+	$effect(() => {
+		if (ws) {
+			const handleMessage = async (event) => {
+				const message = JSON.parse(event.data);
+
+				if (message.type === "new_participant_added") {
+					console.log("Participant approved!");
+					isApproved = true;
+				}
+			};
+
+			ws.addEventListener("message", handleMessage);
+
+			return () => {
+				if (ws) {
+					ws.removeEventListener("message", handleMessage);
+				}
+			};
+		}
+	});
+
+	$effect(() => {
+		if (data.isApproved) {
+			isApproved = data.isApproved;
+		}
 	});
 
 	onDestroy(() => {
@@ -83,7 +112,7 @@
 		</section>
 	</section>
 
-	{#if !data.isApproved}
+	{#if !isApproved}
 		<Popup ss={data.ss!} {ws} {form} user={data.user} />
 	{/if}
 </main>

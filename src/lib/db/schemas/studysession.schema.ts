@@ -89,7 +89,7 @@ export const studySessionJoinRequestTable = sqliteTable("session_join_requests",
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 		.notNull(),
 
-	status: text("status", { enum: ["pending", "approved", "rejected"] })
+	status: text("status", { enum: ["pending", "approved"] })
 		.notNull()
 		.default("pending"),
 

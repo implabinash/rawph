@@ -18,11 +18,13 @@
 	let isMute = $state(false);
 	let copied = $state(false);
 	let allJoinRequests: JoinRequests = $state([]);
+	let newSPs: SP[] = $state([]);
 
 	$effect(() => {
 		if (ws) {
 			const handleMessage = async (event) => {
 				const message = JSON.parse(event.data);
+
 				if (
 					message.type === "request_new_participant" ||
 					message.type === "cancel_participant_requset"
@@ -32,6 +34,22 @@
 					);
 					const data = await res.json();
 					allJoinRequests = data;
+				}
+
+				if (message.type === "new_participant_added") {
+					const joinRequetsRes = await fetch(
+						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`
+					);
+
+					const joinRequestsData = await joinRequetsRes.json();
+					allJoinRequests = joinRequestsData;
+
+					const newSPsRes = await fetch(
+						`/api/v1/study-session/${url.pathname.split("/")[2]}/participants`
+					);
+
+					const newSPsData = await newSPsRes.json();
+					newSPs = newSPsData;
 				}
 			};
 
@@ -46,6 +64,10 @@
 	$effect(() => {
 		if (joinRequests) {
 			allJoinRequests = joinRequests;
+		}
+
+		if (allSPs) {
+			newSPs = allSPs;
 		}
 	});
 
@@ -111,30 +133,39 @@
 					</div>
 
 					<div class="flex items-center gap-1">
-						<form method="POST" action="?/accept" use:enhance>
+						<form
+							method="POST"
+							action="?/accept"
+							use:enhance={() => {
+								return async ({ update }) => {
+									await update();
+
+									const message = {
+										type: "new_participant_added",
+										for: "sp"
+									};
+
+									if (ws?.readyState === WebSocket.OPEN) {
+										ws.send(JSON.stringify(message));
+									}
+								};
+							}}
+						>
 							<input type="hidden" value={joinRequest.requestBy.id} name="pendingParticipant" />
 
 							<button
 								type="submit"
-								class="cursor-pointer rounded-md border border-neutral-border bg-success-50 p-1 text-success-700 hover:bg-success-100 active:bg-success-50"
+								class="flex cursor-pointer items-center gap-1 rounded-md border border-neutral-border bg-success-50 p-1 text-caption-bold text-success-700 hover:bg-success-100 active:bg-success-50"
 							>
-								<Check size="16px" />
-							</button>
-						</form>
-
-						<form method="POST" action="?/reject" use:enhance>
-							<button
-								class="cursor-pointer rounded-md border border-neutral-border bg-error-50 p-1 text-error-700 hover:bg-error-100 active:bg-error-50"
-							>
-								<X size="16px" />
+								<Check size="16px" /> Accept
 							</button>
 						</form>
 					</div>
 				</div>
 			{/each}
 
-			<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
-				{#each allSPs as sp (sp.userID)}
+			{#each newSPs as sp (sp.userID)}
+				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img
 							src={sp.user.image.startsWith("http")
@@ -148,8 +179,8 @@
 					</div>
 
 					<Mic size="16px" class="m-1" />
-				{/each}
-			</div>
+				</div>
+			{/each}
 		</div>
 	</div>
 

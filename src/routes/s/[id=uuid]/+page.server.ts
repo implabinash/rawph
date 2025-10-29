@@ -159,17 +159,48 @@ export const actions = {
 		return { success: true };
 	},
 
-	accept: async ({ request }) => {
+	accept: async ({ request, locals, url }) => {
 		const formData = Object.fromEntries(await request.formData());
 		const result = pendingParticipantSchema.safeParse(formData);
 
 		if (!result.success) {
 			return fail(401, { message: "invalid id" });
 		}
-	},
 
-	reject: () => {
-		console.log("reject");
+		const studySessionID = url.pathname.split("/")[2];
+
+		const joinRequest = await findJoinRequestByID(
+			locals.db,
+			studySessionID,
+			result.data.pendingParticipant
+		);
+
+		if (!joinRequest || joinRequest.status === "approved") {
+			return fail(409, { message: "already approved" });
+		}
+
+		try {
+			await locals.db
+				.update(studySessionJoinRequestTable)
+				.set({
+					status: "approved",
+					respondedBy: locals.user.id,
+					respondedAt: new Date()
+				})
+				.where(eq(studySessionJoinRequestTable.requestedBy, result.data.pendingParticipant));
+
+			await locals.db.insert(sessionParticipantsTable).values({
+				studySessionID,
+				status: "approved",
+				userID: result.data.pendingParticipant,
+				role: "sm"
+			});
+		} catch (err) {
+			console.error("join request status update failed", err);
+			return fail(500, { message: "something went wrong" });
+		}
+
+		return { success: true };
 	}
 } satisfies Actions;
 

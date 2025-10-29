@@ -55,7 +55,10 @@ export const findSPByID = async (
 
 export const findAllSPsBySessionID = async (db: DrizzleClient, studySessionID: string) => {
 	const sps = await db.query.sessionParticipantsTable.findMany({
-		where: eq(sessionParticipantsTable.studySessionID, studySessionID),
+		where: and(
+			eq(sessionParticipantsTable.studySessionID, studySessionID),
+			eq(sessionParticipantsTable.status, "approved")
+		),
 		columns: {
 			id: true,
 			role: true,
@@ -103,7 +106,10 @@ export const findAllJoinRequestByStudySessionID = async (
 	studySessionID: string
 ) => {
 	const allJoinRequests = await db.query.studySessionJoinRequestTable.findMany({
-		where: eq(studySessionJoinRequestTable.studySessionID, studySessionID),
+		where: and(
+			eq(studySessionJoinRequestTable.studySessionID, studySessionID),
+			eq(studySessionJoinRequestTable.status, "pending")
+		),
 		columns: {
 			id: true,
 			status: true,
