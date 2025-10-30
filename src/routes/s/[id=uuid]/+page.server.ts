@@ -226,7 +226,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	}
 
 	let allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
-	const currentSP = allSPs.find((sp) => sp.userID === locals.user.id);
+	let currentSP = allSPs.find((sp) => sp.userID === locals.user.id);
 
 	let isApproved = false;
 
@@ -252,6 +252,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 
 	allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
 	const ss = allSPs.find((sp) => sp.role === "ss");
+	currentSP = allSPs.find((sp) => sp.userID === locals.user.id);
 
 	const allJoinRequests = await findAllJoinRequestByStudySessionID(locals.db, studySessionID);
 

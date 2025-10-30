@@ -48,6 +48,8 @@ class WebSocketStore {
 			try {
 				const message: WSMessage = JSON.parse(event.data);
 				this.messages = [...this.messages, message];
+				console.log("receive: ", message);
+				console.log("this message: ", this.messages);
 			} catch (error) {
 				console.error("Failed to parse message:", error);
 			}
@@ -73,6 +75,7 @@ class WebSocketStore {
 
 		try {
 			this.ws.send(JSON.stringify(message));
+			console.log("Send: ", message);
 			return true;
 		} catch (error) {
 			console.error("Failed to send message:", error);

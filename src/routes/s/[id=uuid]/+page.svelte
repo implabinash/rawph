@@ -27,6 +27,8 @@
 		});
 
 		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
+		console.log("params: ", wsURL);
+		console.log("role: ", data);
 
 		ws.connect(wsURL);
 
