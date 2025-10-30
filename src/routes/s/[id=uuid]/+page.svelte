@@ -13,14 +13,14 @@
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
 	let ws = $state<WebSocket | null>(null);
-	let isApproved: boolean = $state(false);
+	let isApproved: boolean = $state(data.isApproved);
 
 	onMount(() => {
 		const studySessionID = page.url.pathname.split("/")[2];
 
-		if (ws?.readyState === WebSocket.OPEN) {
-			console.log("WebSocket already connected");
-			return;
+		if (ws && ws.readyState !== WebSocket.CLOSED) {
+			console.log("Closing existing WebSocket");
+			ws.close();
 		}
 
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
@@ -44,36 +44,27 @@
 			console.error("WebSocket connection error:", error);
 		});
 
-		ws.addEventListener("close", () => {
+		ws.addEventListener("close", (event) => {
 			console.log("WebSocket connection closed");
+			console.log("Close code:", event.code);
+			console.log("Close reason:", event.reason);
+			console.log("Clean close:", event.wasClean);
 		});
-	});
 
-	$effect(() => {
-		if (ws) {
-			const handleMessage = async (event) => {
-				const message = JSON.parse(event.data);
+		ws.addEventListener("message", async (event) => {
+			const message = JSON.parse(event.data);
 
-				if (message.type === "new_participant_added") {
-					console.log("Participant approved!");
-					isApproved = true;
-				}
-			};
+			if (message.type === "new_participant_added") {
+				isApproved = true;
+			}
+		});
 
-			ws.addEventListener("message", handleMessage);
-
-			return () => {
-				if (ws) {
-					ws.removeEventListener("message", handleMessage);
-				}
-			};
-		}
-	});
-
-	$effect(() => {
-		if (data.isApproved) {
-			isApproved = data.isApproved;
-		}
+		return () => {
+			if (ws && ws.readyState === WebSocket.OPEN) {
+				console.log("Closing WebSocket in cleanup");
+				ws.close();
+			}
+		};
 	});
 
 	onDestroy(() => {

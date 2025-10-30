@@ -5,7 +5,6 @@
 	import { page } from "$app/state";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
-	import { onMount } from "svelte";
 
 	type Props = {
 		allSPs: SP[];
@@ -28,7 +27,7 @@
 
 				if (
 					message.type === "request_new_participant" ||
-					message.type === "cancel_participant_requset"
+					message.type === "cancel_participant_request"
 				) {
 					const res = await fetch(
 						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`

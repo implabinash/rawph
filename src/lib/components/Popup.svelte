@@ -19,7 +19,7 @@
 
 	const cancelRequest = () => {
 		const message = {
-			type: "cancel_participant_requset",
+			type: "cancel_participant_request",
 			for: "ss"
 		};
 
