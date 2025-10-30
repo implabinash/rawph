@@ -14,7 +14,6 @@
 
 	let { allSPs, joinRequests, ws }: Props = $props();
 
-	let url = $state(page.url);
 	let isMute = $state(false);
 	let copied = $state(false);
 	let allJoinRequests: JoinRequests = $state(joinRequests);
@@ -24,14 +23,13 @@
 		if (ws) {
 			ws.addEventListener("message", async (event) => {
 				const message = JSON.parse(event.data);
+				const studySessionID = page.url.pathname.split("/")[2];
 
 				if (
 					message.type === "request_new_participant" ||
 					message.type === "cancel_participant_request"
 				) {
-					const res = await fetch(
-						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`
-					);
+					const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
 
 					const data = await res.json();
 					allJoinRequests = data;
@@ -39,15 +37,13 @@
 
 				if (message.type === "new_participant_added") {
 					const joinRequetsRes = await fetch(
-						`/api/v1/study-session/${url.pathname.split("/")[2]}/join-requests`
+						`/api/v1/study-session/${studySessionID}/join-requests`
 					);
 
 					const joinRequestsData = await joinRequetsRes.json();
 					allJoinRequests = joinRequestsData;
 
-					const newSPsRes = await fetch(
-						`/api/v1/study-session/${url.pathname.split("/")[2]}/participants`
-					);
+					const newSPsRes = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
 
 					const newSPsData = await newSPsRes.json();
 					newSPs = newSPsData;
@@ -57,7 +53,7 @@
 	});
 
 	const copyToClipboard = async () => {
-		await navigator.clipboard.writeText(url.toString());
+		await navigator.clipboard.writeText(page.url.toString());
 		copied = true;
 		setTimeout(() => (copied = false), 1000);
 	};
@@ -177,7 +173,7 @@
 				class="flex min-w-0 flex-1 items-center gap-2 rounded-md border border-neutral-border bg-default-background p-2 text-subtext-color"
 			>
 				<Link size="12px" class="min-w-fit" />
-				<p class="truncate overflow-x-clip text-caption-bold">{url}</p>
+				<p class="truncate overflow-x-clip text-caption-bold">{page.url}</p>
 			</div>
 
 			<button
