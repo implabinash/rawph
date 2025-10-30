@@ -1,7 +1,9 @@
+type MessageType = "new_join_request" | "cancel_join_request" | "add_new_participant";
+
 export type WSMessage = {
-	type: string;
+	type: MessageType;
 	data?: any;
-	for: "ss" | "all";
+	for: "ss" | "all" | "broadcast";
 };
 
 type ConnectionState = "disconnected" | "connecting" | "connected" | "error";
@@ -12,9 +14,19 @@ class WebSocketStore {
 	private reconnectAttempts = 0;
 	private maxReconnectAttempts = 5;
 	private wsUrl = $state("");
+	private messages = $state<WSMessage[]>([]);
 
-	messages = $state<WSMessage[]>([]);
 	connectionState = $state<ConnectionState>("disconnected");
+
+	joinRequestsMessages = $derived<WSMessage[]>(
+		this.messages.filter((m) => m.type === "new_join_request")
+	);
+	cancelRequestMessages = $derived<WSMessage[]>(
+		this.messages.filter((m) => m.type === "cancel_join_request")
+	);
+	newParticipantsMessages = $derived<WSMessage[]>(
+		this.messages.filter((m) => m.type === "add_new_participant")
+	);
 
 	connect(url: string) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
@@ -48,8 +60,6 @@ class WebSocketStore {
 			try {
 				const message: WSMessage = JSON.parse(event.data);
 				this.messages = [...this.messages, message];
-				console.log("receive: ", message);
-				console.log("this message: ", this.messages);
 			} catch (error) {
 				console.error("Failed to parse message:", error);
 			}
@@ -75,7 +85,6 @@ class WebSocketStore {
 
 		try {
 			this.ws.send(JSON.stringify(message));
-			console.log("Send: ", message);
 			return true;
 		} catch (error) {
 			console.error("Failed to send message:", error);

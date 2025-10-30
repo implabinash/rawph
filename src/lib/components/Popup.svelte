@@ -19,7 +19,7 @@
 
 	const cancelRequest = () => {
 		const message: WSMessage = {
-			type: "cancel_participant_request",
+			type: "cancel_join_request",
 			for: "ss"
 		};
 
@@ -114,7 +114,7 @@
 						await update();
 
 						const message: WSMessage = {
-							type: "request_new_participant",
+							type: "new_join_request",
 							data: {
 								userID: user.id,
 								name: user.name,

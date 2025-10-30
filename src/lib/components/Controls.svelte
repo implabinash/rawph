@@ -21,18 +21,15 @@
 	const studySessionID = $derived(page.url.pathname.split("/")[2]);
 
 	$effect(() => {
-		const latestMessage = ws.messages[ws.messages.length - 1];
+		const newJoinRequest = ws.joinRequestsMessages[ws.joinRequestsMessages.length - 1];
+		const cancelRequest = ws.cancelRequestMessages[ws.cancelRequestMessages.length - 1];
+		const newParticipant = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
 
-		if (!latestMessage) return;
-
-		if (
-			latestMessage.type === "request_new_participant" ||
-			latestMessage.type === "cancel_participant_request"
-		) {
+		if (newJoinRequest || cancelRequest) {
 			fetchJoinRequests();
 		}
 
-		if (latestMessage.type === "new_participant_added") {
+		if (newParticipant) {
 			fetchJoinRequests();
 			fetchParticipants();
 		}
@@ -120,7 +117,7 @@
 									await update();
 
 									const message: WSMessage = {
-										type: "new_participant_added",
+										type: "add_new_participant",
 										for: "all"
 									};
 

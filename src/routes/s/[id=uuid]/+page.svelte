@@ -27,8 +27,6 @@
 		});
 
 		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
-		console.log("params: ", wsURL);
-		console.log("role: ", data);
 
 		ws.connect(wsURL);
 
@@ -36,6 +34,14 @@
 			ws.disconnect();
 			ws.clearMessages();
 		};
+	});
+
+	$effect(() => {
+		const latestMessage = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
+
+		if (latestMessage) {
+			isApproved = true;
+		}
 	});
 
 	onDestroy(() => {
