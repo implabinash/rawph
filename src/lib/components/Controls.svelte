@@ -20,36 +20,35 @@
 	let newSPs: SP[] = $state(allSPs);
 
 	$effect(() => {
-		if (ws) {
-			ws.addEventListener("message", async (event) => {
-				const message = JSON.parse(event.data);
-				const studySessionID = page.url.pathname.split("/")[2];
+		if (!ws) return;
 
-				if (
-					message.type === "request_new_participant" ||
-					message.type === "cancel_participant_request"
-				) {
-					const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
+		ws.addEventListener("message", async (event) => {
+			const message = JSON.parse(event.data);
+			const studySessionID = page.url.pathname.split("/")[2];
 
-					const data = await res.json();
-					allJoinRequests = data;
-				}
+			if (
+				message.type === "request_new_participant" ||
+				message.type === "cancel_participant_request"
+			) {
+				const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
 
-				if (message.type === "new_participant_added") {
-					const joinRequetsRes = await fetch(
-						`/api/v1/study-session/${studySessionID}/join-requests`
-					);
+				const data = await res.json();
 
-					const joinRequestsData = await joinRequetsRes.json();
-					allJoinRequests = joinRequestsData;
+				allJoinRequests = data;
+			}
 
-					const newSPsRes = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
+			if (message.type === "new_participant_added") {
+				const joinRequetsRes = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
 
-					const newSPsData = await newSPsRes.json();
-					newSPs = newSPsData;
-				}
-			});
-		}
+				const joinRequestsData = await joinRequetsRes.json();
+				allJoinRequests = joinRequestsData;
+
+				const newSPsRes = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
+
+				const newSPsData = await newSPsRes.json();
+				newSPs = newSPsData;
+			}
+		});
 	});
 
 	const copyToClipboard = async () => {
@@ -128,6 +127,7 @@
 
 									if (ws?.readyState === WebSocket.OPEN) {
 										ws.send(JSON.stringify(message));
+										console.log("accepting request");
 									}
 								};
 							}}
