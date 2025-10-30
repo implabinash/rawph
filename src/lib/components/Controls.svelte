@@ -6,24 +6,32 @@
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
 	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
+	import type { User } from "$lib/db/schemas/user.schema";
+	import { untrack } from "svelte";
 
 	type Props = {
+		user: User;
 		allSPs: SP[];
 		joinRequests: JoinRequests;
 	};
 
-	let { allSPs, joinRequests }: Props = $props();
+	let { user, allSPs, joinRequests }: Props = $props();
 
-	let isMute = $state(false);
-	let copied = $state(false);
-	let allJoinRequests: JoinRequests = $state(joinRequests);
-	let newSPs: SP[] = $state(allSPs);
 	const studySessionID = $derived(page.url.pathname.split("/")[2]);
 
+	let allJoinRequests: JoinRequests = $state(joinRequests);
+	let newSPs: SP[] = $state(allSPs);
+
+	let copied = $state(false);
+
+	let muteList: Record<string, boolean> = $state({});
+
 	$effect(() => {
+		console.log("effect is starting");
 		const newJoinRequest = ws.joinRequestsMessages[ws.joinRequestsMessages.length - 1];
 		const cancelRequest = ws.cancelRequestMessages[ws.cancelRequestMessages.length - 1];
 		const newParticipant = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
+		const changeMuteState = ws.handleMuteMessages[ws.handleMuteMessages.length - 1];
 
 		if (newJoinRequest || cancelRequest) {
 			fetchJoinRequests();
@@ -33,6 +41,22 @@
 			fetchJoinRequests();
 			fetchParticipants();
 		}
+
+		if (changeMuteState) {
+			console.log("message recieved on component: ", changeMuteState);
+
+			untrack(() => {
+				muteList[changeMuteState.data.userID] = !muteList[changeMuteState.data.userID];
+			});
+		}
+	});
+
+	$effect(() => {
+		newSPs.forEach((sp) => {
+			if (!(sp.userID in muteList)) {
+				muteList[sp.userID] = true;
+			}
+		});
 	});
 
 	const copyToClipboard = async () => {
@@ -52,6 +76,21 @@
 		const data: SP[] = await res.json();
 		newSPs = data;
 	};
+
+	const handleMute = () => {
+		muteList[user.id] = !muteList[user.id];
+
+		const message: WSMessage = {
+			type: "handle_mute",
+			data: {
+				userID: user.id
+			},
+			for: "broadcast"
+		};
+
+		ws.send(message);
+		console.log("message sent from component: ", message);
+	};
 </script>
 
 <div
@@ -60,10 +99,10 @@
 	<div class="flex items-center justify-between">
 		<button
 			type="submit"
-			class={`${isMute ? "bg-error-600 text-default-background hover:bg-error-500" : "bg-default-background hover:bg-neutral-100 active:bg-default-background"} cursor-pointer rounded-md border border-neutral-border p-2`}
-			onclick={() => (isMute = !isMute)}
+			class={`${muteList[user.id] ? "bg-error-600 text-default-background hover:bg-error-500" : "bg-default-background hover:bg-neutral-100 active:bg-default-background"} cursor-pointer rounded-md border border-neutral-border p-2`}
+			onclick={handleMute}
 		>
-			{#if isMute}
+			{#if muteList[user.id]}
 				<MicOff size="20px" />
 			{:else}
 				<Mic size="20px" />
@@ -138,7 +177,7 @@
 				</div>
 			{/each}
 
-			{#each newSPs as sp (sp.userID)}
+			{#each newSPs as sp (sp.id)}
 				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img
@@ -152,7 +191,11 @@
 						<p class="text-caption-bold">{sp.user.name}</p>
 					</div>
 
-					<Mic size="16px" class="m-1" />
+					{#if muteList[sp.userID]}
+						<MicOff size="16px" class="m-1" />
+					{:else}
+						<Mic size="16px" class="m-1" />
+					{/if}
 				</div>
 			{/each}
 		</div>

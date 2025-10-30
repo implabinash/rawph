@@ -78,7 +78,7 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls joinRequests={data.allJoinRequests} allSPs={data.allSPs} />
+				<Controls user={data.user} joinRequests={data.allJoinRequests} allSPs={data.allSPs} />
 
 				<Chat />
 			</div>
