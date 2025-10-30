@@ -1,6 +1,6 @@
 export type WSMessage = {
 	type: string;
-	[key: string]: any;
+	data?: any;
 	for: "ss" | "all";
 };
 

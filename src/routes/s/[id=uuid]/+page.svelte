@@ -9,20 +9,14 @@
 	import Video from "$lib/components/Video.svelte";
 	import Popup from "$lib/components/Popup.svelte";
 	import Chat from "$lib/components/Chat.svelte";
+	import { ws } from "$lib/stores/websocket.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let ws = $state<WebSocket | null>(null);
 	let isApproved: boolean = $state(data.isApproved);
 
 	onMount(() => {
 		const studySessionID = page.url.pathname.split("/")[2];
-
-		if (ws && ws.readyState !== WebSocket.CLOSED) {
-			console.log("Closing existing WebSocket");
-			ws.close();
-		}
-
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
 		const params = new URLSearchParams({
@@ -34,45 +28,17 @@
 
 		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
 
-		const newWS = new WebSocket(wsURL);
-
-		newWS.addEventListener("open", () => {
-			ws = newWS;
-		});
-
-		if (ws) {
-			ws.addEventListener("error", (error) => {
-				console.error("WebSocket connection error:", error);
-			});
-
-			ws.addEventListener("close", (event) => {
-				console.log("WebSocket connection closed");
-				console.log("Close code:", event.code);
-				console.log("Close reason:", event.reason);
-				console.log("Clean close:", event.wasClean);
-			});
-
-			ws.addEventListener("message", async (event) => {
-				const message = JSON.parse(event.data);
-
-				if (message.type === "new_participant_added") {
-					isApproved = true;
-				}
-			});
-		}
+		ws.connect(wsURL);
 
 		return () => {
-			if (ws && ws.readyState === WebSocket.OPEN) {
-				console.log("Closing WebSocket in cleanup");
-				ws.close();
-			}
+			ws.disconnect();
+			ws.clearMessages();
 		};
 	});
 
 	onDestroy(() => {
-		if (ws?.readyState === WebSocket.OPEN) {
-			ws.close();
-		}
+		ws.disconnect();
+		ws.clearMessages();
 	});
 
 	// let keyBuffer = "";
@@ -104,7 +70,7 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls {ws} joinRequests={data.allJoinRequests} allSPs={data.allSPs} />
+				<Controls joinRequests={data.allJoinRequests} allSPs={data.allSPs} />
 
 				<Chat />
 			</div>
@@ -118,7 +84,7 @@
 	</section>
 
 	{#if !isApproved}
-		<Popup ss={data.ss!} {ws} {form} user={data.user} />
+		<Popup ss={data.ss!} {form} user={data.user} />
 	{/if}
 </main>
 

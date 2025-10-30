@@ -5,56 +5,55 @@
 	import { page } from "$app/state";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 
 	type Props = {
 		allSPs: SP[];
 		joinRequests: JoinRequests;
-		ws: WebSocket | null;
 	};
 
-	let { allSPs, joinRequests, ws }: Props = $props();
+	let { allSPs, joinRequests }: Props = $props();
 
 	let isMute = $state(false);
 	let copied = $state(false);
 	let allJoinRequests: JoinRequests = $state(joinRequests);
 	let newSPs: SP[] = $state(allSPs);
+	const studySessionID = $derived(page.url.pathname.split("/")[2]);
 
 	$effect(() => {
-		if (!ws) return;
+		const latestMessage = ws.messages[ws.messages.length - 1];
 
-		ws.addEventListener("message", async (event) => {
-			const message = JSON.parse(event.data);
-			const studySessionID = page.url.pathname.split("/")[2];
+		if (!latestMessage) return;
 
-			if (
-				message.type === "request_new_participant" ||
-				message.type === "cancel_participant_request"
-			) {
-				const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
+		if (
+			latestMessage.type === "request_new_participant" ||
+			latestMessage.type === "cancel_participant_request"
+		) {
+			fetchJoinRequests();
+		}
 
-				const data = await res.json();
-
-				allJoinRequests = data;
-			}
-
-			if (message.type === "new_participant_added") {
-				const joinRequetsRes = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
-
-				const joinRequestsData = await joinRequetsRes.json();
-				allJoinRequests = joinRequestsData;
-
-				const newSPsRes = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
-
-				const newSPsData = await newSPsRes.json();
-				newSPs = newSPsData;
-			}
-		});
+		if (latestMessage.type === "new_participant_added") {
+			fetchJoinRequests();
+			fetchParticipants();
+		}
 	});
 
 	const copyToClipboard = async () => {
 		await navigator.clipboard.writeText(page.url.toString());
 		copied = true;
 		setTimeout(() => (copied = false), 1000);
+	};
+
+	const fetchJoinRequests = async () => {
+		const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
+		const data: JoinRequests = await res.json();
+		allJoinRequests = data;
+	};
+
+	const fetchParticipants = async () => {
+		const res = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
+		const data: SP[] = await res.json();
+		newSPs = data;
 	};
 </script>
 
@@ -120,15 +119,12 @@
 								return async ({ update }) => {
 									await update();
 
-									const message = {
+									const message: WSMessage = {
 										type: "new_participant_added",
 										for: "all"
 									};
 
-									if (ws?.readyState === WebSocket.OPEN) {
-										ws.send(JSON.stringify(message));
-										console.log("accepting request");
-									}
+									ws.send(message);
 								};
 							}}
 						>

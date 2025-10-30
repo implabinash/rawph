@@ -5,28 +5,25 @@
 	import { onDestroy } from "svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
 	import type { SP } from "$lib/db/queries/studysessions.query";
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 
 	type Props = {
 		ss: SP;
 		user: User;
-		ws: WebSocket | null;
 		form: ActionData;
 	};
 
-	let { ss, user, ws, form }: Props = $props();
+	let { ss, user, form }: Props = $props();
 
 	let isRequested: boolean = $state(false);
 
 	const cancelRequest = () => {
-		const message = {
+		const message: WSMessage = {
 			type: "cancel_participant_request",
 			for: "ss"
 		};
 
-		if (ws?.readyState === WebSocket.OPEN) {
-			ws.send(JSON.stringify(message));
-			console.log("cencel request sent");
-		}
+		ws.send(message);
 
 		isRequested = false;
 	};
@@ -116,7 +113,7 @@
 					return async ({ update }) => {
 						await update();
 
-						const message = {
+						const message: WSMessage = {
 							type: "request_new_participant",
 							data: {
 								userID: user.id,
@@ -127,10 +124,7 @@
 							for: "ss"
 						};
 
-						if (ws?.readyState === WebSocket.OPEN) {
-							ws.send(JSON.stringify(message));
-							console.log("request sent");
-						}
+						ws.send(message);
 
 						isRequested = true;
 					};
