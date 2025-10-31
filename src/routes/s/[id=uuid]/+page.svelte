@@ -41,6 +41,12 @@
 	});
 
 	$effect(() => {
+		const latestMessage = ws.latestMessage;
+
+		if (!latestMessage) {
+			return;
+		}
+
 		const newJoinRequest = ws.joinRequestsMessages[ws.joinRequestsMessages.length - 1];
 		const cancelRequest = ws.cancelRequestMessages[ws.cancelRequestMessages.length - 1];
 		const newParticipant = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];

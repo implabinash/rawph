@@ -19,16 +19,20 @@
 	let lastMessage: HTMLDivElement;
 
 	$effect(() => {
-		const latestChatMessage = ws.chatMessages[ws.chatMessages.length - 1];
+		const latestMessage = ws.latestMessage;
 
-		if (latestChatMessage) {
+		if (!latestMessage) {
+			return;
+		}
+
+		if (latestMessage.type === "new_chat_message") {
 			untrack(() => {
 				chatMessages.push({
-					userID: latestChatMessage.data.userID,
-					name: latestChatMessage.data.name,
-					message: latestChatMessage.data.message,
-					image: latestChatMessage.data.image,
-					timestamp: latestChatMessage.data.timestamp
+					userID: latestMessage.data.userID,
+					name: latestMessage.data.name,
+					message: latestMessage.data.message,
+					image: latestMessage.data.image,
+					timestamp: latestMessage.data.timestamp
 				});
 			});
 		}
