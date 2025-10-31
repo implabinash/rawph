@@ -2,7 +2,8 @@ type MessageType =
 	| "new_join_request"
 	| "cancel_join_request"
 	| "add_new_participant"
-	| "handle_mute";
+	| "handle_mute"
+	| "new_chat_message";
 
 export type WSMessage = {
 	type: MessageType;
@@ -32,6 +33,7 @@ class WebSocketStore {
 		this.messages.filter((m) => m.type === "add_new_participant")
 	);
 	handleMuteMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "handle_mute"));
+	chatMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "new_chat_message"));
 
 	connect(url: string) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
@@ -64,9 +66,7 @@ class WebSocketStore {
 		this.ws.onmessage = (event) => {
 			try {
 				const message: WSMessage = JSON.parse(event.data);
-				console.log("message recieved in websocet client: ", message);
 				this.messages = [...this.messages.slice(-100), message];
-				console.log("messages get updated: ", this.messages);
 			} catch (error) {
 				console.error("Failed to parse message:", error);
 			}
@@ -92,7 +92,6 @@ class WebSocketStore {
 
 		try {
 			this.ws.send(JSON.stringify(message));
-			console.log("message is sent, from websocket client: ", message);
 			return true;
 		} catch (error) {
 			console.error("Failed to send message:", error);

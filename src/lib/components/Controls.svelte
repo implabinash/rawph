@@ -17,34 +17,14 @@
 
 	let { user, allSPs, joinRequests }: Props = $props();
 
-	const studySessionID = $derived(page.url.pathname.split("/")[2]);
-
-	let allJoinRequests: JoinRequests = $state(joinRequests);
-	let newSPs: SP[] = $state(allSPs);
-
 	let copied = $state(false);
 
 	let muteList: Record<string, boolean> = $state({});
 
 	$effect(() => {
-		console.log("effect is starting");
-		const newJoinRequest = ws.joinRequestsMessages[ws.joinRequestsMessages.length - 1];
-		const cancelRequest = ws.cancelRequestMessages[ws.cancelRequestMessages.length - 1];
-		const newParticipant = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
 		const changeMuteState = ws.handleMuteMessages[ws.handleMuteMessages.length - 1];
 
-		if (newJoinRequest || cancelRequest) {
-			fetchJoinRequests();
-		}
-
-		if (newParticipant) {
-			fetchJoinRequests();
-			fetchParticipants();
-		}
-
 		if (changeMuteState) {
-			console.log("message recieved on component: ", changeMuteState);
-
 			untrack(() => {
 				muteList[changeMuteState.data.userID] = !muteList[changeMuteState.data.userID];
 			});
@@ -52,7 +32,7 @@
 	});
 
 	$effect(() => {
-		newSPs.forEach((sp) => {
+		allSPs.forEach((sp) => {
 			if (!(sp.userID in muteList)) {
 				muteList[sp.userID] = true;
 			}
@@ -63,18 +43,6 @@
 		await navigator.clipboard.writeText(page.url.toString());
 		copied = true;
 		setTimeout(() => (copied = false), 1000);
-	};
-
-	const fetchJoinRequests = async () => {
-		const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
-		const data: JoinRequests = await res.json();
-		allJoinRequests = data;
-	};
-
-	const fetchParticipants = async () => {
-		const res = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
-		const data: SP[] = await res.json();
-		newSPs = data;
 	};
 
 	const handleMute = () => {
@@ -89,7 +57,6 @@
 		};
 
 		ws.send(message);
-		console.log("message sent from component: ", message);
 	};
 </script>
 
@@ -133,7 +100,7 @@
 		<p class="text-caption-bold">Participants</p>
 
 		<div class="space-y-2">
-			{#each allJoinRequests as joinRequest (joinRequest.requestedBy)}
+			{#each joinRequests as joinRequest (joinRequest.requestedBy)}
 				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img
@@ -177,7 +144,7 @@
 				</div>
 			{/each}
 
-			{#each newSPs as sp (sp.id)}
+			{#each allSPs as sp (sp.id)}
 				<div class="flex items-center justify-between rounded-md bg-neutral-100 p-1">
 					<div class="flex items-center gap-2">
 						<img

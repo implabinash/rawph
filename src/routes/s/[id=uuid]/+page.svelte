@@ -10,13 +10,17 @@
 	import Popup from "$lib/components/Popup.svelte";
 	import Chat from "$lib/components/Chat.svelte";
 	import { ws } from "$lib/stores/websocket.svelte";
+	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
+	let allJoinRequests: JoinRequests = $state(data.allJoinRequests);
+	let newSPs: SP[] = $state(data.allSPs);
+
 	let isApproved: boolean = $state(data.isApproved);
+	let studySessionID = page.url.pathname.split("/")[2];
 
 	onMount(() => {
-		const studySessionID = page.url.pathname.split("/")[2];
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
 		const params = new URLSearchParams({
@@ -37,10 +41,19 @@
 	});
 
 	$effect(() => {
-		const latestMessage = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
+		const newJoinRequest = ws.joinRequestsMessages[ws.joinRequestsMessages.length - 1];
+		const cancelRequest = ws.cancelRequestMessages[ws.cancelRequestMessages.length - 1];
+		const newParticipant = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
 
-		if (latestMessage) {
+		if (newJoinRequest || cancelRequest) {
+			fetchJoinRequests();
+		}
+
+		if (newParticipant) {
 			isApproved = true;
+
+			fetchJoinRequests();
+			fetchParticipants();
 		}
 	});
 
@@ -48,6 +61,18 @@
 		ws.disconnect();
 		ws.clearMessages();
 	});
+
+	const fetchParticipants = async () => {
+		const res = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
+		const data: SP[] = await res.json();
+		newSPs = data;
+	};
+
+	const fetchJoinRequests = async () => {
+		const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
+		const data: JoinRequests = await res.json();
+		allJoinRequests = data;
+	};
 
 	// let keyBuffer = "";
 	// let bufferTimeout: ReturnType<typeof setTimeout>;
@@ -78,9 +103,9 @@
 			</div>
 
 			<div class="flex min-h-0 flex-1 gap-4">
-				<Controls user={data.user} joinRequests={data.allJoinRequests} allSPs={data.allSPs} />
+				<Controls user={data.user} joinRequests={allJoinRequests} allSPs={newSPs} />
 
-				<Chat />
+				<Chat user={data.user} />
 			</div>
 		</section>
 
