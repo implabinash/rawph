@@ -25,16 +25,6 @@ class WebSocketStore {
 
 	connectionState = $state<ConnectionState>("disconnected");
 
-	joinRequestsMessages = $derived<WSMessage[]>(
-		this.messages.filter((m) => m.type === "new_join_request")
-	);
-	cancelRequestMessages = $derived<WSMessage[]>(
-		this.messages.filter((m) => m.type === "cancel_join_request")
-	);
-	newParticipantsMessages = $derived<WSMessage[]>(
-		this.messages.filter((m) => m.type === "add_new_participant")
-	);
-	chatMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "new_chat_message"));
 	latestMessage = $derived<WSMessage | undefined>(
 		this.messages.length > 0 ? this.messages[this.messages.length - 1] : undefined
 	);

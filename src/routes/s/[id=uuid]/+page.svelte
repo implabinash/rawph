@@ -47,15 +47,11 @@
 			return;
 		}
 
-		const newJoinRequest = ws.joinRequestsMessages[ws.joinRequestsMessages.length - 1];
-		const cancelRequest = ws.cancelRequestMessages[ws.cancelRequestMessages.length - 1];
-		const newParticipant = ws.newParticipantsMessages[ws.newParticipantsMessages.length - 1];
-
-		if (newJoinRequest || cancelRequest) {
+		if (latestMessage.type == "new_join_request" || latestMessage.type === "cancel_join_request") {
 			fetchJoinRequests();
 		}
 
-		if (newParticipant) {
+		if (latestMessage.type === "add_new_participant") {
 			isApproved = true;
 
 			fetchJoinRequests();
