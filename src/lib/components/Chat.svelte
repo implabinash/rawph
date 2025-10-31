@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { Send } from "@lucide/svelte";
 
-	import { enhance } from "$app/forms";
 	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { untrack } from "svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
@@ -110,7 +109,7 @@
 		<div bind:this={lastMessage} class="h-0"></div>
 	</div>
 
-	<form class="flex items-center gap-2" onsubmit={handleSubmit} use:enhance>
+	<form class="flex items-center gap-2" onsubmit={handleSubmit}>
 		<input
 			type="text"
 			name="message"
