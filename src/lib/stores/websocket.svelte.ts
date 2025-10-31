@@ -34,7 +34,6 @@ class WebSocketStore {
 	newParticipantsMessages = $derived<WSMessage[]>(
 		this.messages.filter((m) => m.type === "add_new_participant")
 	);
-	handleMuteMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "handle_mute"));
 	chatMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "new_chat_message"));
 	latestMessage = $derived<WSMessage | undefined>(
 		this.messages.length > 0 ? this.messages[this.messages.length - 1] : undefined

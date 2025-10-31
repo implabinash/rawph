@@ -22,13 +22,15 @@
 	let muteList: Record<string, boolean> = $state({});
 
 	$effect(() => {
-		const changeMuteState = ws.handleMuteMessages[ws.handleMuteMessages.length - 1];
+		const latestMessage = ws.latestMessage;
 
-		if (changeMuteState) {
-			untrack(() => {
-				muteList[changeMuteState.data.userID] = !muteList[changeMuteState.data.userID];
-			});
+		if (!latestMessage) {
+			return;
 		}
+
+		untrack(() => {
+			muteList[latestMessage.data.userID] = !muteList[latestMessage.data.userID];
+		});
 	});
 
 	$effect(() => {
