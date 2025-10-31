@@ -29,7 +29,9 @@
 		}
 
 		untrack(() => {
-			muteList[latestMessage.data.userID] = !muteList[latestMessage.data.userID];
+			if (latestMessage.type === "handle_mute") {
+				muteList[latestMessage.data.userID] = !muteList[latestMessage.data.userID];
+			}
 		});
 	});
 
