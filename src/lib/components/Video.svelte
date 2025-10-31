@@ -2,20 +2,60 @@
 	import { Link } from "@lucide/svelte";
 
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { enhance } from "$app/forms";
+	import { untrack } from "svelte";
 
 	let { form }: { form: ActionData } = $props();
 
 	let videoCode: string = $state("");
 
 	$effect(() => {
-		if (!videoCode && form?.videoCode) {
-			videoCode = form.videoCode || "";
+		const formVideoCode = form?.videoCode;
+		const shouldChange = form?.change;
+
+		untrack(() => {
+			if (formVideoCode && formVideoCode !== videoCode) {
+				videoCode = formVideoCode;
+
+				const message: WSMessage = {
+					type: "add_video",
+					data: { videoCode: formVideoCode },
+					for: "broadcast"
+				};
+
+				ws.send(message);
+			}
+
+			if (shouldChange && videoCode) {
+				const message: WSMessage = {
+					type: "remove_video",
+					for: "broadcast"
+				};
+
+				ws.send(message);
+
+				videoCode = "";
+			}
+		});
+	});
+
+	$effect(() => {
+		const latestMessage = ws.latestMessage;
+
+		if (!latestMessage) {
+			return;
 		}
 
-		if (form?.change && videoCode) {
-			videoCode = "";
-		}
+		untrack(() => {
+			if (latestMessage.type == "add_video" && latestMessage.data.videoCode !== videoCode) {
+				videoCode = latestMessage.data.videoCode;
+			}
+
+			if (latestMessage.type === "remove_video" && videoCode) {
+				videoCode = "";
+			}
+		});
 	});
 </script>
 

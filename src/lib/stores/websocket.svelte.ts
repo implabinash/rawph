@@ -3,7 +3,9 @@ type MessageType =
 	| "cancel_join_request"
 	| "add_new_participant"
 	| "handle_mute"
-	| "new_chat_message";
+	| "new_chat_message"
+	| "add_video"
+	| "remove_video";
 
 export type WSMessage = {
 	type: MessageType;
@@ -34,6 +36,9 @@ class WebSocketStore {
 	);
 	handleMuteMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "handle_mute"));
 	chatMessages = $derived<WSMessage[]>(this.messages.filter((m) => m.type === "new_chat_message"));
+	latestMessage = $derived<WSMessage | undefined>(
+		this.messages.length > 0 ? this.messages[this.messages.length - 1] : undefined
+	);
 
 	connect(url: string) {
 		if (this.ws?.readyState === WebSocket.OPEN) {
