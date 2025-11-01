@@ -15,7 +15,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid session."
+			message: "Sign in to continue."
 		};
 
 		return json(response, { status: 401 });
@@ -28,7 +28,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid session."
+			message: "Sign in to continue."
 		};
 
 		return json(response, { status: 401 });
@@ -43,7 +43,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Session expired. Please log in again."
+			message: "Your session has expired. Sign in again."
 		};
 		return json(response, { status: 401 });
 	}
@@ -63,7 +63,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 				success: false,
 				data: {},
 				error: {},
-				message: "Failed to retrieve user data. Try again."
+				message: "We couldn't load your account. Try again."
 			};
 
 			return json(response, { status: 500 });
@@ -87,7 +87,7 @@ export const GET: RequestHandler = async ({ cookies, locals }) => {
 			hasPassword: !!password
 		},
 		error: {},
-		message: "User retrieved successfully."
+		message: "Account loaded."
 	};
 
 	return json(response, { status: 200 });

@@ -20,7 +20,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			success: false,
 			data: {},
 			error: z.flattenError(result.error).fieldErrors,
-			message: "Invalid invite code."
+			message: "Check your invite code and try again."
 		};
 
 		return json(response, { status: 400 });
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid invite code."
+			message: "We couldn't find that invite code."
 		};
 
 		return json(response, { status: 400 });
@@ -44,7 +44,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Code is already used."
+			message: "This code has already been used."
 		};
 
 		return json(response, { status: 409 });
@@ -55,7 +55,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Authentication required."
+			message: "Sign in to continue."
 		};
 
 		return json(response, { status: 401 });
@@ -98,7 +98,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invite code verification failed. Try again."
+			message: "We couldn't verify your invite code. Try again."
 		};
 
 		return json(response, { status: 500 });
@@ -108,7 +108,7 @@ export const POST: RequestHandler = async ({ request, locals }) => {
 		success: true,
 		data: {},
 		error: {},
-		message: "Verified successfully."
+		message: "Your invite code is verified."
 	};
 
 	return json(response, { status: 200 });

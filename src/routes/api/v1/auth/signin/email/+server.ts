@@ -20,7 +20,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 			success: false,
 			data: {},
 			error: z.flattenError(result.error).fieldErrors,
-			message: "Invalid inputs."
+			message: "Check your email and password."
 		};
 
 		return json(response, { status: 400 });
@@ -33,7 +33,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid email or password."
+			message: "Check your email and password."
 		};
 
 		return json(response, { status: 401 });
@@ -46,7 +46,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid email or password."
+			message: "Check your email and password."
 		};
 
 		return json(response, { status: 401 });
@@ -68,7 +68,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Signin failed. Try Again."
+			message: "We couldn't sign you in. Try again."
 		};
 
 		return json(response, { status: 500 });
@@ -86,7 +86,7 @@ export const POST: RequestHandler = async ({ request, locals, cookies }) => {
 		success: true,
 		data: {},
 		error: {},
-		message: "Signed In successfully."
+		message: "You're signed in."
 	};
 
 	return json(response, { status: 200 });

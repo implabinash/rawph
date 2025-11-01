@@ -23,7 +23,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 				success: false,
 				data: {},
 				error: z.flattenError(result.error).fieldErrors,
-				message: "Invalid inputs."
+				message: "Check your password and try again."
 			};
 
 			return json(response, { status: 400 });
@@ -36,7 +36,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 				success: false,
 				data: {},
 				error: z.flattenError(result.error).fieldErrors,
-				message: "Invalid inputs."
+				message: "Check your password and try again."
 			};
 
 			return json(response, { status: 400 });
@@ -50,7 +50,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid session."
+			message: "Sign in to continue."
 		};
 
 		return json(response, { status: 401 });
@@ -63,7 +63,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Invalid session."
+			message: "Sign in to continue."
 		};
 
 		return json(response, { status: 401 });
@@ -80,7 +80,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 				success: false,
 				data: {},
 				error: {},
-				message: "Current password is incorrect."
+				message: "Your current password is incorrect."
 			};
 
 			return json(response, { status: 401 });
@@ -101,7 +101,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Password change failed. Try Again."
+			message: "We couldn't change your password. Try again."
 		};
 
 		return json(response, { status: 500 });
@@ -111,7 +111,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 		success: true,
 		data: {},
 		error: {},
-		message: "Password changed successfully."
+		message: "Your password has been changed."
 	};
 
 	return json(response, { status: 200 });

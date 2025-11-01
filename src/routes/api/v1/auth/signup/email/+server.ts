@@ -21,7 +21,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			success: false,
 			data: {},
 			error: z.flattenError(result.error).fieldErrors,
-			message: "Invalid inputs."
+			message: "Check your information and try again."
 		};
 
 		return json(response, { status: 400 });
@@ -34,7 +34,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Email is already in use."
+			message: "An account with this email already exists."
 		};
 
 		return json(response, { status: 409 });
@@ -73,7 +73,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			success: false,
 			data: {},
 			error: {},
-			message: "Signup failed. Try Again."
+			message: "We couldn't create your account. Try again."
 		};
 
 		return json(response, { status: 500 });
@@ -93,7 +93,7 @@ export const POST: RequestHandler = async ({ request, cookies, locals }) => {
 			userID: userID
 		},
 		error: {},
-		message: "User Created."
+		message: "Your account is ready."
 	};
 
 	return json(response, { status: 201 });
