@@ -27,6 +27,9 @@
 	let showCurrentPassword: boolean = $state(false);
 	let showNewPassword: boolean = $state(false);
 	let showConfirmPassword: boolean = $state(false);
+	let isCreating: boolean = $state(false);
+	let isJoining: boolean = $state(false);
+	let isUpdating: boolean = $state(false);
 
 	const copyToClipboard = async (inviteCode: string) => {
 		await navigator.clipboard.writeText(inviteCode.toUpperCase());
@@ -153,10 +156,21 @@
 					</div>
 				{/if}
 
-				<form action="?/create" method="POST" use:enhance>
+				<form
+					action="?/create"
+					method="POST"
+					use:enhance={() => {
+						isCreating = true;
+
+						return async ({ update }) => {
+							await update();
+							isCreating = false;
+						};
+					}}
+				>
 					<button
 						class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-						><Plus size="18px" /> New Session</button
+						><Plus size="18px" /> {isCreating ? "Creating..." : "New Session"}</button
 					>
 				</form>
 			</div>
@@ -177,7 +191,19 @@
 					</div>
 				</div>
 
-				<form class="relative space-y-4" method="POST" action="?/join" use:enhance>
+				<form
+					class="relative space-y-4"
+					method="POST"
+					action="?/join"
+					use:enhance={() => {
+						isJoining = true;
+
+						return async ({ update }) => {
+							await update();
+							isJoining = false;
+						};
+					}}
+				>
 					<Link size="14px" class="absolute top-2 left-2 text-subtext-color" />
 
 					<input
@@ -190,7 +216,7 @@
 
 					<button
 						class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-						type="submit"><Users size="16px" /> Join Session</button
+						type="submit"><Users size="16px" /> {isJoining ? "Joining..." : "Join Session"}</button
 					>
 				</form>
 			</div>
@@ -259,7 +285,19 @@
 				</div>
 			{/if}
 
-			<form class="space-y-4" method="POST" action="?/changePassword" use:enhance>
+			<form
+				class="space-y-4"
+				method="POST"
+				action="?/changePassword"
+				use:enhance={() => {
+					isUpdating = true;
+
+					return async ({ update }) => {
+						await update();
+						isUpdating = false;
+					};
+				}}
+			>
 				<div class="relative flex flex-col gap-1">
 					<label for="currentPassword" class="text-body-bold"
 						>Current Password <span class="text-error-500">*</span></label
@@ -363,8 +401,9 @@
 
 				<button
 					class="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
+					type="submit"
 				>
-					<Lock size="16px" /> Update Password</button
+					<Lock size="16px" /> {isUpdating ? "Updating..." : "Update Password"}</button
 				>
 			</form>
 		</div>

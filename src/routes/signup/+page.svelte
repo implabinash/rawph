@@ -145,6 +145,9 @@
 		<form method="GET" action="/api/v1/auth/google" class="space-y-3">
 			<button
 				class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border border-neutral-border bg-default-background px-4 py-2 text-body-bold text-brand-700 shadow-2xs hover:bg-neutral-50 active:bg-default-background"
+				onclick={() => {
+					isGoogleSubmitting = true;
+				}}
 				type="submit"
 			>
 				<img src="/images/logos/google.svg" alt="Google" class="" />{isGoogleSubmitting
