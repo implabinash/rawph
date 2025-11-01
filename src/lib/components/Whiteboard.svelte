@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { Trash } from "@lucide/svelte";
 
-	import { onMount } from "svelte";
+	import { onMount, untrack } from "svelte";
 
 	let whiteboard: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = $state(null);
@@ -31,6 +32,39 @@
 		if (ctx) {
 			ctx.strokeStyle = strokeColor;
 		}
+	});
+
+	$effect(() => {
+		const latestMessage = ws.latestMessage;
+
+		if (!latestMessage) {
+			return;
+		}
+
+		untrack(() => {
+			if (!ctx) {
+				return;
+			}
+
+			if (latestMessage.type === "drawing") {
+				const data = latestMessage.data;
+
+				ctx.strokeStyle = data.color;
+				ctx.beginPath();
+				ctx.moveTo(data.fromX, data.fromY);
+				ctx.lineTo(data.toX, data.toY);
+				ctx.stroke();
+				ctx.closePath();
+
+				ctx.strokeStyle = strokeColor;
+				isClear = false;
+			}
+
+			if (latestMessage.type === "clear_canvas") {
+				ctx.clearRect(0, 0, whiteboard.width, whiteboard.height);
+				isClear = true;
+			}
+		});
 	});
 
 	const resizeCanvas = () => {
@@ -77,6 +111,20 @@
 		ctx.stroke();
 		ctx.closePath();
 
+		const message: WSMessage = {
+			type: "drawing",
+			data: {
+				fromX: position.x,
+				fromY: position.y,
+				toX: x,
+				toY: y,
+				color: strokeColor
+			},
+			for: "broadcast"
+		};
+
+		ws.send(message);
+
 		position = { x, y };
 	};
 
@@ -89,6 +137,13 @@
 		ctx.clearRect(0, 0, whiteboard.width, whiteboard.height);
 
 		isClear = true;
+
+		const message: WSMessage = {
+			type: "clear_canvas",
+			for: "broadcast"
+		};
+
+		ws.send(message);
 	};
 </script>
 

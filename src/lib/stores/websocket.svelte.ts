@@ -5,7 +5,9 @@ type MessageType =
 	| "handle_mute"
 	| "new_chat_message"
 	| "add_video"
-	| "remove_video";
+	| "remove_video"
+	| "drawing"
+	| "clear_canvas";
 
 export type WSMessage = {
 	type: MessageType;
