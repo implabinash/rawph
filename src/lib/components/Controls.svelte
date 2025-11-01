@@ -8,6 +8,7 @@
 	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
 	import { untrack } from "svelte";
+	import { audio } from "$lib/stores/audio.svelte";
 
 	type Props = {
 		user: User;
@@ -24,13 +25,11 @@
 	$effect(() => {
 		const latestMessage = ws.latestMessage;
 
-		if (!latestMessage) {
-			return;
-		}
+		if (!latestMessage) return;
 
 		untrack(() => {
 			if (latestMessage.type === "handle_mute") {
-				muteList[latestMessage.data.userID] = !muteList[latestMessage.data.userID];
+				muteList[latestMessage.data.userID] = latestMessage.data.isMuted;
 			}
 		});
 	});
@@ -52,15 +51,7 @@
 	const handleMute = () => {
 		muteList[user.id] = !muteList[user.id];
 
-		const message: WSMessage = {
-			type: "handle_mute",
-			data: {
-				userID: user.id
-			},
-			for: "broadcast"
-		};
-
-		ws.send(message);
+		audio.toggleMute();
 	};
 </script>
 
@@ -70,10 +61,11 @@
 	<div class="flex items-center justify-between">
 		<button
 			type="submit"
-			class={`${muteList[user.id] ? "bg-error-600 text-default-background hover:bg-error-500" : "bg-default-background hover:bg-neutral-100 active:bg-default-background"} cursor-pointer rounded-md border border-neutral-border p-2`}
+			class={`${audio.isMuted ? "bg-error-600 text-default-background hover:bg-error-500" : "bg-default-background hover:bg-neutral-100 active:bg-default-background"} cursor-pointer rounded-md border border-neutral-border p-2`}
 			onclick={handleMute}
+			disabled={!audio.isEnabled}
 		>
-			{#if muteList[user.id]}
+			{#if audio.isMuted}
 				<MicOff size="20px" />
 			{:else}
 				<Mic size="20px" />

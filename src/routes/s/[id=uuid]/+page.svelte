@@ -11,6 +11,7 @@
 	import Chat from "$lib/components/Chat.svelte";
 	import { ws } from "$lib/stores/websocket.svelte";
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
+	import { audio } from "$lib/stores/audio.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -20,7 +21,7 @@
 	let isApproved: boolean = $state(data.isApproved);
 	let studySessionID = page.url.pathname.split("/")[2];
 
-	onMount(() => {
+	onMount(async () => {
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
 		const params = new URLSearchParams({
@@ -33,6 +34,14 @@
 		const wsURL = `${protocol}//${PUBLIC_BASE_URL}/ws/${studySessionID}?${params}`;
 
 		ws.connect(wsURL);
+
+		if (isApproved) {
+			await audio.init(data.user.id);
+
+			if (newSPs.length > 1) {
+				audio.startCall();
+			}
+		}
 
 		return () => {
 			ws.disconnect();
@@ -56,6 +65,24 @@
 
 			fetchJoinRequests();
 			fetchParticipants();
+
+			if (!audio.isEnabled) {
+				audio.init(data.user.id).then(() => {
+					audio.startCall();
+				});
+			}
+		}
+
+		if (latestMessage.type === "webrtc_offer") {
+			audio.handleOffer(latestMessage.data.offer);
+		}
+
+		if (latestMessage.type === "webrtc_answer") {
+			audio.handleAnswer(latestMessage.data.answer);
+		}
+
+		if (latestMessage.type === "webrtc_ice") {
+			audio.handleIce(latestMessage.data.ice);
 		}
 	});
 
