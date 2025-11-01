@@ -8,6 +8,6 @@ export const youtubeURLSchema = z.object({
 		(url) => {
 			return youtubeRegex.test(url);
 		},
-		{ message: "Please enter a valid YouTube URL" }
+		{ message: "We couldn't find a YouTube video at that link. Check the URL and try again." }
 	)
 });
