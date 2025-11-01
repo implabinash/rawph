@@ -14,7 +14,7 @@ export const actions = {
 				success: false,
 				data: { email: formData.email },
 				error: z.flattenError(result.error).fieldErrors,
-				message: "Invalid inputs."
+				message: "Check your email and password."
 			});
 		}
 

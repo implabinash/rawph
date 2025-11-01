@@ -15,7 +15,7 @@ export const actions = {
 				success: false,
 				data: {},
 				error: z.flattenError(result.error).fieldErrors,
-				message: "Invalid code."
+				message: "Check your invite code and try again."
 			});
 		}
 

@@ -66,7 +66,7 @@ export const actions = {
 		} catch (err) {
 			console.error("Video add error: ", err);
 			return fail(500, {
-				message: "Something went wrong. Try again."
+				message: "We couldn't add that video. Try again."
 			});
 		}
 
@@ -97,7 +97,7 @@ export const actions = {
 			console.log("Leave error: ", err);
 
 			return fail(500, {
-				message: "Failed. Try again."
+				message: "We couldn't end your study session. Try again."
 			});
 		}
 
@@ -111,15 +111,15 @@ export const actions = {
 		const currentSP = await findSPByID(locals.db, studySession!.id, locals.user.id);
 
 		if (!studySession) {
-			return fail(404, { message: "session not found" });
+			return fail(404, { message: "We couldn't find that study session." });
 		}
 
 		if (studySession.status === "completed") {
-			return fail(404, { message: "session completed" });
+			return fail(404, { message: "This study session has already ended." });
 		}
 
 		if (currentSP && currentSP.status === "kicked") {
-			return fail(404, { message: "not allowed" });
+			return fail(404, { message: "You can't join this study session." });
 		}
 
 		try {
@@ -130,7 +130,7 @@ export const actions = {
 		} catch (err) {
 			console.error("Session request failed.", err);
 
-			return fail(500, { message: "failed" });
+			return fail(500, { message: "We couldn't send your join request. Try again." });
 		}
 
 		return { success: true };
@@ -164,7 +164,7 @@ export const actions = {
 		const result = pendingParticipantSchema.safeParse(formData);
 
 		if (!result.success) {
-			return fail(401, { message: "invalid id" });
+			return fail(401, { message: "We couldn't process that request." });
 		}
 
 		const studySessionID = url.pathname.split("/")[2];
@@ -176,7 +176,7 @@ export const actions = {
 		);
 
 		if (!joinRequest || joinRequest.status === "approved") {
-			return fail(409, { message: "already approved" });
+			return fail(409, { message: "This request has already been approved." });
 		}
 
 		try {
@@ -197,7 +197,7 @@ export const actions = {
 			});
 		} catch (err) {
 			console.error("join request status update failed", err);
-			return fail(500, { message: "something went wrong" });
+			return fail(500, { message: "We couldn't approve that request. Try again." });
 		}
 
 		return { success: true };
@@ -218,11 +218,11 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	const studySession = await findStudySessionByID(locals.db, studySessionID);
 
 	if (!studySession) {
-		return error(404, { message: "Study session not found." });
+		return error(404, { message: "We couldn't find that study session." });
 	}
 
 	if (studySession.status === "completed") {
-		return error(404, { message: "Study session already finished" });
+		return error(404, { message: "This study session has already ended." });
 	}
 
 	let allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
@@ -242,7 +242,7 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 			isApproved = true;
 		} catch (err) {
 			console.error("Study Session joining error: ", err);
-			return error(500, { message: "Something went wrong. Try again!" });
+			return error(500, { message: "We couldn't add you to this study session. Try again." });
 		}
 	}
 

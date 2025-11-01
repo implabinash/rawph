@@ -22,7 +22,7 @@ export const actions = {
 				success: false,
 				data: {},
 				error: {},
-				message: "Study session creation failed. Try again."
+				message: "We couldn't create your study session. Try again."
 			});
 		}
 
@@ -48,7 +48,7 @@ export const actions = {
 					success: false,
 					data: {},
 					error: z.flattenError(result.error).fieldErrors,
-					message: "Invalid inputs."
+					message: "Check your password and try again."
 				});
 			}
 		} else {
@@ -59,7 +59,7 @@ export const actions = {
 					success: false,
 					data: {},
 					error: z.flattenError(result.error).fieldErrors,
-					message: "Invalid inputs."
+					message: "Check your password and try again."
 				});
 			}
 		}

@@ -17,7 +17,7 @@ export const actions = {
 					name: formData.name as string
 				},
 				error: z.flattenError(result.error).fieldErrors,
-				message: "Invalid inputs."
+				message: "Check your information and try again."
 			});
 		}
 
