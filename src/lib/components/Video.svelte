@@ -2,9 +2,10 @@
 	import { Link } from "@lucide/svelte";
 
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
-	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { enhance } from "$app/forms";
 	import { untrack } from "svelte";
+
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 
 	let { form }: { form: ActionData } = $props();
 

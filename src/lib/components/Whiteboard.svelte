@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { Trash } from "@lucide/svelte";
 
 	import { onMount, untrack } from "svelte";
+
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 
 	let whiteboard: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D | null = $state(null);

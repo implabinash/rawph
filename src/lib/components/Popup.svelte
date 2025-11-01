@@ -1,11 +1,13 @@
 <script lang="ts">
-	import { enhance } from "$app/forms";
 	import { Clock } from "@lucide/svelte";
+
 	import type { ActionData } from "../../routes/s/[id=uuid]/$types";
+	import { enhance } from "$app/forms";
 	import { onDestroy } from "svelte";
-	import type { User } from "$lib/db/schemas/user.schema";
-	import type { SP } from "$lib/db/queries/studysessions.query";
+
 	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
+	import type { SP } from "$lib/db/queries/studysessions.query";
+	import type { User } from "$lib/db/schemas/user.schema";
 
 	type Props = {
 		ss: SP;
@@ -13,7 +15,7 @@
 		form: ActionData;
 	};
 
-	let { ss, user, form }: Props = $props();
+	let { ss, user }: Props = $props();
 
 	let isRequested: boolean = $state(false);
 

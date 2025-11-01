@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { Send } from "@lucide/svelte";
 
-	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { untrack } from "svelte";
+
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
 
 	let { user }: { user: User } = $props();
@@ -14,6 +15,7 @@
 		image: string;
 		timestamp: Date;
 	}[] = $state([]);
+
 	let latestMessage: string = $state("");
 
 	let lastMessage: HTMLDivElement;

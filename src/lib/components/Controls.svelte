@@ -3,11 +3,11 @@
 
 	import { enhance } from "$app/forms";
 	import { page } from "$app/state";
+	import { untrack } from "svelte";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
 	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import type { User } from "$lib/db/schemas/user.schema";
-	import { untrack } from "svelte";
 	import { audio } from "$lib/stores/audio.svelte";
 
 	type Props = {

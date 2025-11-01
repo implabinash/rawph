@@ -1,17 +1,18 @@
 <script lang="ts">
+	import { PUBLIC_BASE_URL } from "$env/static/public";
 	import type { ActionData, PageData } from "./$types";
 	import { onDestroy, onMount } from "svelte";
 	import { page } from "$app/state";
-	import { PUBLIC_BASE_URL } from "$env/static/public";
+
+	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
+	import { ws } from "$lib/stores/websocket.svelte";
+	import { audio } from "$lib/stores/audio.svelte";
 
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
 	import Controls from "$lib/components/Controls.svelte";
 	import Video from "$lib/components/Video.svelte";
 	import Popup from "$lib/components/Popup.svelte";
 	import Chat from "$lib/components/Chat.svelte";
-	import { ws } from "$lib/stores/websocket.svelte";
-	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
-	import { audio } from "$lib/stores/audio.svelte";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
