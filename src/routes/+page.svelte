@@ -33,7 +33,7 @@
 </svelte:head>
 
 <header
-	class="mx-auto my-6 flex max-w-5xl items-center justify-between rounded-md border border-neutral-border px-3 py-3"
+	class="mx-3 my-6 flex max-w-5xl items-center justify-between rounded-md border border-neutral-border px-3 py-3 xl:mx-auto"
 >
 	<a href={resolve("/", {})} class="flex items-center gap-2 text-heading-3"
 		><img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />Rawph</a
@@ -42,7 +42,7 @@
 	<div class="flex items-center gap-2">
 		<a
 			href={resolve("/signin", {})}
-			class="rounded-md bg-brand-50 px-4 py-2 text-body-bold text-brand-700 hover:bg-brand-100 active:bg-brand-50"
+			class="hidden rounded-md bg-brand-50 px-4 py-2 text-body-bold text-brand-700 hover:bg-brand-100 active:bg-brand-50 md:block"
 			>Sign In</a
 		>
 		<a
@@ -53,14 +53,14 @@
 	</div>
 </header>
 
-<main class="mx-auto max-w-5xl">
-	<section class="space-y-12 px-6 py-24">
-		<div class="w-[80%] space-y-6">
-			<h1 class="text-[3.5rem] leading-[3.875rem] font-bold">
+<main class="mx-6 max-w-5xl xl:mx-auto">
+	<section class="space-y-6 py-14 md:space-y-12 md:px-6 lg:py-24">
+		<div class="space-y-3 md:w-[80%] md:space-y-6">
+			<h1 class="text-3xl font-bold md:text-5xl lg:text-[3.5rem] lg:leading-[3.875rem]">
 				A Smarter and Simpler Way to Learn with Peers
 			</h1>
 
-			<p class="text-[1.313rem] leading-[1.75rem] text-subtext-color">
+			<p class="text-subtext-color lg:text-[1.313rem] lg:leading-[1.75rem]">
 				Study side by side with Rawph. Watch videos together, join a call, chat effortlessly and
 				explore your ideas on a clean whiteboard.
 			</p>
@@ -80,12 +80,12 @@
 		</div>
 	</section>
 
-	<section class="mb-24 grid place-items-center rounded-md bg-[url('/images/bg.png')] p-6">
+	<section class="mb-24 grid place-items-center rounded-md bg-[url('/images/bg.png')] p-3 lg:p-6">
 		<img src="/images/products/demo.jpg" alt="Rawph Demo" class="rounded-md" />
 	</section>
 </main>
 
-<footer class="mx-auto mb-12 flex max-w-5xl items-center justify-between">
+<footer class="mx-6 mb-12 flex max-w-5xl items-center justify-between xl:mx-auto">
 	<a href={resolve("/", {})} class="flex items-center gap-2 text-heading-3"
 		><img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />Rawph</a
 	>
