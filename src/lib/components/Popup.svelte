@@ -18,6 +18,8 @@
 	let { ss, user }: Props = $props();
 
 	let isRequested: boolean = $state(false);
+	let isRequesting: boolean = $state(false);
+	let isCanceling: boolean = $state(false);
 
 	const cancelRequest = () => {
 		const message: WSMessage = {
@@ -96,15 +98,19 @@
 				method="POST"
 				action="?/cancel"
 				use:enhance={() => {
+					isCanceling = true;
+
 					return async ({ update }) => {
 						await update();
 						cancelRequest();
+
+						isCanceling = false;
 					};
 				}}
 			>
 				<button
 					class="w-full cursor-pointer rounded-md border border-neutral-border py-2 text-body-bold text-neutral-700 hover:bg-neutral-50 active:bg-default-background"
-					type="submit">Cancel Request</button
+					type="submit">{isCanceling ? "Canceling..." : "Cancel Request"}</button
 				>
 			</form>
 		{:else}
@@ -112,6 +118,8 @@
 				method="POST"
 				action="?/request"
 				use:enhance={() => {
+					isRequesting = true;
+
 					return async ({ update }) => {
 						await update();
 
@@ -129,12 +137,13 @@
 						ws.send(message);
 
 						isRequested = true;
+						isRequesting = false;
 					};
 				}}
 			>
 				<button
 					class="w-full cursor-pointer rounded-md bg-brand-600 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-					type="submit">Ask to Join</button
+					type="submit">{isRequesting ? "Asking..." : "Ask to Join"}</button
 				>
 			</form>
 		{/if}
