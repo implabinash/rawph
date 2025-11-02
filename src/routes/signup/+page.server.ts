@@ -1,6 +1,7 @@
 import { z } from "zod/v4";
 
 import { fail, redirect, type Actions } from "@sveltejs/kit";
+import type { PageServerLoad } from "./$types";
 
 import { signUpSchema } from "$lib/validations/auth";
 
@@ -84,3 +85,9 @@ export const actions = {
 		throw redirect(303, "/invite");
 	}
 } satisfies Actions;
+
+export const load: PageServerLoad = async ({ locals }) => {
+	if (locals.user) {
+		redirect(303, "/dashboard");
+	}
+};
