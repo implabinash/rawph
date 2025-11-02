@@ -228,6 +228,12 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 	let allSPs = await findAllSPsBySessionID(locals.db, studySession.id);
 	let currentSP = allSPs.find((sp) => sp.userID === locals.user.id);
 
+	if (!currentSP && allSPs.length >= 2) {
+		return error(403, {
+			message: "This session already has two participants. Ask your friend to create a new session."
+		});
+	}
+
 	let isApproved = false;
 
 	if (!currentSP && studySession.createdBy === locals.user.id) {
