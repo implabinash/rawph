@@ -14,7 +14,7 @@
 <Seo title="Invite" />
 
 <main class="grid h-screen place-items-center">
-	<section class="max-w-100 space-y-8">
+	<section class="w-[90%] space-y-8 md:max-w-100">
 		<div class="flex flex-col items-center gap-6">
 			<img src="/images/logos/rawph.svg" alt="Rawph Logo" class="size-8" />
 
