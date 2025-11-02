@@ -35,18 +35,18 @@
 <header
 	class="mx-auto my-6 flex max-w-5xl items-center justify-between rounded-md border border-neutral-border px-3 py-3"
 >
-	<a href={resolve("/")} class="flex items-center gap-2 text-heading-3"
+	<a href={resolve("/", {})} class="flex items-center gap-2 text-heading-3"
 		><img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />Rawph</a
 	>
 
 	<div class="flex items-center gap-2">
 		<a
-			href={resolve("/signin")}
+			href={resolve("/signin", {})}
 			class="rounded-md bg-brand-50 px-4 py-2 text-body-bold text-brand-700 hover:bg-brand-100 active:bg-brand-50"
 			>Sign In</a
 		>
 		<a
-			href={resolve("/signup")}
+			href={resolve("/signup", {})}
 			class="rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 			>Try Rawph for Free</a
 		>
@@ -68,12 +68,12 @@
 
 		<div class="flex items-center gap-4">
 			<a
-				href={resolve("/signup")}
+				href={resolve("/signup", {})}
 				class="rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 				>Try Rawph for Free</a
 			>
 			<a
-				href={resolve("/signin")}
+				href={resolve("/signin", {})}
 				class="rounded-md bg-brand-50 px-4 py-2 text-body-bold text-brand-700 hover:bg-brand-100 active:bg-brand-50"
 				>Sing In</a
 			>
@@ -86,7 +86,7 @@
 </main>
 
 <footer class="mx-auto mb-12 flex max-w-5xl items-center justify-between">
-	<a href={resolve("/")} class="flex items-center gap-2 text-heading-3"
+	<a href={resolve("/", {})} class="flex items-center gap-2 text-heading-3"
 		><img src="/images/logos/rawph.svg" alt="Homepage" class="size-6" />Rawph</a
 	>
 

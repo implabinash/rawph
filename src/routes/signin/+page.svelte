@@ -137,7 +137,8 @@
 
 		<!-- Sign Up Page -->
 		<p class="text-center text-body text-subtext-color">
-			Don't have an account? <a href={resolve("/signup")} class="text-blue-600 underline">Sign Up</a
+			Don't have an account? <a href={resolve("/signup", {})} class="text-blue-600 underline"
+				>Sign Up</a
 			>
 		</p>
 	</section>

@@ -158,7 +158,7 @@
 
 		<!-- Sign In Page -->
 		<p class="text-center text-body text-subtext-color">
-			Already have an account? <a href={resolve("/signin")} class="text-blue-700 underline"
+			Already have an account? <a href={resolve("/signin", {})} class="text-blue-700 underline"
 				>Sign In</a
 			>
 		</p>
