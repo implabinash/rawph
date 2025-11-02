@@ -16,8 +16,8 @@
 
 <Seo title="Sign In" />
 
-<main class="grid h-screen grid-cols-2 place-items-center">
-	<section class="w-112 space-y-8 p-8">
+<main class="grid h-screen grid-cols-1 place-items-center lg:grid-cols-2">
+	<section class="w-full space-y-8 p-8 md:w-112">
 		<div class="flex flex-col items-center space-y-5 text-center">
 			<img src="/images/logos/rawph.svg" alt="Rawph Logo" class="size-8" />
 
@@ -143,7 +143,7 @@
 	</section>
 
 	<!-- Right Image -->
-	<section class="h-full w-full p-4">
+	<section class="hidden h-full w-full p-4 lg:block">
 		<div
 			class="h-full w-full rounded-lg bg-[url('/images/bg.png')] bg-cover bg-center bg-no-repeat"
 		></div>
