@@ -1,6 +1,10 @@
 import type { DrizzleClient } from "$lib/db";
 
 declare global {
+	interface Window {
+		YT: any;
+		onYouTubeIframeAPIReady: () => void;
+	}
 	namespace App {
 		interface Platform {
 			env: {

@@ -10,7 +10,10 @@ type MessageType =
 	| "clear_canvas"
 	| "webrtc_offer"
 	| "webrtc_answer"
-	| "webrtc_ice";
+	| "webrtc_ice"
+	| "video_play"
+	| "video_pause"
+	| "video_seek";
 
 export type WSMessage = {
 	type: MessageType;
