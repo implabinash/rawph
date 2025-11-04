@@ -115,7 +115,7 @@
 		<div bind:this={lastMessage} class="h-0"></div>
 	</div>
 
-	<form class="flex items-center gap-2" onsubmit={handleSubmit}>
+	<form class="flex items-center gap-2" autocomplete="off" onsubmit={handleSubmit}>
 		<input
 			type="text"
 			name="message"
