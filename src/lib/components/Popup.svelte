@@ -8,6 +8,7 @@
 	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import type { SP } from "$lib/db/queries/studysessions.query";
 	import type { User } from "$lib/db/schemas/user.schema";
+	import toast from "svelte-french-toast";
 
 	type Props = {
 		ss: SP;
@@ -105,13 +106,20 @@
 						cancelRequest();
 
 						isCanceling = false;
+						toast.success("Request canceled.");
 					};
 				}}
 			>
 				<button
-					class="w-full cursor-pointer rounded-md border border-neutral-border py-2 text-body-bold text-neutral-700 hover:bg-neutral-50 active:bg-default-background"
-					type="submit">{isCanceling ? "Canceling..." : "Cancel Request"}</button
+					class="flex w-full cursor-pointer items-center justify-center rounded-md border border-neutral-border py-2 text-body-bold text-neutral-700 hover:bg-neutral-50 active:bg-default-background"
+					type="submit"
 				>
+					{#if isCanceling}
+						<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+					{:else}
+						Cancel Request
+					{/if}
+				</button>
 			</form>
 		{:else}
 			<form
@@ -138,13 +146,20 @@
 
 						isRequested = true;
 						isRequesting = false;
+						toast.success("Request sent.");
 					};
 				}}
 			>
 				<button
-					class="w-full cursor-pointer rounded-md bg-brand-600 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-					type="submit">{isRequesting ? "Asking..." : "Ask to Join"}</button
+					class="flex w-full cursor-pointer items-center justify-center rounded-md bg-brand-600 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
+					type="submit"
 				>
+					{#if isRequesting}
+						<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+					{:else}
+						Ask to Join
+					{/if}
+				</button>
 			</form>
 		{/if}
 	</div>
