@@ -10,7 +10,7 @@
 	let { form }: { form: ActionData } = $props();
 
 	let showPassword: boolean = $state(false);
-	let isSubmitting: boolean = $state(false);
+	let isEmailSubmitting: boolean = $state(false);
 	let isGoogleSubmitting: boolean = $state(false);
 </script>
 
@@ -40,11 +40,11 @@
 			method="POST"
 			action="?/manual"
 			use:enhance={() => {
-				isSubmitting = true;
+				isEmailSubmitting = true;
 
 				return async ({ update }) => {
 					await update();
-					isSubmitting = false;
+					isEmailSubmitting = false;
 				};
 			}}
 		>
@@ -129,9 +129,15 @@
 
 			<!-- Submit Button -->
 			<button
-				class="mt-2 w-full cursor-pointer rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-				type="submit">{isSubmitting ? "Creating account..." : "Join Rawph"}</button
+				class="mt-2 flex w-full cursor-pointer items-center justify-center rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
+				type="submit"
 			>
+				{#if isEmailSubmitting}
+					<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+				{:else}
+					Join Rawph
+				{/if}
+			</button>
 		</form>
 
 		<!-- OR Devider -->
@@ -150,10 +156,12 @@
 				}}
 				type="submit"
 			>
-				<img src="/images/logos/google.svg" alt="Google" class="" />{isGoogleSubmitting
-					? "Connecting..."
-					: "Continue with Google"}</button
-			>
+				{#if isGoogleSubmitting}
+					<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+				{:else}
+					<img src="/images/logos/google.svg" alt="Google" class="" /> Continue with Google
+				{/if}
+			</button>
 		</form>
 
 		<!-- Sign In Page -->
