@@ -18,7 +18,8 @@
 
 	let { user, allSPs, joinRequests }: Props = $props();
 
-	let copied = $state(false);
+	let copied: boolean = $state(false);
+	let isAccepting: boolean = $state(false);
 
 	let muteList: Record<string, boolean> = $state({});
 
@@ -115,8 +116,12 @@
 							method="POST"
 							action="?/accept"
 							use:enhance={() => {
+								isAccepting = true;
+
 								return async ({ update }) => {
-									await update();
+									setTimeout(async () => {
+										await update();
+									}, 1000);
 
 									const message: WSMessage = {
 										type: "add_new_participant",
@@ -124,6 +129,8 @@
 									};
 
 									ws.send(message);
+
+									isAccepting = false;
 								};
 							}}
 						>
@@ -133,7 +140,11 @@
 								type="submit"
 								class="flex cursor-pointer items-center gap-1 rounded-md border border-neutral-border bg-success-50 p-1 text-caption-bold text-success-700 hover:bg-success-100 active:bg-success-50"
 							>
-								<Check size="16px" /> Accept
+								{#if isAccepting}
+									<img src="/images/icons/loader.svg" alt="loader" class="size-4" />
+								{:else}
+									<Check size="16px" /> Accept
+								{/if}
 							</button>
 						</form>
 					</div>
