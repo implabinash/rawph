@@ -170,8 +170,13 @@
 				>
 					<button
 						class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-						><Plus size="18px" /> {isCreating ? "Creating..." : "New Session"}</button
 					>
+						{#if isCreating}
+							<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+						{:else}
+							<Plus size="18px" /> New Session
+						{/if}
+					</button>
 				</form>
 			</div>
 
@@ -216,8 +221,14 @@
 
 					<button
 						class="flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 py-2 pr-4 pl-3 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
-						type="submit"><Users size="16px" /> {isJoining ? "Joining..." : "Join Session"}</button
+						type="submit"
 					>
+						{#if isJoining}
+							<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+						{:else}
+							<Users size="16px" /> Join Session
+						{/if}
+					</button>
 				</form>
 			</div>
 		</div>
@@ -403,8 +414,12 @@
 					class="mt-2 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md bg-brand-600 px-4 py-2 text-body-bold text-default-background hover:bg-brand-500 active:bg-brand-600"
 					type="submit"
 				>
-					<Lock size="16px" /> {isUpdating ? "Updating..." : "Update Password"}</button
-				>
+					{#if isUpdating}
+						<img src="/images/icons/loader.svg" alt="loader" class="size-5" />
+					{:else}
+						<Lock size="16px" /> Update Password
+					{/if}
+				</button>
 			</form>
 		</div>
 	</section>
