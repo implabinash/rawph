@@ -73,7 +73,16 @@
 			{/if}
 		</button>
 
-		<form method="POST" action="?/changeVideo" use:enhance>
+		<form
+			method="POST"
+			action="?/changeVideo"
+			use:enhance={() => {
+				return async ({ update }) => {
+					audio.cleanup();
+					await update();
+				};
+			}}
+		>
 			<button
 				type="submit"
 				class="cursor-pointer rounded-md border border-neutral-border bg-default-background p-2 hover:bg-neutral-100 active:bg-default-background"

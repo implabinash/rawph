@@ -88,6 +88,7 @@
 	});
 
 	onDestroy(() => {
+		audio.cleanup();
 		ws.disconnect();
 		ws.clearMessages();
 	});

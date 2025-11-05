@@ -83,16 +83,18 @@ export const actions = {
 		try {
 			const studySession = await findStudySessionByID(locals.db, studySessionID);
 
-			const duration = calculateTimeDiffInMin(studySession!.startedAt, new Date());
+			if (studySession?.createdBy === locals.user.id) {
+				const duration = calculateTimeDiffInMin(studySession!.startedAt, new Date());
 
-			await locals.db
-				.update(studySessionsTable)
-				.set({
-					status: "completed",
-					endedAt: new Date(),
-					durationMinutes: duration
-				})
-				.where(eq(studySessionsTable.id, studySessionID));
+				await locals.db
+					.update(studySessionsTable)
+					.set({
+						status: "completed",
+						endedAt: new Date(),
+						durationMinutes: duration
+					})
+					.where(eq(studySessionsTable.id, studySessionID));
+			}
 		} catch (err) {
 			console.log("Leave error: ", err);
 
