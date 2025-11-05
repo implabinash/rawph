@@ -31,8 +31,8 @@ export const actions = {
 
 	join: async ({ request }) => {
 		const formData = Object.fromEntries(await request.formData());
-		const roomID = formData.videoURL.toString().split("/").at(-1);
-		throw redirect(303, `/${roomID}`);
+		const roomID = formData.sessionURL.toString().split("/").at(-1);
+		throw redirect(303, `/s/${roomID}`);
 	},
 
 	changePassword: async ({ request, fetch, cookies, locals }) => {

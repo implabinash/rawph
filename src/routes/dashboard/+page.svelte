@@ -200,6 +200,7 @@
 					class="relative space-y-4"
 					method="POST"
 					action="?/join"
+					autocomplete="off"
 					use:enhance={() => {
 						isJoining = true;
 
