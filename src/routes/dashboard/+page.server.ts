@@ -5,7 +5,6 @@ import { fail, redirect } from "@sveltejs/kit";
 
 import { changePasswordSchema, setPasswordSchema } from "$lib/validations/auth";
 import { studySessionsTable } from "$lib/db/schemas/studysession.schema";
-import { findInviteCodesByUserID } from "$lib/db/queries/invites.query";
 import { COOKIE_NAME } from "$lib/utils/constants";
 
 export const actions = {
@@ -118,11 +117,5 @@ export const load: PageServerLoad = async ({ locals }) => {
 		throw redirect(307, "/signin");
 	}
 
-	if (!locals.user.isInvited) {
-		throw redirect(307, "/invite");
-	}
-
-	const inviteCodes = await findInviteCodesByUserID(locals.db, locals.user.id);
-
-	return { user: locals.user, inviteCodes };
+	return { user: locals.user };
 };

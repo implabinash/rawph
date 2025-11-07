@@ -4,7 +4,7 @@ CREATE TABLE `auth_sessions` (
 	`user_id` text NOT NULL,
 	`expires_at` integer NOT NULL,
 	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	`updated_at` integer NOT NULL,
+	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
@@ -21,31 +21,18 @@ CREATE TABLE `oauth_accounts` (
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `oauth_accounts_id_unique` ON `oauth_accounts` (`id`);--> statement-breakpoint
-CREATE TABLE `invite_codes` (
-	`id` text PRIMARY KEY NOT NULL,
-	`code` text NOT NULL,
-	`created_by` text DEFAULT '00000000-0000-0000-0000-000000000000',
-	`is_used` integer DEFAULT false NOT NULL,
-	`used_by` text,
-	`used_at` integer,
-	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL
-);
---> statement-breakpoint
-CREATE UNIQUE INDEX `invite_codes_id_unique` ON `invite_codes` (`id`);--> statement-breakpoint
-CREATE UNIQUE INDEX `invite_codes_code_unique` ON `invite_codes` (`code`);--> statement-breakpoint
 CREATE TABLE `session_participants` (
 	`id` text PRIMARY KEY NOT NULL,
 	`study_session_id` text NOT NULL,
 	`user_id` text NOT NULL,
-	`role` text DEFAULT 'participant' NOT NULL,
+	`role` text DEFAULT 'sm' NOT NULL,
 	`status` text NOT NULL,
 	`joined_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	`left_at` integer,
 	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	FOREIGN KEY (`study_session_id`) REFERENCES `study_sessions`(`id`) ON UPDATE no action ON DELETE cascade,
-	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `session_participants_id_unique` ON `session_participants` (`id`);--> statement-breakpoint
@@ -59,10 +46,26 @@ CREATE TABLE `session_videos` (
 	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	FOREIGN KEY (`study_session_id`) REFERENCES `study_sessions`(`id`) ON UPDATE no action ON DELETE no action,
-	FOREIGN KEY (`added_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`added_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `session_videos_id_unique` ON `session_videos` (`id`);--> statement-breakpoint
+CREATE TABLE `session_join_requests` (
+	`id` text PRIMARY KEY NOT NULL,
+	`study_session_id` text NOT NULL,
+	`requested_by` text NOT NULL,
+	`requested_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
+	`status` text DEFAULT 'pending' NOT NULL,
+	`responded_by` text,
+	`responded_at` integer,
+	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
+	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
+	FOREIGN KEY (`study_session_id`) REFERENCES `study_sessions`(`id`) ON UPDATE no action ON DELETE no action,
+	FOREIGN KEY (`requested_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`responded_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `session_join_requests_id_unique` ON `session_join_requests` (`id`);--> statement-breakpoint
 CREATE TABLE `study_sessions` (
 	`id` text PRIMARY KEY NOT NULL,
 	`created_by` text NOT NULL,
@@ -72,7 +75,7 @@ CREATE TABLE `study_sessions` (
 	`duration_minutes` integer,
 	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
 	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
+	FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `study_sessions_id_unique` ON `study_sessions` (`id`);--> statement-breakpoint
@@ -82,11 +85,8 @@ CREATE TABLE `users` (
 	`email` text NOT NULL,
 	`password` text,
 	`image` text NOT NULL,
-	`is_invited` integer DEFAULT false NOT NULL,
-	`joined_code` text,
 	`created_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL,
-	FOREIGN KEY (`joined_code`) REFERENCES `invite_codes`(`code`) ON UPDATE no action ON DELETE no action
+	`updated_at` integer DEFAULT (cast(unixepoch('subsecond') * 1000 as integer)) NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `users_id_unique` ON `users` (`id`);--> statement-breakpoint

@@ -22,7 +22,6 @@ declare global {
 				email: string;
 				hasPassword: boolean;
 				image: string;
-				isInvited: boolean;
 				joinedCode: string;
 				createdAt: Date;
 				updatedAt: Date;

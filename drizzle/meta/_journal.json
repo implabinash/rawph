@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1761463212619,
-      "tag": "0000_motionless_slyde",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1761546843554,
-      "tag": "0001_needy_mandarin",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1761668878524,
-      "tag": "0002_plain_frog_thor",
+      "when": 1762507047987,
+      "tag": "0000_talented_glorian",
       "breakpoints": true
     }
   ]

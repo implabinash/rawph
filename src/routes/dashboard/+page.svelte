@@ -1,7 +1,5 @@
 <script lang="ts">
 	import {
-		Check,
-		Copy,
 		Eye,
 		EyeOff,
 		Link,
@@ -22,23 +20,12 @@
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
-	let code = $state("");
-
 	let showCurrentPassword: boolean = $state(false);
 	let showNewPassword: boolean = $state(false);
 	let showConfirmPassword: boolean = $state(false);
 	let isCreating: boolean = $state(false);
 	let isJoining: boolean = $state(false);
 	let isUpdating: boolean = $state(false);
-
-	const copyToClipboard = async (inviteCode: string) => {
-		await navigator.clipboard.writeText(inviteCode.toUpperCase());
-		code = inviteCode;
-
-		setTimeout(() => {
-			code = "";
-		}, 1000);
-	};
 </script>
 
 <Seo title="Dashboard" />
@@ -74,60 +61,6 @@
 			<p class="text-body text-subtext-color">
 				Start learning together with your friends through shared video experiences
 			</p>
-		</div>
-
-		<!-- Invite Code -->
-		<div
-			class="space-y-4 rounded-lg border border-neutral-border bg-neutral-50 px-6 py-4 shadow-sm"
-		>
-			<div class="space-y-1">
-				<p class="text-body-bold">Your Invite Code</p>
-
-				<p class="text-caption text-subtext-color">
-					{data.inviteCodes.filter((code) => !code.isUsed).length} of 2 codes available • Share with
-					friends to invite them
-				</p>
-			</div>
-
-			<div class="grid grid-cols-2 gap-4">
-				{#each data.inviteCodes as inviteCode, index (inviteCode.id)}
-					<div
-						class="space-y-2 rounded-md border border-neutral-border bg-neutral-0 px-4 py-3 shadow-sm"
-						class:cursor-not-allowed={inviteCode.isUsed}
-					>
-						<div class="flex items-center gap-1 text-caption text-subtext-color">
-							<p>Code {index + 1}</p>
-
-							{#if inviteCode.isUsed}
-								<div class="size-1 rounded-full bg-subtext-color"></div>
-								<p>Used</p>
-							{/if}
-						</div>
-
-						<div class="flex items-center justify-between">
-							<p
-								class="text-body-bold"
-								class:line-through={inviteCode.isUsed}
-								class:text-neutral-400={inviteCode.isUsed}
-							>
-								{inviteCode.code}
-							</p>
-
-							{#if !inviteCode.isUsed}
-								<button
-									class="cursor-pointer rounded-md bg-default-background p-1.5 text-brand-700 hover:bg-neutral-100 active:bg-default-background"
-									onclick={() => copyToClipboard(inviteCode.code)}
-									>{#if inviteCode.code === code}
-										<Check size="14px" />
-									{:else}
-										<Copy size="14px" />
-									{/if}</button
-								>
-							{/if}
-						</div>
-					</div>
-				{/each}
-			</div>
 		</div>
 
 		<div class="grid grid-cols-2 gap-6">

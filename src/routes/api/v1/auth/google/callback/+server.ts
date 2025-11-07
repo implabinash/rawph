@@ -113,5 +113,6 @@ export const GET: RequestHandler = async ({ url, cookies, locals }) => {
 		const redirectPath = oauthFlow === "signup" ? "/signup" : "/signin";
 		redirect(303, `${redirectPath}?error=oauth_failed`);
 	}
-	redirect(303, "/invite");
+
+	redirect(303, "/dashboard");
 };

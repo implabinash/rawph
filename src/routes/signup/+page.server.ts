@@ -82,7 +82,7 @@ export const actions = {
 			});
 		}
 
-		throw redirect(303, "/invite");
+		throw redirect(303, "/dashboard");
 	}
 } satisfies Actions;
 

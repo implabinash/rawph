@@ -13,7 +13,7 @@ export const studySessionsTable = sqliteTable("study_sessions", {
 
 	createdBy: text("created_by")
 		.notNull()
-		.references(() => usersTable.id),
+		.references(() => usersTable.id, { onDelete: "cascade" }),
 
 	status: text("status", { enum: ["active", "completed"] })
 		.notNull()
@@ -46,7 +46,7 @@ export const sessionParticipantsTable = sqliteTable("session_participants", {
 		.references(() => studySessionsTable.id, { onDelete: "cascade" }),
 	userID: text("user_id")
 		.notNull()
-		.references(() => usersTable.id),
+		.references(() => usersTable.id, { onDelete: "cascade" }),
 
 	// SS: Session Secretary -> Creator of the session (Max: 1)
 	// SR: Session Representative -> Management power over session, under admin (Max: 5)
@@ -84,7 +84,7 @@ export const studySessionJoinRequestTable = sqliteTable("session_join_requests",
 
 	requestedBy: text("requested_by")
 		.notNull()
-		.references(() => usersTable.id),
+		.references(() => usersTable.id, { onDelete: "cascade" }),
 	requestedAt: integer("requested_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 		.notNull(),
@@ -120,8 +120,8 @@ export const sessionVideosTable = sqliteTable("session_videos", {
 	youtubeURL: text("youtube_url").notNull(),
 
 	addedBy: text("added_by")
-		.references(() => usersTable.id)
-		.notNull(),
+		.notNull()
+		.references(() => usersTable.id, { onDelete: "cascade" }),
 	addedAt: integer("added_at", { mode: "timestamp_ms" })
 		.default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
 		.notNull(),

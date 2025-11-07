@@ -67,7 +67,3 @@ export const setPasswordSchema = changePasswordSchema
 		message: "Passwords don't match",
 		path: ["confirmPassword"]
 	});
-
-export const inviteCodeSchema = z.object({
-	code: z.string().min(10, { message: "Check your invite code and try again" })
-});

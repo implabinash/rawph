@@ -211,10 +211,6 @@ export const load: PageServerLoad = async ({ locals, url }) => {
 		throw redirect(307, "/signin");
 	}
 
-	if (!locals.user.isInvited) {
-		throw redirect(307, "/invite");
-	}
-
 	const studySessionID = url.pathname.split("/")[2];
 
 	const studySession = await findStudySessionByID(locals.db, studySessionID);
