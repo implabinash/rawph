@@ -1,6 +1,6 @@
 import posthog from "posthog-js";
 
-import { PUBLIC_POSTHOG_API_KEY } from "$env/static/private";
+import { PUBLIC_POSTHOG_API_KEY } from "$env/static/public";
 import { browser } from "$app/environment";
 
 export const load = async ({ url, data }) => {
