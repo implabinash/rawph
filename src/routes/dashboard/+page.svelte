@@ -17,6 +17,7 @@
 	import { enhance } from "$app/forms";
 
 	import Seo from "$lib/components/Seo.svelte";
+	import posthog from "posthog-js";
 
 	let { data, form }: { data: PageData; form: ActionData } = $props();
 
@@ -45,7 +46,16 @@
 			class="size-9 rounded-full"
 		/>
 
-		<form action="?/logout" method="POST" use:enhance>
+		<form
+			action="?/logout"
+			method="POST"
+			use:enhance={() => {
+				return async ({ update }) => {
+					posthog.reset();
+					await update();
+				};
+			}}
+		>
 			<button
 				class="flex cursor-pointer items-center gap-2 rounded-md bg-error-50 px-4 py-2 text-body-bold text-error-700 hover:bg-error-100 active:bg-error-50"
 				><LogOut size="18px" />Log Out</button

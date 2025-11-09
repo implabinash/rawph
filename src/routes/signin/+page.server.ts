@@ -80,7 +80,7 @@ export const actions = {
 	}
 } satisfies Actions;
 
-export const load: PageServerLoad = async ({ locals }) => {
+export const load: PageServerLoad = ({ locals }) => {
 	if (locals.user) {
 		redirect(303, "/dashboard");
 	}
