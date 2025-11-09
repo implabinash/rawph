@@ -13,7 +13,9 @@ type MessageType =
 	| "webrtc_ice"
 	| "video_play"
 	| "video_pause"
-	| "video_seek";
+	| "video_seek"
+	| "join"
+	| "leave";
 
 export type WSMessage = {
 	type: MessageType;

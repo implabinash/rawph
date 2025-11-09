@@ -5,7 +5,7 @@
 	import { page } from "$app/state";
 
 	import type { JoinRequests, SP } from "$lib/db/queries/studysessions.query";
-	import { ws } from "$lib/stores/websocket.svelte";
+	import { ws, type WSMessage } from "$lib/stores/websocket.svelte";
 	import { audio } from "$lib/stores/audio.svelte";
 
 	import Whiteboard from "$lib/components/Whiteboard.svelte";
@@ -22,7 +22,7 @@
 	let isApproved: boolean = $state(data.isApproved);
 	let studySessionID = page.url.pathname.split("/")[2];
 
-	onMount(async () => {
+	onMount(() => {
 		const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
 		const params = new URLSearchParams({
@@ -37,14 +37,20 @@
 		ws.connect(wsURL);
 
 		if (isApproved) {
-			await audio.init(data.user.id);
+			(async () => {
+				await audio.init(data.user.id);
 
-			if (newSPs.length > 1) {
-				audio.startCall();
-			}
+				if (newSPs.length > 1) {
+					audio.startCall();
+				}
+			})();
+
+			joinStudySession();
 		}
 
 		return () => {
+			leaveStudySession();
+			audio.cleanup();
 			ws.disconnect();
 			ws.clearMessages();
 		};
@@ -85,9 +91,18 @@
 		if (latestMessage.type === "webrtc_ice") {
 			audio.handleIce(latestMessage.data.ice);
 		}
+
+		if (latestMessage.type === "leave") {
+			newSPs = data.allSPs.filter((sp) => sp.userID !== latestMessage.data.userID);
+		}
+
+		if (latestMessage.type === "join") {
+			fetchParticipants();
+		}
 	});
 
 	onDestroy(() => {
+		leaveStudySession();
 		audio.cleanup();
 		ws.disconnect();
 		ws.clearMessages();
@@ -103,6 +118,27 @@
 		const res = await fetch(`/api/v1/study-session/${studySessionID}/join-requests`);
 		const data: JoinRequests = await res.json();
 		allJoinRequests = data;
+	};
+
+	const leaveStudySession = () => {
+		const message: WSMessage = {
+			type: "leave",
+			data: {
+				userID: data.user.id
+			},
+			for: "broadcast"
+		};
+
+		ws.send(message);
+	};
+
+	const joinStudySession = () => {
+		const message: WSMessage = {
+			type: "join",
+			for: "broadcast"
+		};
+
+		ws.send(message);
 	};
 
 	// let keyBuffer = "";
