@@ -2,9 +2,8 @@ import { ws } from "./websocket.svelte";
 
 class SimpleAudio {
 	private localStream: MediaStream | null = $state(null);
-	private peerConnection: RTCPeerConnection | null = $state(null);
+	private peerConnections: Map<string, RTCPeerConnection> = new Map();
 	private myUserID: string = "";
-	private isHandlingOffer = false;
 
 	isMuted = $state(true);
 	isEnabled = $state(false);
@@ -40,111 +39,132 @@ class SimpleAudio {
 		});
 	}
 
-	async startCall() {
-		this.peerConnection?.close();
-		this.peerConnection = new RTCPeerConnection({
+	async startCall(remoteUserID: string) {
+		if (this.peerConnections.has(remoteUserID)) {
+			console.log(`Already have connection with ${remoteUserID}`);
+			return;
+		}
+
+		const pc = new RTCPeerConnection({
 			iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
 		});
 
+		this.peerConnections.set(remoteUserID, pc);
+
 		this.localStream?.getTracks().forEach((track) => {
-			this.peerConnection!.addTrack(track, this.localStream!);
+			pc.addTrack(track, this.localStream!);
 		});
 
-		this.peerConnection.ontrack = (event) => {
+		pc.ontrack = (event) => {
 			const audio = new Audio();
 			audio.srcObject = event.streams[0];
 			audio.play();
 		};
 
-		// Send ICE candidates
-		this.peerConnection.onicecandidate = (event) => {
+		pc.onicecandidate = (event) => {
 			if (event.candidate) {
 				ws.send({
 					type: "webrtc_ice",
-					data: { ice: event.candidate },
+					data: { ice: event.candidate, fromUserID: this.myUserID, toUserID: remoteUserID },
 					for: "broadcast"
 				});
 			}
 		};
 
-		const offer = await this.peerConnection.createOffer();
-		await this.peerConnection.setLocalDescription(offer);
+		const offer = await pc.createOffer();
+		await pc.setLocalDescription(offer);
 
 		ws.send({
 			type: "webrtc_offer",
-			data: { offer },
+			data: { offer, fromUserID: this.myUserID, toUserID: remoteUserID },
 			for: "broadcast"
 		});
 
-		console.log("Call started");
+		console.log(`Call started with ${remoteUserID}`);
 	}
 
-	async handleOffer(offer: RTCSessionDescriptionInit) {
-		if (this.isHandlingOffer) {
-			console.log("Already handling offer, skipping");
+	async handleOffer(offer: RTCSessionDescriptionInit, fromUserID: string) {
+		if (this.peerConnections.has(fromUserID)) {
+			console.log(`Already have connection with ${fromUserID}`);
 			return;
 		}
 
-		this.isHandlingOffer = true;
+		const pc = new RTCPeerConnection({
+			iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+		});
 
-		try {
-			this.peerConnection?.close();
-			this.peerConnection = new RTCPeerConnection({
-				iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-			});
+		this.peerConnections.set(fromUserID, pc);
 
-			this.localStream?.getTracks().forEach((track) => {
-				this.peerConnection!.addTrack(track, this.localStream!);
-			});
+		this.localStream?.getTracks().forEach((track) => {
+			pc.addTrack(track, this.localStream!);
+		});
 
-			this.peerConnection.ontrack = (event) => {
-				const audio = new Audio();
-				audio.srcObject = event.streams[0];
-				audio.play();
-			};
+		pc.ontrack = (event) => {
+			const audio = new Audio();
+			audio.srcObject = event.streams[0];
+			audio.play();
+		};
 
-			this.peerConnection.onicecandidate = (event) => {
-				if (event.candidate) {
-					ws.send({
-						type: "webrtc_ice",
-						data: { ice: event.candidate },
-						for: "broadcast"
-					});
-				}
-			};
+		pc.onicecandidate = (event) => {
+			if (event.candidate) {
+				ws.send({
+					type: "webrtc_ice",
+					data: { ice: event.candidate, fromUserID: this.myUserID, toUserID: fromUserID },
+					for: "broadcast"
+				});
+			}
+		};
 
-			await this.peerConnection.setRemoteDescription(offer);
-			const answer = await this.peerConnection.createAnswer();
-			await this.peerConnection.setLocalDescription(answer);
+		await pc.setRemoteDescription(offer);
+		const answer = await pc.createAnswer();
+		await pc.setLocalDescription(answer);
 
-			ws.send({
-				type: "webrtc_answer",
-				data: { answer },
-				for: "broadcast"
-			});
+		ws.send({
+			type: "webrtc_answer",
+			data: { answer, fromUserID: this.myUserID, toUserID: fromUserID },
+			for: "broadcast"
+		});
 
-			console.log("Answered call");
-		} finally {
-			setTimeout(() => {
-				this.isHandlingOffer = false;
-			}, 1000);
+		console.log(`Answered call from ${fromUserID}`);
+	}
+
+	async handleAnswer(answer: RTCSessionDescriptionInit, fromUserID: string) {
+		const pc = this.peerConnections.get(fromUserID);
+		if (!pc) {
+			console.log(`No peer connection found for ${fromUserID}`);
+			return;
+		}
+		await pc.setRemoteDescription(answer);
+		console.log(`Call connected with ${fromUserID}`);
+	}
+
+	async handleIce(ice: RTCIceCandidateInit, fromUserID: string) {
+		const pc = this.peerConnections.get(fromUserID);
+		if (!pc) {
+			console.log(`No peer connection found for ICE from ${fromUserID}`);
+			return;
+		}
+		await pc.addIceCandidate(ice);
+	}
+
+	removePeer(userID: string) {
+		const pc = this.peerConnections.get(userID);
+		if (pc) {
+			pc.close();
+			this.peerConnections.delete(userID);
+			console.log(`Removed peer connection for ${userID}`);
 		}
 	}
 
-	async handleAnswer(answer: RTCSessionDescriptionInit) {
-		await this.peerConnection?.setRemoteDescription(answer);
-		console.log("Call connected");
-	}
-
-	async handleIce(ice: RTCIceCandidateInit) {
-		await this.peerConnection?.addIceCandidate(ice);
+	hasPeerConnection(userID: string): boolean {
+		return this.peerConnections.has(userID);
 	}
 
 	cleanup() {
 		this.localStream?.getTracks().forEach((track) => track.stop());
-		this.peerConnection?.close();
+		this.peerConnections.forEach((pc) => pc.close());
+		this.peerConnections.clear();
 		this.localStream = null;
-		this.peerConnection = null;
 		this.isEnabled = false;
 	}
 }

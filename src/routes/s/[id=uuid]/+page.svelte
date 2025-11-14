@@ -41,7 +41,12 @@
 				await audio.init(data.user.id);
 
 				if (newSPs.length > 1) {
-					audio.startCall();
+					// Start call with each other participant
+					for (const sp of newSPs) {
+						if (sp.userID !== data.user.id) {
+							audio.startCall(sp.userID);
+						}
+					}
 				}
 			})();
 
@@ -74,30 +79,54 @@
 			fetchParticipants();
 
 			if (!audio.isEnabled) {
-				audio.init(data.user.id).then(() => {
-					audio.startCall();
+				audio.init(data.user.id).then(async () => {
+					const participants = await fetchParticipants();
+					for (const sp of participants) {
+						if (sp.userID !== data.user.id) {
+							audio.startCall(sp.userID);
+						}
+					}
 				});
 			}
 		}
 
 		if (latestMessage.type === "webrtc_offer") {
-			audio.handleOffer(latestMessage.data.offer);
+			const { offer, fromUserID, toUserID } = latestMessage.data;
+			if (toUserID === data.user.id || !toUserID) {
+				audio.handleOffer(offer, fromUserID);
+			}
 		}
 
 		if (latestMessage.type === "webrtc_answer") {
-			audio.handleAnswer(latestMessage.data.answer);
+			const { answer, fromUserID, toUserID } = latestMessage.data;
+			if (toUserID === data.user.id || !toUserID) {
+				audio.handleAnswer(answer, fromUserID);
+			}
 		}
 
 		if (latestMessage.type === "webrtc_ice") {
-			audio.handleIce(latestMessage.data.ice);
+			const { ice, fromUserID, toUserID } = latestMessage.data;
+			if (toUserID === data.user.id || !toUserID) {
+				audio.handleIce(ice, fromUserID);
+			}
 		}
 
 		if (latestMessage.type === "leave") {
-			newSPs = data.allSPs.filter((sp) => sp.userID !== latestMessage.data.userID);
+			const userID = latestMessage.data.userID;
+			audio.removePeer(userID);
+			newSPs = newSPs.filter((sp) => sp.userID !== userID);
 		}
 
 		if (latestMessage.type === "join") {
-			fetchParticipants();
+			(async () => {
+				const participants = await fetchParticipants();
+				// Start call with the new participant
+				for (const sp of participants) {
+					if (sp.userID !== data.user.id && !audio.hasPeerConnection(sp.userID)) {
+						audio.startCall(sp.userID);
+					}
+				}
+			})();
 		}
 	});
 
@@ -112,6 +141,7 @@
 		const res = await fetch(`/api/v1/study-session/${studySessionID}/participants`);
 		const data: SP[] = await res.json();
 		newSPs = data;
+		return data;
 	};
 
 	const fetchJoinRequests = async () => {
