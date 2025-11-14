@@ -4,6 +4,7 @@ class SimpleAudio {
 	private localStream: MediaStream | null = $state(null);
 	private peerConnection: RTCPeerConnection | null = $state(null);
 	private myUserID: string = "";
+	private isHandlingOffer = false;
 
 	isMuted = $state(true);
 	isEnabled = $state(false);
@@ -40,6 +41,7 @@ class SimpleAudio {
 	}
 
 	async startCall() {
+		this.peerConnection?.close();
 		this.peerConnection = new RTCPeerConnection({
 			iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
 		});
@@ -78,41 +80,55 @@ class SimpleAudio {
 	}
 
 	async handleOffer(offer: RTCSessionDescriptionInit) {
-		this.peerConnection = new RTCPeerConnection({
-			iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
-		});
+		if (this.isHandlingOffer) {
+			console.log("Already handling offer, skipping");
+			return;
+		}
 
-		this.localStream?.getTracks().forEach((track) => {
-			this.peerConnection!.addTrack(track, this.localStream!);
-		});
+		this.isHandlingOffer = true;
 
-		this.peerConnection.ontrack = (event) => {
-			const audio = new Audio();
-			audio.srcObject = event.streams[0];
-			audio.play();
-		};
+		try {
+			this.peerConnection?.close();
+			this.peerConnection = new RTCPeerConnection({
+				iceServers: [{ urls: "stun:stun.l.google.com:19302" }]
+			});
 
-		this.peerConnection.onicecandidate = (event) => {
-			if (event.candidate) {
-				ws.send({
-					type: "webrtc_ice",
-					data: { ice: event.candidate },
-					for: "broadcast"
-				});
-			}
-		};
+			this.localStream?.getTracks().forEach((track) => {
+				this.peerConnection!.addTrack(track, this.localStream!);
+			});
 
-		await this.peerConnection.setRemoteDescription(offer);
-		const answer = await this.peerConnection.createAnswer();
-		await this.peerConnection.setLocalDescription(answer);
+			this.peerConnection.ontrack = (event) => {
+				const audio = new Audio();
+				audio.srcObject = event.streams[0];
+				audio.play();
+			};
 
-		ws.send({
-			type: "webrtc_answer",
-			data: { answer },
-			for: "broadcast"
-		});
+			this.peerConnection.onicecandidate = (event) => {
+				if (event.candidate) {
+					ws.send({
+						type: "webrtc_ice",
+						data: { ice: event.candidate },
+						for: "broadcast"
+					});
+				}
+			};
 
-		console.log("Answered call");
+			await this.peerConnection.setRemoteDescription(offer);
+			const answer = await this.peerConnection.createAnswer();
+			await this.peerConnection.setLocalDescription(answer);
+
+			ws.send({
+				type: "webrtc_answer",
+				data: { answer },
+				for: "broadcast"
+			});
+
+			console.log("Answered call");
+		} finally {
+			setTimeout(() => {
+				this.isHandlingOffer = false;
+			}, 1000);
+		}
 	}
 
 	async handleAnswer(answer: RTCSessionDescriptionInit) {

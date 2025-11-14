@@ -7,7 +7,11 @@ export const load = async ({ url, data }) => {
 	if (browser && !url.host.includes("localhost")) {
 		posthog.init(PUBLIC_POSTHOG_API_KEY, {
 			api_host: "https://us.i.posthog.com",
-			defaults: "2025-05-24"
+			defaults: "2025-05-24",
+
+			on_xhr_error: (error) => {
+				console.debug("PostHog blocked (expected with ad blockers)");
+			}
 		});
 
 		if (data.user) {
